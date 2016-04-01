@@ -49,7 +49,7 @@ public class RouteListActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+                Snackbar.make(view, "ОЛОЛОЛО", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
             }
         });
@@ -75,14 +75,14 @@ public class RouteListActivity extends AppCompatActivity {
         DummyContent.clear();
 
         Uri myUri = Uri.withAppendedPath(RoutesContentProvider.CONTENT_URI, "routes");
-        Cursor cursor = getContentResolver().query(myUri, new String[]{"id", "name"}, null, null, null);
+        Cursor cursor = getContentResolver().query(myUri, null, null, null, null);
 
         try {
             if (cursor != null && cursor.moveToFirst()) {
                 do {
                     Integer id = cursor.getInt(cursor.getColumnIndex("id"));
                     String name = cursor.getString(cursor.getColumnIndex("name"));
-                    DummyContent.addItem(new DummyContent.DummyItem(id.toString(), name));
+                    DummyContent.addItem(new DummyContent.DummyItem(id.toString(), name, cursor));
                 } while (cursor.moveToNext());
             }
         } finally {
