@@ -27,6 +27,10 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="me.vadik.instaclimb.routes.RouteListActivity" />
         </activity>
+        <provider
+            android:authorities="me.vadik.instaclimb.routes.provider.Example"
+            android:name="me.vadik.instaclimb.routes.ExampleContentProvider"
+            android:exported="false"/>
     </application>
 
 </manifest>

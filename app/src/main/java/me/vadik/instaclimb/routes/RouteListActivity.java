@@ -2,23 +2,23 @@ package me.vadik.instaclimb.routes;
 
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import java.util.List;
 
 import me.vadik.instaclimb.routes.dummy.DummyContent;
-
-import java.util.List;
 
 /**
  * An activity representing a list of Routes. This activity
@@ -68,7 +68,31 @@ public class RouteListActivity extends AppCompatActivity {
     }
 
     private void setupRecyclerView(@NonNull RecyclerView recyclerView) {
-        recyclerView.setAdapter(new SimpleItemRecyclerViewAdapter(DummyContent.ITEMS));
+        recyclerView.setAdapter(new SimpleItemRecyclerViewAdapter(getDummyItems()));
+    }
+
+    private List<DummyContent.DummyItem> getDummyItems() {
+        DummyContent.clear();
+
+        Uri myUri = Uri.withAppendedPath(ExampleContentProvider.CONTENT_URI, "example");
+
+        Cursor cursor = getContentResolver().query(myUri, new String[]{"id", "name"}, null, null, null);
+
+        try {
+            if (cursor != null && cursor.moveToFirst()) {
+                do {
+                    Integer id = cursor.getInt(cursor.getColumnIndex("id"));
+                    String name = cursor.getString(cursor.getColumnIndex("name"));
+                    DummyContent.addItem(new DummyContent.DummyItem(id.toString(), name));
+                } while (cursor.moveToNext());
+            }
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+        }
+
+        return DummyContent.ITEMS;
     }
 
     public class SimpleItemRecyclerViewAdapter
