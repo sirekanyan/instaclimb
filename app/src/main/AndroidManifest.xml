@@ -28,8 +28,8 @@
                 android:value="me.vadik.instaclimb.routes.RouteListActivity" />
         </activity>
         <provider
-            android:authorities="me.vadik.instaclimb.routes.provider.Example"
-            android:name="me.vadik.instaclimb.routes.ExampleContentProvider"
+            android:authorities="me.vadik.instaclimb.routes.provider"
+            android:name="me.vadik.instaclimb.routes.RoutesContentProvider"
             android:exported="false"/>
     </application>
 

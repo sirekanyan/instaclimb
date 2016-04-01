@@ -74,8 +74,7 @@ public class RouteListActivity extends AppCompatActivity {
     private List<DummyContent.DummyItem> getDummyItems() {
         DummyContent.clear();
 
-        Uri myUri = Uri.withAppendedPath(ExampleContentProvider.CONTENT_URI, "example");
-
+        Uri myUri = Uri.withAppendedPath(RoutesContentProvider.CONTENT_URI, "routes");
         Cursor cursor = getContentResolver().query(myUri, new String[]{"id", "name"}, null, null, null);
 
         try {
