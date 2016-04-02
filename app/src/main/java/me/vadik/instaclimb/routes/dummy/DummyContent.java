@@ -41,6 +41,7 @@ public class DummyContent {
             String comment = cursor.getString(cursor.getColumnIndex("comment"));
             String created_when = cursor.getString(cursor.getColumnIndex("created_when"));
             String destroyed_when = cursor.getString(cursor.getColumnIndex("destroyed_when"));
+            String status = cursor.getString(cursor.getColumnIndex("status"));
             Integer sector_id = cursor.getInt(cursor.getColumnIndex("sector_id"));
 
             if (!grade.isEmpty())
@@ -59,6 +60,8 @@ public class DummyContent {
                 details += "Дата накрутки: " + created_when + "\n";
             if (!destroyed_when.isEmpty() && !"Не задан".equals(destroyed_when))
                 details += "Дата скрутки: " + destroyed_when + "\n";
+            if (!status.isEmpty())
+                details += "Статус: " + status + "\n";
             if (!sector_id.toString().isEmpty())
                 details += "Сектор: " + sector_id + "\n";
         }

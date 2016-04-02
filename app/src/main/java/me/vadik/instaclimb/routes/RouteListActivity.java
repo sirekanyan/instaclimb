@@ -75,7 +75,7 @@ public class RouteListActivity extends AppCompatActivity {
         DummyContent.clear();
 
         Uri myUri = Uri.withAppendedPath(RoutesContentProvider.CONTENT_URI, "routes");
-        Cursor cursor = getContentResolver().query(myUri, null, null, null, null);
+        Cursor cursor = getContentResolver().query(myUri, null, null, null, "id desc");
 
         try {
             if (cursor != null && cursor.moveToFirst()) {
