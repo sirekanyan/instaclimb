@@ -2,9 +2,11 @@ package me.vadik.instaclimb.routes;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -13,15 +15,14 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Log;
-import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import me.vadik.instaclimb.routes.dummy.DummyContent;
@@ -74,7 +75,20 @@ public class RouteListActivity extends AppCompatActivity {
     }
 
     private void setupRecyclerView(@NonNull RecyclerView recyclerView) {
-        recyclerView.setAdapter(new SimpleItemRecyclerViewAdapter(getDummyItems(new String[]{"Активна"})));
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        List<String> statusFilterArgs = new ArrayList<>();
+        if (preferences.getBoolean("show_active", true)) {
+            statusFilterArgs.add("Активна");
+        }
+        if (preferences.getBoolean("show_archived", false)) {
+            statusFilterArgs.add("Архив");
+        }
+        if (preferences.getBoolean("show_draft", false)) {
+            statusFilterArgs.add("Черновик");
+        }
+        String[] statusFilterArgsArray = statusFilterArgs.toArray(new String[statusFilterArgs.size()]);
+        List<DummyContent.DummyItem> dummyItems = getDummyItems(statusFilterArgsArray);
+        recyclerView.setAdapter(new SimpleItemRecyclerViewAdapter(dummyItems));
     }
 
     private List<DummyContent.DummyItem> getDummyItems(String[] statusFilterArgs) {
@@ -174,5 +188,23 @@ public class RouteListActivity extends AppCompatActivity {
                 return super.toString() + " '" + mContentView.getText() + "'";
             }
         }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.settings:
+                startActivity(new Intent(this, SettingsActivity.class));
+                break;
+            default:
+                break;
+        }
+        return true;
     }
 }

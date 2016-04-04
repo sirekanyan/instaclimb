@@ -37,8 +37,17 @@
         </activity>
         <provider
             android:authorities="me.vadik.instaclimb.routes.provider"
-            android:name="me.vadik.instaclimb.routes.RoutesContentProvider"
+            android:name=".RoutesContentProvider"
             android:exported="false"/>
+
+        <activity
+            android:name=".SettingsActivity"
+            android:label="@string/title_activity_settings"
+            android:parentActivityName=".RouteListActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="me.vadik.instaclimb.routes.RouteListActivity" />
+        </activity>
     </application>
 
 </manifest>
