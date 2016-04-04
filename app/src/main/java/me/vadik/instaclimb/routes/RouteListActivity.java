@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -14,14 +15,23 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.ImageLoader;
+import com.android.volley.toolbox.ImageRequest;
+import com.android.volley.toolbox.NetworkImageView;
+
 import java.util.List;
 
 import me.vadik.instaclimb.routes.dummy.DummyContent;
@@ -138,9 +148,16 @@ public class RouteListActivity extends AppCompatActivity {
 
         @Override
         public void onBindViewHolder(final ViewHolder holder, int position) {
-            holder.mItem = mValues.get(position);
-            holder.mIdView.setText(mValues.get(position).id);
-            holder.mContentView.setText(mValues.get(position).content);
+            DummyContent.DummyItem item = mValues.get(position);
+            holder.mItem = item;
+            holder.routeNameView.setText(item.name);
+            holder.routeGradeView.setText(item.grade);
+
+            if (item.isArchived() || item.isDraft()) {
+                holder.routeNameView.setTextColor(getResources().getColor(android.R.color.darker_gray));
+            } else {
+                holder.routeNameView.setTextColor(getResources().getColor(android.R.color.black));
+            }
 
             holder.mView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -171,20 +188,20 @@ public class RouteListActivity extends AppCompatActivity {
 
         public class ViewHolder extends RecyclerView.ViewHolder {
             public final View mView;
-            public final TextView mIdView;
-            public final TextView mContentView;
+            public final TextView routeNameView;
+            public final TextView routeGradeView;
             public DummyContent.DummyItem mItem;
 
             public ViewHolder(View view) {
                 super(view);
                 mView = view;
-                mIdView = (TextView) view.findViewById(R.id.id);
-                mContentView = (TextView) view.findViewById(R.id.content);
+                routeNameView = (TextView) view.findViewById(R.id.route_name);
+                routeGradeView = (TextView) view.findViewById(R.id.route_grade);
             }
 
             @Override
             public String toString() {
-                return super.toString() + " '" + mContentView.getText() + "'";
+                return super.toString() + " '" + routeNameView.getText() + "'";
             }
         }
     }

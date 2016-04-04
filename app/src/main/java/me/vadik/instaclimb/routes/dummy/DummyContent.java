@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 
 public class DummyContent {
 
@@ -25,15 +24,30 @@ public class DummyContent {
 
     public static class DummyItem {
         public final String id;
-        public final String content;
+        public String name;
+        public final String grade;
+        public final Integer pictureId;
+
+        public boolean isArchived() {
+            return archived;
+        }
+
+        public boolean isDraft() {
+            return draft;
+        }
+
+        private final boolean archived;
+        private final boolean draft;
         public String details;
 
         public DummyItem(String id, String content, Cursor cursor) {
             this.id = id;
-            this.content = content;
+            this.name = content.replaceAll(" \\(.*?\\)$", ""); //TODO remove replacement
             this.details = "";
 
-            String grade = cursor.getString(cursor.getColumnIndex("grade"));
+            this.pictureId = cursor.getInt(cursor.getColumnIndex("picture_id"));
+            this.grade = cursor.getString(cursor.getColumnIndex("grade"));
+
             String grade_author = cursor.getString(cursor.getColumnIndex("grade_author"));
             String grade_users = cursor.getString(cursor.getColumnIndex("grade_users"));
             String color = cursor.getString(cursor.getColumnIndex("color"));
@@ -43,6 +57,13 @@ public class DummyContent {
             String destroyed_when = cursor.getString(cursor.getColumnIndex("destroyed_when"));
             String status = cursor.getString(cursor.getColumnIndex("status"));
             Integer sector_id = cursor.getInt(cursor.getColumnIndex("sector_id"));
+
+            this.archived = "Архив".equals(status);
+            this.draft = "Черновик".equals(status);
+
+            if (archived || draft) {
+                this.name += " (" + status.toLowerCase() + ")";
+            }
 
             if (!grade.isEmpty())
                 details += "Сложность: " + grade + "\n";
@@ -68,7 +89,19 @@ public class DummyContent {
 
         @Override
         public String toString() {
-            return content;
+            return name;
+        }
+
+        public String getThumbnailUrl() {
+            return "http://instaclimb.ru/maps/" + pictureId + "/thumb.jpg";
+        }
+
+        public String getSmallPictureUrl() {
+            return "http://instaclimb.ru/maps/" + pictureId + "/small.jpg";
+        }
+
+        public String getPictureUrl() {
+            return "http://instaclimb.ru/maps/" + pictureId + "/full.jpg";
         }
     }
 }

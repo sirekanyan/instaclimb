@@ -70,4 +70,6 @@
     <string name="pref_title_vibrate">Vibrate</string>
 
     <!-- END Strings related to Settings -->
+
+    <string name="route_picture_description">Route picture</string>
 </resources>
