@@ -1,4 +1,6 @@
 <resources>
     <string name="app_name">Instaclimb Routes</string>
     <string name="title_route_detail">Route Detail</string>
+    <string name="menu_show_archived_routes">Show archived</string>
+    <string name="menu_show_draft_routes">Show draft</string>
 </resources>

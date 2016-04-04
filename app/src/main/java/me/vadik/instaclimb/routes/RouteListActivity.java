@@ -11,7 +11,13 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
+import android.util.Log;
+import android.view.ContextMenu;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -68,14 +74,21 @@ public class RouteListActivity extends AppCompatActivity {
     }
 
     private void setupRecyclerView(@NonNull RecyclerView recyclerView) {
-        recyclerView.setAdapter(new SimpleItemRecyclerViewAdapter(getDummyItems()));
+        recyclerView.setAdapter(new SimpleItemRecyclerViewAdapter(getDummyItems(new String[]{"Активна"})));
     }
 
-    private List<DummyContent.DummyItem> getDummyItems() {
+    private List<DummyContent.DummyItem> getDummyItems(String[] statusFilterArgs) {
         DummyContent.clear();
 
         Uri myUri = Uri.withAppendedPath(RoutesContentProvider.CONTENT_URI, "routes");
-        Cursor cursor = getContentResolver().query(myUri, null, null, null, "id desc");
+
+        String[] placeHolders = new String[statusFilterArgs.length];
+
+        for (int i = 0; i < placeHolders.length; i++) {
+            placeHolders[i] = "?";
+        }
+
+        Cursor cursor = getContentResolver().query(myUri, null, "status in (" + TextUtils.join(",", placeHolders) + ")", statusFilterArgs, "id desc");
 
         try {
             if (cursor != null && cursor.moveToFirst()) {
