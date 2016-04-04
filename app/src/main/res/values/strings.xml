@@ -1,9 +1,9 @@
 <resources>
     <string name="app_name">Instaclimb Routes</string>
     <string name="title_route_detail">Route Detail</string>
-    <string name="menu_show_archived_routes">Show archived</string>
-    <string name="menu_show_draft_routes">Show draft</string>
-    <string name="title_activity_settings">Settings</string>
+
+    <string name="menu_settings">Settings</string>
+    <string name="menu_reload">Reload</string>
 
     <!-- START Strings related to Settings -->
 

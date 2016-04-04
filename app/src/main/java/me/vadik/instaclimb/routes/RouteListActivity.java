@@ -14,7 +14,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -199,6 +198,11 @@ public class RouteListActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
+            case R.id.reload:
+                View recyclerView = findViewById(R.id.route_list);
+                assert recyclerView != null;
+                setupRecyclerView((RecyclerView) recyclerView);
+                break;
             case R.id.settings:
                 startActivity(new Intent(this, SettingsActivity.class));
                 break;
