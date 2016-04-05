@@ -3,11 +3,6 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <com.android.volley.toolbox.NetworkImageView
-        android:id="@+id/route_image"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-
     <TextView xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/route_detail"
         style="?android:attr/textAppearanceLarge"
@@ -15,4 +10,12 @@
         android:layout_height="match_parent"
         android:padding="16dp"
         android:textIsSelectable="true" />
+
+    <com.android.volley.toolbox.NetworkImageView
+        android:id="@+id/route_image"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:adjustViewBounds="true"
+        android:scaleType="fitXY" />
+
 </LinearLayout>
