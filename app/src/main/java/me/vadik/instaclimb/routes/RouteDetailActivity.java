@@ -1,6 +1,7 @@
 package me.vadik.instaclimb.routes;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -10,6 +11,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.app.ActionBar;
 import android.support.v4.app.NavUtils;
 import android.view.MenuItem;
+import android.widget.TextView;
+
+import me.vadik.instaclimb.routes.dummy.DummyContent;
 
 /**
  * An activity representing a single Route detail screen. This
@@ -27,6 +31,7 @@ public class RouteDetailActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        assert fab != null;
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -79,5 +84,18 @@ public class RouteDetailActivity extends AppCompatActivity {
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    public void showRouteFullscreen(View view) {
+        TextView pictureId = (TextView) this.findViewById(R.id.picture_id);
+        Intent showRouteIntent = new Intent(this, RouteImageActivity.class);
+        if (pictureId != null) {
+            String pictureIdString = pictureId.getText().toString();
+            if (!pictureIdString.isEmpty()) {
+                String uriString = DummyContent.DummyItem.getSmallPictureUrl(pictureIdString);
+                showRouteIntent.setData(Uri.parse(uriString));
+            }
+        }
+        startActivity(showRouteIntent);
     }
 }

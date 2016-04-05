@@ -125,11 +125,19 @@ public class DummyContent {
         }
 
         public String getSmallPictureUrl() {
+            return getSmallPictureUrl(pictureId.toString());
+        }
+
+        public static String getSmallPictureUrl(String pictureId) {
             return "http://instaclimb.ru/maps/" + pictureId + "/small.jpg";
         }
 
-        public String getPictureUrl() {
+        public static String getPictureUrl(String pictureId) {
             return "http://instaclimb.ru/maps/" + pictureId + "/full.jpg";
+        }
+
+        public Integer getPictureId() {
+            return pictureId;
         }
     }
 }

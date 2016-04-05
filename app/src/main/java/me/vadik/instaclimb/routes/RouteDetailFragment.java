@@ -72,6 +72,9 @@ public class RouteDetailFragment extends Fragment {
             if (mNetworkImageView != null) {
                 mNetworkImageView.setImageUrl(mItem.getSmallPictureUrl(), mImageLoader);
             }
+
+            TextView picIdTextView = (TextView) rootView.findViewById(R.id.picture_id);
+            picIdTextView.setText(mItem.getPictureId().toString());
         }
 
         return rootView;
