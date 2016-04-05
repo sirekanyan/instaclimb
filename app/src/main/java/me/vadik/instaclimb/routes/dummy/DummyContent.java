@@ -74,6 +74,8 @@ public class DummyContent {
             String status = cursor.getString(cursor.getColumnIndex("status"));
             Integer sector_id = cursor.getInt(cursor.getColumnIndex("sector_id"));
 
+            color = color.replaceAll("^,", ""); //TODO remove replacement
+
             if (!color.isEmpty()) {
                 String[] colors = color.split(",");
                 switch (colors.length) {

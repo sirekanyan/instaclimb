@@ -128,12 +128,17 @@ public class RouteListActivity extends AppCompatActivity {
     static {
         colors = new HashMap<>();
         colors.put("черный", R.drawable.rect_black);
-        colors.put("красный", R.drawable.rect_red);
         colors.put("синий", R.drawable.rect_blue);
+        colors.put("голубой", R.drawable.rect_blue_light);
+        colors.put("коричневый", R.drawable.rect_brown);
+        colors.put("серый", R.drawable.rect_gray);
         colors.put("зеленый", R.drawable.rect_green);
         colors.put("оранжевый", R.drawable.rect_orange);
-        colors.put("желтый", R.drawable.rect_yellow);
+        colors.put("розовый", R.drawable.rect_pink);
+        colors.put("фиолетовый", R.drawable.rect_purple);
+        colors.put("красный", R.drawable.rect_red);
         colors.put("белый", R.drawable.rect_white);
+        colors.put("желтый", R.drawable.rect_yellow);
     }
 
     public class SimpleItemRecyclerViewAdapter
@@ -161,6 +166,7 @@ public class RouteListActivity extends AppCompatActivity {
 
             if (colors.containsKey(item.getFirstColor())) {
                 holder.marker1View.setBackgroundResource(colors.get(item.getFirstColor()));
+                holder.marker1View.setVisibility(View.VISIBLE);
             } else {
                 holder.marker1View.setVisibility(View.INVISIBLE);
             }
