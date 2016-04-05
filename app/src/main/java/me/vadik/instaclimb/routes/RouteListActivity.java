@@ -1,5 +1,6 @@
 package me.vadik.instaclimb.routes;
 
+import android.app.DialogFragment;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -20,9 +21,11 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -37,7 +40,7 @@ import me.vadik.instaclimb.routes.dummy.DummyContent;
  * item details. On tablets, the activity presents the list of items and
  * item details side-by-side using two vertical panes.
  */
-public class RouteListActivity extends AppCompatActivity {
+public class RouteListActivity extends AppCompatActivity implements FilterDialog.OnFilterPickedListener {
 
     /**
      * Whether or not the activity is in two-pane mode, i.e. running on a tablet
@@ -63,9 +66,7 @@ public class RouteListActivity extends AppCompatActivity {
             }
         });
 
-        View recyclerView = findViewById(R.id.route_list);
-        assert recyclerView != null;
-        setupRecyclerView((RecyclerView) recyclerView);
+        reloadRoutes();
 
         if (findViewById(R.id.route_detail_container) != null) {
             // The detail container view will be present only in the
@@ -76,8 +77,15 @@ public class RouteListActivity extends AppCompatActivity {
         }
     }
 
+    private void reloadRoutes() {
+        View recyclerView = findViewById(R.id.route_list);
+        assert recyclerView != null;
+        setupRecyclerView((RecyclerView) recyclerView);
+    }
+
     private void setupRecyclerView(@NonNull RecyclerView recyclerView) {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+
         List<String> statusFilterArgs = new ArrayList<>();
         if (preferences.getBoolean("show_active", true)) {
             statusFilterArgs.add("Активна");
@@ -88,23 +96,91 @@ public class RouteListActivity extends AppCompatActivity {
         if (preferences.getBoolean("show_draft", false)) {
             statusFilterArgs.add("Черновик");
         }
+
+        List<String> gradeFilterArgs = new ArrayList<>();
+        switch (preferences.getInt("grade", -1)) {
+            case 0:
+                gradeFilterArgs.addAll(Arrays.asList(
+                        "5a", "5a+", "5b", "5b+", "5c", "5c+",
+                        "6a", "6a+"
+                ));
+                break;
+            case 1:
+                gradeFilterArgs.addAll(Arrays.asList(
+                        "6a", "6a+",
+                        "6b", "6b+"
+                ));
+                break;
+            case 2:
+                gradeFilterArgs.addAll(Arrays.asList(
+                        "6b", "6b+",
+                        "6c", "6c+"
+                ));
+                break;
+            case 3:
+                gradeFilterArgs.addAll(Arrays.asList(
+                        "6c", "6c+",
+                        "7a", "7a+"
+                ));
+                break;
+            case 4:
+                gradeFilterArgs.addAll(Arrays.asList(
+                        "7a", "7a+",
+                        "7b", "7b+"
+                ));
+                break;
+            case 5:
+                gradeFilterArgs.addAll(Arrays.asList(
+                        "7b", "7b+",
+                        "7c", "7c+"
+                ));
+                break;
+            case 6:
+                gradeFilterArgs.addAll(Arrays.asList(
+                        "7c", "7c+",
+                        "8a", "8a+", "8b", "8b+", "8c", "8c+", "9a"
+                ));
+                break;
+        }
+
         String[] statusFilterArgsArray = statusFilterArgs.toArray(new String[statusFilterArgs.size()]);
-        List<DummyContent.DummyItem> dummyItems = getDummyItems(statusFilterArgsArray);
+        String[] gradeFilterArgsArray = gradeFilterArgs.toArray(new String[gradeFilterArgs.size()]);
+
+        List<DummyContent.DummyItem> dummyItems = getDummyItems(statusFilterArgsArray, gradeFilterArgsArray);
         recyclerView.setAdapter(new SimpleItemRecyclerViewAdapter(dummyItems));
     }
 
-    private List<DummyContent.DummyItem> getDummyItems(String[] statusFilterArgs) {
+    private List<DummyContent.DummyItem> getDummyItems(String[] statusFilterArgs, String[] gradeFilterArgs) {
         DummyContent.clear();
 
         Uri myUri = Uri.withAppendedPath(RoutesContentProvider.CONTENT_URI, "routes");
 
-        String[] placeHolders = new String[statusFilterArgs.length];
+        String[] statusPlaceHolders = new String[statusFilterArgs.length];
+        String[] gradePlaceHolders = new String[gradeFilterArgs.length];
 
-        for (int i = 0; i < placeHolders.length; i++) {
-            placeHolders[i] = "?";
+        for (int i = 0; i < statusPlaceHolders.length; i++) {
+            statusPlaceHolders[i] = "?";
         }
 
-        Cursor cursor = getContentResolver().query(myUri, null, "status in (" + TextUtils.join(",", placeHolders) + ")", statusFilterArgs, "id desc");
+        for (int i = 0; i < gradePlaceHolders.length; i++) {
+            gradePlaceHolders[i] = "?";
+        }
+
+        String[] args = new String[statusFilterArgs.length + gradeFilterArgs.length];
+
+        System.arraycopy(statusFilterArgs, 0, args, 0, statusFilterArgs.length);
+
+        System.arraycopy(gradeFilterArgs, 0, args, statusFilterArgs.length, gradeFilterArgs.length);
+
+        String gradeInClause = "";
+
+        if (gradeFilterArgs.length > 0) {
+            gradeInClause = "and lower(grade) in (" + TextUtils.join(",", gradePlaceHolders) + ")";
+        }
+
+        Cursor cursor = getContentResolver().query(myUri, null,
+                "status in (" + TextUtils.join(",", statusPlaceHolders) + ") " + gradeInClause,
+                args, "id desc");
 
         try {
             if (cursor != null && cursor.moveToFirst()) {
@@ -253,10 +329,12 @@ public class RouteListActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.reload:
-                View recyclerView = findViewById(R.id.route_list);
-                assert recyclerView != null;
-                setupRecyclerView((RecyclerView) recyclerView);
+            case R.id.reload_button:
+                reloadRoutes();
+                break;
+            case R.id.filter_button:
+                DialogFragment filterDialog = new FilterDialog();
+                filterDialog.show(getFragmentManager(), "Lalala");
                 break;
             case R.id.settings:
                 startActivity(new Intent(this, SettingsActivity.class));
@@ -265,5 +343,13 @@ public class RouteListActivity extends AppCompatActivity {
                 break;
         }
         return true;
+    }
+
+    @Override
+    public void onFilterPicked(int which) {
+        Toast.makeText(this, "Picked: " + String.valueOf(which), Toast.LENGTH_SHORT).show();
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        preferences.edit().putInt("grade", which).commit();
+        reloadRoutes();
     }
 }

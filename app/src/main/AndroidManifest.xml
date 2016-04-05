@@ -51,6 +51,8 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="me.vadik.instaclimb.routes.RouteListActivity" />
         </activity>
-        <activity android:name=".RouteImageActivity" />
+        <activity
+            android:name=".RouteImageActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
     </application>
 </manifest>
