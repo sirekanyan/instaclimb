@@ -13,6 +13,9 @@ import android.support.v4.app.NavUtils;
 import android.view.MenuItem;
 import android.widget.TextView;
 
+import com.android.volley.toolbox.ImageLoader;
+import com.android.volley.toolbox.NetworkImageView;
+
 import me.vadik.instaclimb.routes.dummy.DummyContent;
 
 /**
@@ -59,13 +62,22 @@ public class RouteDetailActivity extends AppCompatActivity {
             // Create the detail fragment and add it to the activity
             // using a fragment transaction.
             Bundle arguments = new Bundle();
-            arguments.putString(RouteDetailFragment.ARG_ITEM_ID,
-                    getIntent().getStringExtra(RouteDetailFragment.ARG_ITEM_ID));
+            String argItemId = getIntent().getStringExtra(RouteDetailFragment.ARG_ITEM_ID);
+            arguments.putString(RouteDetailFragment.ARG_ITEM_ID, argItemId);
             RouteDetailFragment fragment = new RouteDetailFragment();
             fragment.setArguments(arguments);
             getSupportFragmentManager().beginTransaction()
                     .add(R.id.route_detail_container, fragment)
                     .commit();
+
+            NetworkImageView mNetworkImageToolbarView = (NetworkImageView) this.findViewById(R.id.route_image_toolbar);
+            ImageLoader mImageLoader = VolleySingleton.getInstance(this).getImageLoader();
+
+            DummyContent.DummyItem mItem = DummyContent.ITEM_MAP.get(argItemId);
+
+            if (mNetworkImageToolbarView != null) {
+                mNetworkImageToolbarView.setImageUrl(mItem.getSmallPictureUrl(), mImageLoader);
+            }
         }
     }
 

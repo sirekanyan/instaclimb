@@ -11,14 +11,6 @@
         android:padding="16dp"
         android:textIsSelectable="true" />
 
-    <com.android.volley.toolbox.NetworkImageView
-        android:id="@+id/route_image"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:adjustViewBounds="true"
-        android:onClick="showRouteFullscreen"
-        android:scaleType="fitXY" />
-
     <TextView
         android:id="@+id/picture_id"
         android:layout_width="0dp"

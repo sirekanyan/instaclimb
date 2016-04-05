@@ -66,13 +66,6 @@ public class RouteDetailFragment extends Fragment {
         if (mItem != null) {
             ((TextView) rootView.findViewById(R.id.route_detail)).setText(mItem.details);
 
-            NetworkImageView mNetworkImageView = (NetworkImageView) rootView.findViewById(R.id.route_image);
-            ImageLoader mImageLoader = VolleySingleton.getInstance(rootView.getContext()).getImageLoader();
-
-            if (mNetworkImageView != null) {
-                mNetworkImageView.setImageUrl(mItem.getSmallPictureUrl(), mImageLoader);
-            }
-
             TextView picIdTextView = (TextView) rootView.findViewById(R.id.picture_id);
             picIdTextView.setText(mItem.getPictureId().toString());
         }
