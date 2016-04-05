@@ -25,19 +25,20 @@ public class FilterDialog extends DialogFragment {
         }
     }
 
+    public static String[] GRADES = new String[]{
+            "5a—6a (very easy)",
+            "6a—6b (easy)",
+            "6b—6c (medium)",
+            "6c—7a (hard)",
+            "7a—7b (very hard)",
+            "7b—7c (wtf, is it real?)",
+            "7c—8a (hardcore)"};
+
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setTitle("Select grade").setItems(
-                new String[]{
-                        "5a—6a (very easy)",
-                        "6a—6b (easy)",
-                        "6b—6c (medium)",
-                        "6c—7a (hard)",
-                        "7a—7b (very hard)",
-                        "7b—7c (wtf, is it real?)",
-                        "7c—8a (hardcore)",
-                }, new DialogInterface.OnClickListener() {
+                GRADES, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         mListener.onFilterPicked(which);

@@ -347,9 +347,19 @@ public class RouteListActivity extends AppCompatActivity implements FilterDialog
 
     @Override
     public void onFilterPicked(int which) {
-        Toast.makeText(this, "Picked: " + String.valueOf(which), Toast.LENGTH_SHORT).show();
+        TextView clearFilterDialog = (TextView) this.findViewById(R.id.clear_filter_dialog);
+        if (which >= 0 && which < FilterDialog.GRADES.length) {
+            clearFilterDialog.setText("×   Filtered on: " + FilterDialog.GRADES[which]);
+        }
+        if (clearFilterDialog != null)
+            clearFilterDialog.setVisibility(View.VISIBLE);
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
         preferences.edit().putInt("grade", which).commit();
         reloadRoutes();
+    }
+
+    public void clearFilters(View view) {
+        onFilterPicked(-1);
+        view.setVisibility(View.GONE);
     }
 }

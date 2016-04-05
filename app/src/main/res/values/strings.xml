@@ -6,6 +6,8 @@
     <string name="menu_reload">Reload</string>
     <string name="menu_search">Search</string>
 
+    <string name="clear_filter_dialog">Clear filter</string>
+
     <!-- START Strings related to Settings -->
 
     <!-- Example General settings -->
