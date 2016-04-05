@@ -7,8 +7,8 @@
     <color name="rect_black">@android:color/black</color>
     <color name="rect_blue">#3F51B5</color>
     <color name="rect_blue_light">@android:color/holo_blue_light</color>
-    <color name="rect_brown">#3e2723</color>
-    <color name="rect_gray">#3e2723</color>
+    <color name="rect_brown">#795548</color>
+    <color name="rect_gray">@android:color/darker_gray</color>
     <color name="rect_green">@android:color/holo_green_dark</color>
     <color name="rect_orange">@android:color/holo_orange_dark</color>
     <color name="rect_pink">#ec407a</color>
