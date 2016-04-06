@@ -7,7 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import me.vadik.instaclimb.routes.R;
+import me.vadik.instaclimb.R;
 
 public class MyFragment extends Fragment {
 
@@ -29,7 +29,6 @@ public class MyFragment extends Fragment {
         textView.setText(getArguments().getString("content"));
         return a;
     }
-
 
 //    interface FragmentContent {
 //        String getText();

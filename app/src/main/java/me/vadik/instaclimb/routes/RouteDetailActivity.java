@@ -16,6 +16,7 @@ import android.widget.TextView;
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.NetworkImageView;
 
+import me.vadik.instaclimb.R;
 import me.vadik.instaclimb.routes.dummy.DummyContent;
 
 /**

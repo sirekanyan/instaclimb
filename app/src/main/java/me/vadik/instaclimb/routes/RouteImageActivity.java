@@ -6,6 +6,8 @@ import android.support.v7.app.AppCompatActivity;
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.NetworkImageView;
 
+import me.vadik.instaclimb.R;
+
 public class RouteImageActivity extends AppCompatActivity {
 
     @Override

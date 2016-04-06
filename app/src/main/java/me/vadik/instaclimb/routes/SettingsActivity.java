@@ -23,6 +23,8 @@ import android.support.v4.app.NavUtils;
 
 import java.util.List;
 
+import me.vadik.instaclimb.R;
+
 /**
  * A {@link PreferenceActivity} that presents a set of application settings. On
  * handset devices, settings are presented as a single list. On tablets,

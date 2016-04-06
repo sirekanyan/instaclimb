@@ -5,7 +5,7 @@ android {
     buildToolsVersion "23.0.3"
 
     defaultConfig {
-        applicationId "me.vadik.instaclimb.routes"
+        applicationId "me.vadik.instaclimb"
         minSdkVersion 15
         targetSdkVersion 23
         versionCode 1

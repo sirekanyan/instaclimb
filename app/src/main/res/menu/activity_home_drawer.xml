@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:checkableBehavior="single">
+        <!--TODO: remove first two items-->
+        <item
+            android:id="@+id/temprorary_tabs_item"
+            android:icon="@drawable/ic_menu_slideshow"
+            android:title="Табы" />
+        <item
+            android:id="@+id/temprorary_tabs2_item"
+            android:icon="@drawable/ic_menu_slideshow"
+            android:title="Табы2" />
+        <item
+            android:id="@+id/temprorary_item"
+            android:icon="@drawable/ic_menu_slideshow"
+            android:title="Все" />
+        <item
+            android:id="@+id/nav_all_gyms"
+            android:icon="@drawable/ic_menu_slideshow"
+            android:title="Все скалодромы" />
+        <item
+            android:id="@+id/nav_skalatoria"
+            android:icon="@drawable/ic_menu_gallery"
+            android:title="Скалатория" />
+        <item
+            android:id="@+id/nav_bigwall"
+            android:icon="@drawable/ic_menu_gallery"
+            android:title="BigWall" />
+        <item
+            android:id="@+id/nav_rockzona"
+            android:icon="@drawable/ic_menu_gallery"
+            android:title="RockZona" />
+        <item
+            android:id="@+id/nav_cherepaha"
+            android:icon="@drawable/ic_menu_gallery"
+            android:title="МАИ Черепаха" />
+        <item
+            android:id="@+id/nav_mgtu"
+            android:icon="@drawable/ic_menu_gallery"
+            android:title="МГТУ им.Баумана" />
+        <item
+            android:id="@+id/nav_x8"
+            android:icon="@drawable/ic_menu_gallery"
+            android:title="X8" />
+        <item
+            android:id="@+id/nav_tramontana"
+            android:icon="@drawable/ic_menu_gallery"
+            android:title="Трамонтана" />
+        <item
+            android:id="@+id/nav_atmosfera"
+            android:icon="@drawable/ic_menu_gallery"
+            android:title="Атмосфера" />
+    </group>
+
+    <item android:title="Settings">
+        <menu>
+            <item
+                android:id="@+id/nav_settings"
+                android:icon="@drawable/ic_menu_manage"
+                android:title="Settings" />
+        </menu>
+    </item>
+
+    <item android:title="Communicate">
+        <menu>
+            <item
+                android:id="@+id/nav_send"
+                android:icon="@drawable/ic_menu_send"
+                android:title="Send feedback" />
+            <item
+                android:id="@+id/nav_share"
+                android:icon="@drawable/ic_menu_share"
+                android:title="Share with friends" />
+        </menu>
+    </item>
+
+    <!--
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_camera"
+            android:icon="@drawable/ic_menu_camera"
+            android:title="Import" />
+        <item
+            android:id="@+id/nav_gallery"
+            android:icon="@drawable/ic_menu_gallery"
+            android:title="Gallery" />
+        <item
+            android:id="@+id/nav_slideshow"
+            android:icon="@drawable/ic_menu_slideshow"
+            android:title="Slideshow" />
+        <item
+            android:id="@+id/nav_manage"
+            android:icon="@drawable/ic_menu_manage"
+            android:title="Tools" />
+    </group>
+
+    <item android:title="Communicate">
+        <menu>
+            <item
+                android:id="@+id/nav_share"
+                android:icon="@drawable/ic_menu_share"
+                android:title="Share" />
+            <item
+                android:id="@+id/nav_send"
+                android:icon="@drawable/ic_menu_send"
+                android:title="Send" />
+        </menu>
+    </item>
+    -->
+
+</menu>
