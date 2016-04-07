@@ -128,6 +128,11 @@ public class HomeActivity extends AppCompatActivity
             case R.id.temprorary_item:
                 startActivity(new Intent(this, RouteListActivity.class));
                 break;
+            case R.id.temprorary2_item:
+                Fragment example5 = new RouteListFragment();
+                getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.gym_fragment_container, example5).commit();
+                break;
             case R.id.nav_all_gyms:
             case R.id.nav_skalatoria:
             case R.id.nav_bigwall:

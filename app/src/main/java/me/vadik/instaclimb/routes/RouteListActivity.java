@@ -80,7 +80,7 @@ public class RouteListActivity extends AppCompatActivity implements FilterDialog
         String[] statusFilterArgsArray = statusFilterArgs.toArray(new String[statusFilterArgs.size()]);
         String[] gradeFilterArgsArray = gradeFilterArgs.toArray(new String[gradeFilterArgs.size()]);
 
-        List<DummyContent.DummyItem> dummyItems = DummyItemsHelper.getDummyItems(this, statusFilterArgsArray, gradeFilterArgsArray);
+        List<DummyContent.DummyItem> dummyItems = DummyItemsHelper.getDummyItems(this, statusFilterArgsArray, gradeFilterArgsArray, -1);
         recyclerView.setAdapter(new SimpleItemRecyclerViewAdapter(this, getSupportFragmentManager(), dummyItems, mTwoPane));
     }
 

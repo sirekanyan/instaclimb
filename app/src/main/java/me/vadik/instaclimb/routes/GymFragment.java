@@ -136,9 +136,7 @@ public class GymFragment extends Fragment {
     private void setupViewPager(ViewPager viewPager) {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getActivity().getSupportFragmentManager());
         for (Sector sector : getSectors(mGymId)) {
-            Log.e("me", String.valueOf(sector.getId()) + ", " + sector.getName());
-//            adapter.addFragment(RouteListFragment.newInstance(sector.getId()), sector.getName());
-            adapter.addFragment(getFragmentWithContent(sector.getName()), sector.getName());
+            adapter.addFragment(RouteListFragment.newInstance(sector.getId()), sector.getName());
         }
         viewPager.setAdapter(adapter);
     }

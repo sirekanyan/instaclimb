@@ -27,8 +27,8 @@ public class RouteListFragment extends Fragment implements FilterDialog.OnFilter
         // Required empty public constructor
     }
 
-    public static GymFragment newInstance(Integer sectorId) {
-        GymFragment fragment = new GymFragment();
+    public static RouteListFragment newInstance(Integer sectorId) {
+        RouteListFragment fragment = new RouteListFragment();
         Bundle args = new Bundle();
         args.putInt(ARG_SECTOR_ID, sectorId);
         fragment.setArguments(args);
@@ -70,7 +70,7 @@ public class RouteListFragment extends Fragment implements FilterDialog.OnFilter
         String[] statusFilterArgsArray = statusFilterArgs.toArray(new String[statusFilterArgs.size()]);
         String[] gradeFilterArgsArray = gradeFilterArgs.toArray(new String[gradeFilterArgs.size()]);
 
-        List<DummyContent.DummyItem> dummyItems = DummyItemsHelper.getDummyItems(getActivity(), statusFilterArgsArray, gradeFilterArgsArray);
+        List<DummyContent.DummyItem> dummyItems = DummyItemsHelper.getDummyItems(getActivity(), statusFilterArgsArray, gradeFilterArgsArray, mSectorId);
         recyclerView.setAdapter(new SimpleItemRecyclerViewAdapter(getActivity(), getActivity().getSupportFragmentManager(), dummyItems, mTwoPane));
     }
 

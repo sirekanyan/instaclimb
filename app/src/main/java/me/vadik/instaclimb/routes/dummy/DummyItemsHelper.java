@@ -36,7 +36,7 @@ public class DummyItemsHelper {
         COLORS.put("желтый", R.drawable.rect_yellow);
     }
 
-    public static List<DummyContent.DummyItem> getDummyItems(Context context, String[] statusFilterArgs, String[] gradeFilterArgs) {
+    public static List<DummyContent.DummyItem> getDummyItems(Context context, String[] statusFilterArgs, String[] gradeFilterArgs, Integer mSectorId) {
         DummyContent.clear();
 
         Uri myUri = Uri.withAppendedPath(RoutesContentProvider.CONTENT_URI, "routes");
@@ -54,6 +54,14 @@ public class DummyItemsHelper {
 
         String[] args = new String[statusFilterArgs.length + gradeFilterArgs.length];
 
+//        String[] args;
+//
+//        if (mSectorId > 0) {
+//            args = new String[statusFilterArgs.length + gradeFilterArgs.length + 1];
+//        } else {
+//            args = new String[statusFilterArgs.length + gradeFilterArgs.length];
+//        }
+
         System.arraycopy(statusFilterArgs, 0, args, 0, statusFilterArgs.length);
 
         System.arraycopy(gradeFilterArgs, 0, args, statusFilterArgs.length, gradeFilterArgs.length);
@@ -64,8 +72,15 @@ public class DummyItemsHelper {
             gradeInClause = "and lower(grade) in (" + TextUtils.join(",", gradePlaceHolders) + ")";
         }
 
+//        String sectorClause = "";
+//        if (mSectorId > 0) {
+//            sectorClause = "and sector_id = ?";
+//            System.arraycopy(new String[]{mSectorId.toString()}, 0, args, statusFilterArgs.length + gradeFilterArgs.length, 1);
+//        }
+
         Cursor cursor = context.getContentResolver().query(myUri, null,
                 "status in (" + TextUtils.join(",", statusPlaceHolders) + ") " + gradeInClause,
+//                        + " " + sectorClause
                 args, "id desc");
 
         try {
