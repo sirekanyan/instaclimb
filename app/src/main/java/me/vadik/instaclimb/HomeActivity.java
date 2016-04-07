@@ -109,9 +109,11 @@ public class HomeActivity extends AppCompatActivity
         Integer itemId = item.getItemId();
 
         Integer gymId = null;
+        String gymName = "Ноунейм скалодром";
 
         if (GYM_IDS.containsKey(itemId)) {
             gymId = GYM_IDS.get(itemId);
+            gymName = item.getTitle().toString();
         }
 
         switch (itemId) {
@@ -141,7 +143,7 @@ public class HomeActivity extends AppCompatActivity
             case R.id.nav_tramontana:
             case R.id.nav_atmosfera:
                 if (gymId != null) {
-                    Fragment gymFragment = GymFragment.newInstance(gymId);
+                    Fragment gymFragment = GymFragment.newInstance(gymId, gymName);
                     getSupportFragmentManager().beginTransaction()
                             .replace(R.id.gym_fragment_container, gymFragment).commit();
                 }

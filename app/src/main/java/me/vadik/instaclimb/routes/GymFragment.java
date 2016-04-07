@@ -9,11 +9,10 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.util.Log;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,17 +23,20 @@ import me.vadik.instaclimb.routes.example.MyFragment;
 public class GymFragment extends Fragment {
 
     private static final String ARG_GYM_ID = "gym_id";
+    private static final String ARG_GYM_NAME = "gym_name";
     private Integer mGymId;
+    private String mGymName;
     private OnFragmentInteractionListener mListener;
 
     public GymFragment() {
         // Required empty public constructor
     }
 
-    public static GymFragment newInstance(Integer gymId) {
+    public static GymFragment newInstance(Integer gymId, String gymName) {
         GymFragment fragment = new GymFragment();
         Bundle args = new Bundle();
         args.putInt(ARG_GYM_ID, gymId);
+        args.putString(ARG_GYM_NAME, gymName);
         fragment.setArguments(args);
         return fragment;
     }
@@ -44,6 +46,7 @@ public class GymFragment extends Fragment {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             mGymId = getArguments().getInt(ARG_GYM_ID);
+            mGymName = getArguments().getString(ARG_GYM_NAME);
         }
     }
 
@@ -51,6 +54,9 @@ public class GymFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_gym, container, false);
+
+        Toolbar toolbar = (Toolbar) getActivity().findViewById(R.id.toolbar);
+        toolbar.setTitle(mGymName);
 
         ViewPager viewPager = (ViewPager) view.findViewById(R.id.viewpager22);
         List<Sector> sectors = getSectors(mGymId);
