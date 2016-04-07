@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.app.ActionBar;
@@ -23,7 +24,7 @@ import me.vadik.instaclimb.routes.dummy.DummyContent;
  * An activity representing a single Route detail screen. This
  * activity is only used narrow width devices. On tablet-size devices,
  * item details are presented side-by-side with a list of items
- * in a {@link RouteListActivity}.
+ * in a {@link SectorActivity}.
  */
 public class RouteDetailActivity extends AppCompatActivity {
 
@@ -77,7 +78,11 @@ public class RouteDetailActivity extends AppCompatActivity {
             DummyContent.DummyItem mItem = DummyContent.ITEM_MAP.get(argItemId);
 
             if (mNetworkImageToolbarView != null) {
-                mNetworkImageToolbarView.setImageUrl(mItem.getSmallPictureUrl(), mImageLoader);
+                if (mItem == null) {
+                    Log.e("me", "mItem is null, wtf? argItemId: " + argItemId);
+                } else {
+                    mNetworkImageToolbarView.setImageUrl(mItem.getSmallPictureUrl(), mImageLoader);
+                }
             }
         }
     }
@@ -93,7 +98,7 @@ public class RouteDetailActivity extends AppCompatActivity {
             //
             // http://developer.android.com/design/patterns/navigation.html#up-vs-back
             //
-            NavUtils.navigateUpTo(this, new Intent(this, RouteListActivity.class));
+            NavUtils.navigateUpTo(this, new Intent(this, SectorActivity.class));
             return true;
         }
         return super.onOptionsItemSelected(item);

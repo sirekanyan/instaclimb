@@ -21,8 +21,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 import me.vadik.instaclimb.routes.GymFragment;
-import me.vadik.instaclimb.routes.RouteListActivity;
-import me.vadik.instaclimb.routes.RouteListFragment;
+import me.vadik.instaclimb.routes.SectorActivity;
+import me.vadik.instaclimb.routes.SectorFragment;
 import me.vadik.instaclimb.routes.SettingsActivity;
 import me.vadik.instaclimb.routes.example.MainActivity;
 import me.vadik.instaclimb.routes.example.MainFragment;
@@ -126,10 +126,10 @@ public class HomeActivity extends AppCompatActivity
                         .replace(R.id.gym_fragment_container, example2).commit();
                 break;
             case R.id.temprorary_route_list_activity_item:
-                startActivity(new Intent(this, RouteListActivity.class));
+                startActivity(new Intent(this, SectorActivity.class));
                 break;
             case R.id.temprorary_route_list_fragment_item:
-                Fragment example5 = new RouteListFragment();
+                Fragment example5 = new SectorFragment();
                 getSupportFragmentManager().beginTransaction()
                         .replace(R.id.gym_fragment_container, example5).commit();
                 break;
@@ -147,7 +147,7 @@ public class HomeActivity extends AppCompatActivity
                     getSupportFragmentManager().beginTransaction()
                             .replace(R.id.gym_fragment_container, gymFragment).commit();
                 }
-//                Fragment example = new RouteListFragment();
+//                Fragment example = new SectorFragment();
 //                Bundle b = new Bundle();
 //                b.putString("content", item.getTitle().toString());
 //                b.putInt("menuItemId", item.getItemId());

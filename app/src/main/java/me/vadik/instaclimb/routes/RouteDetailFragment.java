@@ -14,7 +14,7 @@ import me.vadik.instaclimb.routes.dummy.DummyContent;
 
 /**
  * A fragment representing a single Route detail screen.
- * This fragment is either contained in a {@link RouteListActivity}
+ * This fragment is either contained in a {@link SectorActivity}
  * in two-pane mode (on tablets) or a {@link RouteDetailActivity}
  * on handsets.
  */

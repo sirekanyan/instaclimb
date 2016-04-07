@@ -7,5 +7,5 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     app:layoutManager="LinearLayoutManager"
-    tools:context="me.vadik.instaclimb.routes.RouteListActivity"
+    tools:context=".routes.SectorActivity"
     tools:listitem="@layout/route_list_content" />

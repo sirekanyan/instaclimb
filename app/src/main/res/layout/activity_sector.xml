@@ -19,6 +19,12 @@
             android:layout_height="?attr/actionBarSize"
             app:popupTheme="@style/AppTheme.PopupOverlay" />
 
+        <android.support.design.widget.TabLayout
+            android:id="@+id/sectors_tabs"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:tabMode="fixed"
+            app:tabGravity="fill"/>
     </android.support.design.widget.AppBarLayout>
 
     <LinearLayout
@@ -38,9 +44,28 @@
             android:paddingLeft="16dp"
             android:paddingRight="16dp"
             android:paddingTop="8dp"
-            android:text="@string/clear_filter_dialog"
             android:textColor="@android:color/white"
             android:visibility="gone" />
+
+        <!-- TODO: remove this text view due to the functionality should be implemented with nav drawer -->
+        <TextView
+            android:id="@+id/clear_gym_filter_dialog"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/colorPrimaryDark"
+            android:onClick="clearGymFilters"
+            android:paddingBottom="8dp"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
+            android:paddingTop="8dp"
+            android:textColor="@android:color/white"
+            android:visibility="gone" />
+
+        <android.support.v4.view.ViewPager
+            android:id="@+id/viewpager1"
+            android:layout_width="match_parent"
+            android:layout_height="150dp"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
         <include layout="@layout/route_list" />
     </LinearLayout>

@@ -32,18 +32,18 @@
         </activity>
 
         <activity
-            android:name=".routes.RouteListActivity"
+            android:name=".routes.SectorActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar" />
 
         <activity
             android:name=".routes.RouteDetailActivity"
             android:label="@string/title_route_detail"
-            android:parentActivityName=".routes.RouteListActivity"
+            android:parentActivityName=".routes.SectorActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="me.vadik.instaclimb.routes.RouteListActivity" />
+                android:value=".routes.SectorActivity" />
         </activity>
 
         <provider
@@ -54,10 +54,10 @@
         <activity
             android:name=".routes.SettingsActivity"
             android:label="@string/menu_settings"
-            android:parentActivityName=".routes.RouteListActivity">
+            android:parentActivityName=".routes.SectorActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="me.vadik.instaclimb.routes.RouteListActivity" />
+                android:value=".routes.SectorActivity" />
         </activity>
 
         <activity

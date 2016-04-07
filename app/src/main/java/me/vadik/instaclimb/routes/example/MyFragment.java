@@ -24,7 +24,7 @@ public class MyFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View a = inflater.inflate(R.layout.fragment_one, container, false);
+        View a = inflater.inflate(R.layout.fragment_my, container, false);
         TextView textView = (TextView) a.findViewById(R.id.fragment_content);
         textView.setText(getArguments().getString("content"));
         return a;

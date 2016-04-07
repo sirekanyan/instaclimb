@@ -32,7 +32,8 @@ public class FilterDialog extends DialogFragment {
             "6c—7a (hard)",
             "7a—7b (very hard)",
             "7b—7c (wtf, is it real?)",
-            "7c—8a (hardcore)"};
+            "7c—8c (hardcore)"
+    };
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {

@@ -30,7 +30,7 @@ import me.vadik.instaclimb.routes.dummy.DummyItemsHelper;
  * item details. On tablets, the activity presents the list of items and
  * item details side-by-side using two vertical panes.
  */
-public class RouteListActivity extends AppCompatActivity implements FilterDialog.OnFilterPickedListener {
+public class SectorActivity extends AppCompatActivity implements FilterDialog.OnFilterPickedListener {
 
     /**
      * Whether or not the activity is in two-pane mode, i.e. running on a tablet
@@ -41,7 +41,7 @@ public class RouteListActivity extends AppCompatActivity implements FilterDialog
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_route_list);
+        setContentView(R.layout.activity_sector);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);

@@ -17,18 +17,18 @@ import me.vadik.instaclimb.R;
 import me.vadik.instaclimb.routes.dummy.DummyContent;
 import me.vadik.instaclimb.routes.dummy.DummyItemsHelper;
 
-public class RouteListFragment extends Fragment implements FilterDialog.OnFilterPickedListener {
+public class SectorFragment extends Fragment implements FilterDialog.OnFilterPickedListener {
 
     private static final String ARG_SECTOR_ID = "sectorId";
     private Integer mSectorId;
     private boolean mTwoPane;
 
-    public RouteListFragment() {
+    public SectorFragment() {
         // Required empty public constructor
     }
 
-    public static RouteListFragment newInstance(Integer sectorId) {
-        RouteListFragment fragment = new RouteListFragment();
+    public static SectorFragment newInstance(Integer sectorId) {
+        SectorFragment fragment = new SectorFragment();
         Bundle args = new Bundle();
         args.putInt(ARG_SECTOR_ID, sectorId);
         fragment.setArguments(args);
@@ -45,7 +45,7 @@ public class RouteListFragment extends Fragment implements FilterDialog.OnFilter
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_route_list, container, false);
+        View view = inflater.inflate(R.layout.fragment_sector, container, false);
         if (view.findViewById(R.id.route_detail_container) != null) {
             // The detail container view will be present only in the
             // large-screen layouts (res/values-w900dp).
