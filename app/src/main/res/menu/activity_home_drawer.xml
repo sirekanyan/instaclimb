@@ -4,21 +4,21 @@
     <group android:checkableBehavior="single">
         <!--TODO: remove first 4 items-->
         <item
-            android:id="@+id/temprorary_tabs_item"
+            android:id="@+id/temprorary_tabs_activity_item"
             android:icon="@drawable/ic_menu_slideshow"
-            android:title="Табы" />
+            android:title="Табы (активити)" />
         <item
-            android:id="@+id/temprorary_tabs2_item"
+            android:id="@+id/temprorary_tabs_fragment_item"
             android:icon="@drawable/ic_menu_slideshow"
-            android:title="Табы2" />
+            android:title="Табы (фрагмент)" />
         <item
-            android:id="@+id/temprorary_item"
+            android:id="@+id/temprorary_route_list_activity_item"
             android:icon="@drawable/ic_menu_slideshow"
-            android:title="Все" />
+            android:title="Список трасс (активити)" />
         <item
-            android:id="@+id/temprorary2_item"
+            android:id="@+id/temprorary_route_list_fragment_item"
             android:icon="@drawable/ic_menu_slideshow"
-            android:title="Все2" />
+            android:title="Список трасс (фрагмент)" />
         <item
             android:id="@+id/nav_all_gyms"
             android:icon="@drawable/ic_menu_slideshow"

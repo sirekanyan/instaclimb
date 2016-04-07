@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -27,7 +26,6 @@ import me.vadik.instaclimb.routes.RouteListFragment;
 import me.vadik.instaclimb.routes.SettingsActivity;
 import me.vadik.instaclimb.routes.example.MainActivity;
 import me.vadik.instaclimb.routes.example.MainFragment;
-import me.vadik.instaclimb.routes.example.MyFragment;
 
 public class HomeActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, GymFragment.OnFragmentInteractionListener {
@@ -117,18 +115,18 @@ public class HomeActivity extends AppCompatActivity
         }
 
         switch (itemId) {
-            case R.id.temprorary_tabs_item:
+            case R.id.temprorary_tabs_activity_item:
                 startActivity(new Intent(this, MainActivity.class));
                 break;
-            case R.id.temprorary_tabs2_item:
+            case R.id.temprorary_tabs_fragment_item:
                 Fragment example2 = new MainFragment();
                 getSupportFragmentManager().beginTransaction()
                         .replace(R.id.gym_fragment_container, example2).commit();
                 break;
-            case R.id.temprorary_item:
+            case R.id.temprorary_route_list_activity_item:
                 startActivity(new Intent(this, RouteListActivity.class));
                 break;
-            case R.id.temprorary2_item:
+            case R.id.temprorary_route_list_fragment_item:
                 Fragment example5 = new RouteListFragment();
                 getSupportFragmentManager().beginTransaction()
                         .replace(R.id.gym_fragment_container, example5).commit();

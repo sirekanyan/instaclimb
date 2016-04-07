@@ -53,10 +53,15 @@ public class GymFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_gym, container, false);
 
         ViewPager viewPager = (ViewPager) view.findViewById(R.id.viewpager22);
-        setupViewPager(viewPager);
+        List<Sector> sectors = getSectors(mGymId);
+        setupViewPager(viewPager, sectors);
 
         TabLayout tabLayout = (TabLayout) getActivity().findViewById(R.id.tabz);
-        tabLayout.setVisibility(View.VISIBLE);
+        if (sectors.size() > 1) {
+            tabLayout.setVisibility(View.VISIBLE);
+        } else {
+            tabLayout.setVisibility(View.GONE); //TODO: remove this
+        }
         tabLayout.setupWithViewPager(viewPager);
 
         return view;
@@ -133,9 +138,9 @@ public class GymFragment extends Fragment {
         }
     }
 
-    private void setupViewPager(ViewPager viewPager) {
+    private void setupViewPager(ViewPager viewPager, List<Sector> sectors) {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getActivity().getSupportFragmentManager());
-        for (Sector sector : getSectors(mGymId)) {
+        for (Sector sector : sectors) {
             adapter.addFragment(RouteListFragment.newInstance(sector.getId()), sector.getName());
         }
         viewPager.setAdapter(adapter);
