@@ -11,6 +11,7 @@ import java.util.Map;
 
 import me.vadik.instaclimb.R;
 import me.vadik.instaclimb.routes.RoutesContentProvider;
+import me.vadik.instaclimb.routes.SectorFragment;
 
 /**
  * User: vadik
@@ -53,35 +54,33 @@ public class DummyItemsHelper {
         }
 
         String[] args = new String[statusFilterArgs.length + gradeFilterArgs.length];
-
-//        String[] args;
-//
-//        if (mSectorId > 0) {
-//            args = new String[statusFilterArgs.length + gradeFilterArgs.length + 1];
-//        } else {
-//            args = new String[statusFilterArgs.length + gradeFilterArgs.length];
-//        }
-
         System.arraycopy(statusFilterArgs, 0, args, 0, statusFilterArgs.length);
-
         System.arraycopy(gradeFilterArgs, 0, args, statusFilterArgs.length, gradeFilterArgs.length);
 
-        String gradeInClause = "";
+        String statusInClause = "status in (" + TextUtils.join(",", statusPlaceHolders) + ") ";
 
+        String gradeInClause = "";
         if (gradeFilterArgs.length > 0) {
-            gradeInClause = "and lower(grade) in (" + TextUtils.join(",", gradePlaceHolders) + ")";
+            gradeInClause = "and lower(grade) in (" + TextUtils.join(",", gradePlaceHolders) + ") ";
         }
 
-//        String sectorClause = "";
-//        if (mSectorId > 0) {
-//            sectorClause = "and sector_id = ?";
-//            System.arraycopy(new String[]{mSectorId.toString()}, 0, args, statusFilterArgs.length + gradeFilterArgs.length, 1);
-//        }
+        String sectorClause = "";
+        if (mSectorId != null && mSectorId != SectorFragment.ALL_SECTORS) {
+            String[] argsWithSector = new String[args.length + 1];
+            System.arraycopy(args, 0, argsWithSector, 0, args.length);
+            args = argsWithSector;
+            args[args.length - 1] = String.valueOf(mSectorId);
+            sectorClause = "and sector_id = ?";
+        }
 
-        Cursor cursor = context.getContentResolver().query(myUri, null,
-                "status in (" + TextUtils.join(",", statusPlaceHolders) + ") " + gradeInClause,
-//                        + " " + sectorClause
-                args, "id desc");
+        String sqlSelection = statusInClause + gradeInClause + sectorClause;
+
+        Cursor cursor = context.getContentResolver().query(
+                myUri,
+                null,
+                sqlSelection,
+                args,
+                "id desc");
 
         try {
             if (cursor != null && cursor.moveToFirst()) {

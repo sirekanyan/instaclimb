@@ -18,12 +18,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import me.vadik.instaclimb.R;
-import me.vadik.instaclimb.routes.example.MyFragment;
 
 public class GymFragment extends Fragment {
 
     private static final String ARG_GYM_ID = "gym_id";
     private static final String ARG_GYM_NAME = "gym_name";
+    public static final int ALL_GYMS = -1;
     private Integer mGymId;
     private String mGymName;
     private OnFragmentInteractionListener mListener;
@@ -59,7 +59,15 @@ public class GymFragment extends Fragment {
         toolbar.setTitle(mGymName);
 
         ViewPager viewPager = (ViewPager) view.findViewById(R.id.viewpager22);
-        List<Sector> sectors = getSectors(mGymId);
+        List<Sector> sectors;
+
+        if (mGymId == ALL_GYMS) {
+            sectors = new ArrayList<>();
+            sectors.add(new Sector(SectorFragment.ALL_SECTORS, "All"));
+        } else {
+            sectors = getSectors(mGymId);
+        }
+
         setupViewPager(viewPager, sectors);
 
         TabLayout tabLayout = (TabLayout) getActivity().findViewById(R.id.tabz);
@@ -145,7 +153,7 @@ public class GymFragment extends Fragment {
     }
 
     private void setupViewPager(ViewPager viewPager, List<Sector> sectors) {
-        ViewPagerAdapter adapter = new ViewPagerAdapter(getActivity().getSupportFragmentManager());
+        ViewPagerAdapter adapter = new ViewPagerAdapter(getChildFragmentManager());
         for (Sector sector : sectors) {
             adapter.addFragment(SectorFragment.newInstance(sector.getId()), sector.getName());
         }
@@ -179,13 +187,5 @@ public class GymFragment extends Fragment {
         public CharSequence getPageTitle(int position) {
             return mFragmentTitleList.get(position);
         }
-    }
-
-    private Fragment getFragmentWithContent(String content) {
-        Fragment f = new MyFragment();
-        Bundle args = new Bundle();
-        args.putString("content", content);
-        f.setArguments(args);
-        return f;
     }
 }

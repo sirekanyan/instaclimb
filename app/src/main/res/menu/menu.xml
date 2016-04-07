@@ -13,5 +13,6 @@
         app:showAsAction="always" />
     <item
         android:id="@+id/settings"
-        android:title="@string/menu_settings" />
+        android:title="@string/menu_settings"
+        app:showAsAction="never" />
 </menu>

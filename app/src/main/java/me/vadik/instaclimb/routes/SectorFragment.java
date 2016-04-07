@@ -20,6 +20,7 @@ import me.vadik.instaclimb.routes.dummy.DummyItemsHelper;
 public class SectorFragment extends Fragment implements FilterDialog.OnFilterPickedListener {
 
     private static final String ARG_SECTOR_ID = "sectorId";
+    public static final int ALL_SECTORS = -1;
     private Integer mSectorId;
     private boolean mTwoPane;
 
@@ -85,10 +86,5 @@ public class SectorFragment extends Fragment implements FilterDialog.OnFilterPic
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
         preferences.edit().putInt("grade", which).commit();
 //        reloadRoutes();
-    }
-
-    public void clearFilters(View view) {
-        onFilterPicked(-1);
-        view.setVisibility(View.GONE);
     }
 }

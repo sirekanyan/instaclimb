@@ -1,13 +1,15 @@
 package me.vadik.instaclimb;
 
+import android.app.DialogFragment;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
-import android.view.View;
-import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -15,20 +17,23 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.HashMap;
 import java.util.Map;
 
+import me.vadik.instaclimb.routes.FilterDialog;
 import me.vadik.instaclimb.routes.GymFragment;
 import me.vadik.instaclimb.routes.SectorActivity;
 import me.vadik.instaclimb.routes.SectorFragment;
 import me.vadik.instaclimb.routes.SettingsActivity;
-import me.vadik.instaclimb.routes.example.MainActivity;
-import me.vadik.instaclimb.routes.example.MainFragment;
 
-public class HomeActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener, GymFragment.OnFragmentInteractionListener {
+public class HomeActivity extends AppCompatActivity implements
+        NavigationView.OnNavigationItemSelectedListener,
+        GymFragment.OnFragmentInteractionListener,
+        FilterDialog.OnFilterPickedListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,21 +73,23 @@ public class HomeActivity extends AppCompatActivity
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.home, menu);
+        getMenuInflater().inflate(R.menu.menu, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+        switch (item.getItemId()) {
+            case R.id.reload_button:
+//                reloadRoutes(); //TODO
+                return true;
+            case R.id.filter_button:
+                DialogFragment filterDialog = new FilterDialog();
+                filterDialog.show(getFragmentManager(), "Lalala");
+                return true;
+            case R.id.settings:
+                startActivity(new Intent(this, SettingsActivity.class));
+                return true;
         }
 
         return super.onOptionsItemSelected(item);
@@ -117,14 +124,6 @@ public class HomeActivity extends AppCompatActivity
         }
 
         switch (itemId) {
-            case R.id.temprorary_tabs_activity_item:
-                startActivity(new Intent(this, MainActivity.class));
-                break;
-            case R.id.temprorary_tabs_fragment_item:
-                Fragment example2 = new MainFragment();
-                getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.gym_fragment_container, example2).commit();
-                break;
             case R.id.temprorary_route_list_activity_item:
                 startActivity(new Intent(this, SectorActivity.class));
                 break;
@@ -133,7 +132,9 @@ public class HomeActivity extends AppCompatActivity
                 getSupportFragmentManager().beginTransaction()
                         .replace(R.id.gym_fragment_container, example5).commit();
                 break;
-            case R.id.nav_all_gyms:
+            case R.id.nav_all_routes:
+                gymId = GymFragment.ALL_GYMS;
+                gymName = item.getTitle().toString();
             case R.id.nav_skalatoria:
             case R.id.nav_bigwall:
             case R.id.nav_rockzona:
@@ -147,13 +148,6 @@ public class HomeActivity extends AppCompatActivity
                     getSupportFragmentManager().beginTransaction()
                             .replace(R.id.gym_fragment_container, gymFragment).commit();
                 }
-//                Fragment example = new SectorFragment();
-//                Bundle b = new Bundle();
-//                b.putString("content", item.getTitle().toString());
-//                b.putInt("menuItemId", item.getItemId());
-//                example.setArguments(b);
-//                getSupportFragmentManager().beginTransaction()
-//                        .replace(R.id.gym_fragment_container, example).commit();
                 break;
             case R.id.nav_settings:
                 startActivity(new Intent(this, SettingsActivity.class));
@@ -173,5 +167,23 @@ public class HomeActivity extends AppCompatActivity
     @Override
     public void onFragmentInteraction(Uri uri) {
 
+    }
+
+    @Override
+    public void onFilterPicked(int which) {
+        TextView clearFilterDialog = (TextView) this.findViewById(R.id.clear_filter_dialog);
+        if (which >= 0 && which < FilterDialog.GRADES.length) {
+            clearFilterDialog.setText("×   Filtered on: " + FilterDialog.GRADES[which]);
+        }
+        if (clearFilterDialog != null)
+            clearFilterDialog.setVisibility(View.VISIBLE);
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        preferences.edit().putInt("grade", which).commit();
+//        reloadRoutes(); //TODO
+    }
+
+    public void clearFilters(View view) {
+        onFilterPicked(-1);
+        view.setVisibility(View.GONE);
     }
 }

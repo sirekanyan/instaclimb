@@ -2,15 +2,7 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <group android:checkableBehavior="single">
-        <!--TODO: remove first 4 items-->
-        <item
-            android:id="@+id/temprorary_tabs_activity_item"
-            android:icon="@drawable/ic_menu_slideshow"
-            android:title="Табы (активити)" />
-        <item
-            android:id="@+id/temprorary_tabs_fragment_item"
-            android:icon="@drawable/ic_menu_slideshow"
-            android:title="Табы (фрагмент)" />
+        <!--TODO: remove first 2 items-->
         <item
             android:id="@+id/temprorary_route_list_activity_item"
             android:icon="@drawable/ic_menu_slideshow"
@@ -20,9 +12,9 @@
             android:icon="@drawable/ic_menu_slideshow"
             android:title="Список трасс (фрагмент)" />
         <item
-            android:id="@+id/nav_all_gyms"
+            android:id="@+id/nav_all_routes"
             android:icon="@drawable/ic_menu_slideshow"
-            android:title="Все скалодромы" />
+            android:title="Все трассы" />
         <item
             android:id="@+id/nav_skalatoria"
             android:icon="@drawable/ic_menu_gallery"
