@@ -23,7 +23,7 @@
             android:id="@+id/tabz"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:tabMode="fixed"
+            app:tabMode="scrollable"
             app:tabGravity="fill"
             android:visibility="gone"/>
     </android.support.design.widget.AppBarLayout>

@@ -19,14 +19,28 @@ import me.vadik.instaclimb.routes.dummy.DummyItemsHelper;
 
 public class RouteListFragment extends Fragment implements FilterDialog.OnFilterPickedListener {
 
+    private static final String ARG_SECTOR_ID = "sectorId";
+    private Integer mSectorId;
     private boolean mTwoPane;
 
     public RouteListFragment() {
+        // Required empty public constructor
+    }
+
+    public static GymFragment newInstance(Integer sectorId) {
+        GymFragment fragment = new GymFragment();
+        Bundle args = new Bundle();
+        args.putInt(ARG_SECTOR_ID, sectorId);
+        fragment.setArguments(args);
+        return fragment;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (getArguments() != null) {
+            mSectorId = getArguments().getInt(ARG_SECTOR_ID);
+        }
     }
 
     @Override

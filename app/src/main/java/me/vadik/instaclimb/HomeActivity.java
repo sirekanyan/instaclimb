@@ -1,6 +1,7 @@
 package me.vadik.instaclimb;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -17,6 +18,10 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import me.vadik.instaclimb.routes.GymFragment;
 import me.vadik.instaclimb.routes.RouteListActivity;
 import me.vadik.instaclimb.routes.RouteListFragment;
 import me.vadik.instaclimb.routes.SettingsActivity;
@@ -25,7 +30,7 @@ import me.vadik.instaclimb.routes.example.MainFragment;
 import me.vadik.instaclimb.routes.example.MyFragment;
 
 public class HomeActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+        implements NavigationView.OnNavigationItemSelectedListener, GymFragment.OnFragmentInteractionListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,11 +90,33 @@ public class HomeActivity extends AppCompatActivity
         return super.onOptionsItemSelected(item);
     }
 
+    private static Map<Integer, Integer> GYM_IDS;
+
+    static {
+        GYM_IDS = new HashMap<>();
+        GYM_IDS.put(R.id.nav_skalatoria, 1);
+        GYM_IDS.put(R.id.nav_bigwall, 2);
+        GYM_IDS.put(R.id.nav_rockzona, 4);
+        GYM_IDS.put(R.id.nav_cherepaha, 5);
+        GYM_IDS.put(R.id.nav_mgtu, 6);
+        GYM_IDS.put(R.id.nav_x8, 7);
+        GYM_IDS.put(R.id.nav_tramontana, 9);
+        GYM_IDS.put(R.id.nav_atmosfera, 12);
+    }
+
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
 
-        switch (item.getItemId()) {
+        Integer itemId = item.getItemId();
+
+        Integer gymId = null;
+
+        if (GYM_IDS.containsKey(itemId)) {
+            gymId = GYM_IDS.get(itemId);
+        }
+
+        switch (itemId) {
             case R.id.temprorary_tabs_item:
                 startActivity(new Intent(this, MainActivity.class));
                 break;
@@ -110,13 +137,18 @@ public class HomeActivity extends AppCompatActivity
             case R.id.nav_x8:
             case R.id.nav_tramontana:
             case R.id.nav_atmosfera:
-                Fragment example = new RouteListFragment();
-                Bundle b = new Bundle();
-                b.putString("content", item.getTitle().toString());
-                b.putInt("menuItemId", item.getItemId());
-                example.setArguments(b);
-                getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.gym_fragment_container, example).commit();
+                if (gymId != null) {
+                    Fragment gymFragment = GymFragment.newInstance(gymId);
+                    getSupportFragmentManager().beginTransaction()
+                            .replace(R.id.gym_fragment_container, gymFragment).commit();
+                }
+//                Fragment example = new RouteListFragment();
+//                Bundle b = new Bundle();
+//                b.putString("content", item.getTitle().toString());
+//                b.putInt("menuItemId", item.getItemId());
+//                example.setArguments(b);
+//                getSupportFragmentManager().beginTransaction()
+//                        .replace(R.id.gym_fragment_container, example).commit();
                 break;
             case R.id.nav_settings:
                 startActivity(new Intent(this, SettingsActivity.class));
@@ -131,5 +163,10 @@ public class HomeActivity extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    @Override
+    public void onFragmentInteraction(Uri uri) {
+
     }
 }
