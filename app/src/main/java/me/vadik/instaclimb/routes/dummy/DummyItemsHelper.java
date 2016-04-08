@@ -5,12 +5,13 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.text.TextUtils;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import me.vadik.instaclimb.R;
-import me.vadik.instaclimb.routes.RoutesContentProvider;
+import me.vadik.instaclimb.routes.provider.RoutesContentProvider;
 import me.vadik.instaclimb.routes.SectorFragment;
 
 /**
@@ -37,8 +38,8 @@ public class DummyItemsHelper {
         COLORS.put("желтый", R.drawable.rect_yellow);
     }
 
-    public static List<DummyContent.DummyItem> getDummyItems(Context context, String[] statusFilterArgs, String[] gradeFilterArgs, Integer mSectorId) {
-        DummyContent.clear();
+    public static List<DummyItem> getDummyItems(Context context, String[] statusFilterArgs, String[] gradeFilterArgs, Integer mSectorId) {
+        List<DummyItem> dummyItems = new ArrayList<>();
 
         Uri myUri = Uri.withAppendedPath(RoutesContentProvider.CONTENT_URI, "routes");
 
@@ -87,7 +88,8 @@ public class DummyItemsHelper {
                 do {
                     Integer id = cursor.getInt(cursor.getColumnIndex("id"));
                     String name = cursor.getString(cursor.getColumnIndex("name"));
-                    DummyContent.addItem(new DummyContent.DummyItem(id.toString(), name, cursor));
+                    DummyItem item = new DummyItem(id.toString(), name, cursor);
+                    dummyItems.add(item);
                 } while (cursor.moveToNext());
             }
         } finally {
@@ -96,6 +98,6 @@ public class DummyItemsHelper {
             }
         }
 
-        return DummyContent.ITEMS;
+        return dummyItems;
     }
 }

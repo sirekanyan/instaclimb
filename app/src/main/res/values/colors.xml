@@ -3,13 +3,13 @@
     <!--<color name="colorPrimary">#3F51B5</color>-->
     <!--<color name="colorPrimaryDark">#303F9F</color>-->
 
-    <!--<color name="colorPrimary">#607d8b</color>-->
-    <!--<color name="colorPrimaryDark">#455a64</color>-->
-    <!--<color name="colorAccent">#ffab91</color>-->
-
-    <color name="colorPrimary">#795548</color>
-    <color name="colorPrimaryDark">#5d4037</color>
-    <color name="colorAccent">#40c4ff</color>
+    <color name="colorPrimary">#607d8b</color>
+    <color name="colorPrimaryDark">#455a64</color>
+    <color name="colorAccent">#ffab91</color>
+<!---->
+    <!--<color name="colorPrimary">#795548</color>-->
+    <!--<color name="colorPrimaryDark">#5d4037</color>-->
+    <!--<color name="colorAccent">#40c4ff</color>-->
 
     <color name="rect_black">@android:color/black</color>
     <color name="rect_blue">#3F51B5</color>

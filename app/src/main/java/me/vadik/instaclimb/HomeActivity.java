@@ -24,8 +24,10 @@ import android.widget.Toast;
 import java.util.HashMap;
 import java.util.Map;
 
+import me.vadik.instaclimb.routes.ContactsFragment;
 import me.vadik.instaclimb.routes.FilterDialog;
 import me.vadik.instaclimb.routes.GymFragment;
+import me.vadik.instaclimb.routes.Sector2Fragment;
 import me.vadik.instaclimb.routes.SectorActivity;
 import me.vadik.instaclimb.routes.SectorFragment;
 import me.vadik.instaclimb.routes.SettingsActivity;
@@ -71,29 +73,8 @@ public class HomeActivity extends AppCompatActivity implements
         }
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu, menu);
-        return true;
-    }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.reload_button:
-//                reloadRoutes(); //TODO
-                return true;
-            case R.id.filter_button:
-                DialogFragment filterDialog = new FilterDialog();
-                filterDialog.show(getFragmentManager(), "Lalala");
-                return true;
-            case R.id.settings:
-                startActivity(new Intent(this, SettingsActivity.class));
-                return true;
-        }
 
-        return super.onOptionsItemSelected(item);
-    }
 
     private static Map<Integer, Integer> GYM_IDS;
 
@@ -116,7 +97,7 @@ public class HomeActivity extends AppCompatActivity implements
         Integer itemId = item.getItemId();
 
         Integer gymId = null;
-        String gymName = "Ноунейм скалодром";
+        String gymName = null;
 
         if (GYM_IDS.containsKey(itemId)) {
             gymId = GYM_IDS.get(itemId);
@@ -124,6 +105,16 @@ public class HomeActivity extends AppCompatActivity implements
         }
 
         switch (itemId) {
+            case R.id.contacts_nav:
+                Fragment ex111 = new ContactsFragment();
+                getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.gym_fragment_container, ex111).commit();
+                break;
+            case R.id.sector_fragment_list:
+                Fragment ex11 = new Sector2Fragment();
+                getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.gym_fragment_container, ex11).commit();
+                break;
             case R.id.temprorary_route_list_activity_item:
                 startActivity(new Intent(this, SectorActivity.class));
                 break;
@@ -172,13 +163,15 @@ public class HomeActivity extends AppCompatActivity implements
     @Override
     public void onFilterPicked(int which) {
         TextView clearFilterDialog = (TextView) this.findViewById(R.id.clear_filter_dialog);
-        if (which >= 0 && which < FilterDialog.GRADES.length) {
-            clearFilterDialog.setText("×   Filtered on: " + FilterDialog.GRADES[which]);
+        String[] grades = getResources().getStringArray(R.array.grades);
+        if (which >= 0 && which < grades.length) {
+            clearFilterDialog.setText("×   Filtered on: " + grades[which]);
         }
         if (clearFilterDialog != null)
             clearFilterDialog.setVisibility(View.VISIBLE);
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
         preferences.edit().putInt("grade", which).commit();
+        getSupportFragmentManager().findFragmentByTag("");
 //        reloadRoutes(); //TODO
     }
 

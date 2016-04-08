@@ -1,4 +1,4 @@
-package me.vadik.instaclimb.routes;
+package me.vadik.instaclimb.routes.provider;
 
 import android.content.ContentProvider;
 import android.content.ContentValues;

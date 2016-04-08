@@ -1,6 +1,7 @@
 package me.vadik.instaclimb.routes;
 
 import android.content.Intent;
+import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -18,7 +19,8 @@ import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.NetworkImageView;
 
 import me.vadik.instaclimb.R;
-import me.vadik.instaclimb.routes.dummy.DummyContent;
+import me.vadik.instaclimb.routes.dummy.DummyItem;
+import me.vadik.instaclimb.routes.provider.RoutesContentProvider;
 
 /**
  * An activity representing a single Route detail screen. This
@@ -26,7 +28,7 @@ import me.vadik.instaclimb.routes.dummy.DummyContent;
  * item details are presented side-by-side with a list of items
  * in a {@link SectorActivity}.
  */
-public class RouteDetailActivity extends AppCompatActivity {
+public class RouteActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,9 +66,9 @@ public class RouteDetailActivity extends AppCompatActivity {
             // Create the detail fragment and add it to the activity
             // using a fragment transaction.
             Bundle arguments = new Bundle();
-            String argItemId = getIntent().getStringExtra(RouteDetailFragment.ARG_ITEM_ID);
-            arguments.putString(RouteDetailFragment.ARG_ITEM_ID, argItemId);
-            RouteDetailFragment fragment = new RouteDetailFragment();
+            String argItemId = getIntent().getStringExtra(RouteFragment.ARG_ITEM_ID);
+            arguments.putString(RouteFragment.ARG_ITEM_ID, argItemId);
+            RouteFragment fragment = new RouteFragment();
             fragment.setArguments(arguments);
             getSupportFragmentManager().beginTransaction()
                     .add(R.id.route_detail_container, fragment)
@@ -75,7 +77,30 @@ public class RouteDetailActivity extends AppCompatActivity {
             NetworkImageView mNetworkImageToolbarView = (NetworkImageView) this.findViewById(R.id.route_image_toolbar);
             ImageLoader mImageLoader = VolleySingleton.getInstance(this).getImageLoader();
 
-            DummyContent.DummyItem mItem = DummyContent.ITEM_MAP.get(argItemId);
+            DummyItem mItem = null;
+
+            Uri myUri = Uri.withAppendedPath(RoutesContentProvider.CONTENT_URI, "routes");
+            //TODO simplify call to content provider
+            //TODO use loader here
+
+            Cursor cursor = this.getContentResolver().query(
+                    myUri,
+                    null,
+                    "id = ?",
+                    new String[]{argItemId},
+                    null);
+
+            try {
+                if (cursor != null && cursor.moveToFirst()) {
+                    Integer id = cursor.getInt(cursor.getColumnIndex("id"));
+                    String name = cursor.getString(cursor.getColumnIndex("name"));
+                    mItem = new DummyItem(id.toString(), name, cursor);
+                }
+            } finally {
+                if (cursor != null) {
+                    cursor.close();
+                }
+            }
 
             if (mNetworkImageToolbarView != null) {
                 if (mItem == null) {
@@ -110,7 +135,7 @@ public class RouteDetailActivity extends AppCompatActivity {
         if (pictureId != null) {
             String pictureIdString = pictureId.getText().toString();
             if (!pictureIdString.isEmpty()) {
-                String uriString = DummyContent.DummyItem.getSmallPictureUrl(pictureIdString);
+                String uriString = DummyItem.getSmallPictureUrl(pictureIdString);
                 showRouteIntent.setData(Uri.parse(uriString));
             }
         }

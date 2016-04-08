@@ -3,6 +3,7 @@
     package="me.vadik.instaclimb">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.READ_CONTACTS" /><!--TODO remove-->
 
     <application
         android:allowBackup="true"
@@ -27,7 +28,7 @@
             android:theme="@style/AppTheme.NoActionBar" />
 
         <activity
-            android:name=".routes.RouteDetailActivity"
+            android:name=".routes.RouteActivity"
             android:label="@string/title_route_detail"
             android:parentActivityName=".routes.SectorActivity"
             android:theme="@style/AppTheme.NoActionBar">
@@ -37,7 +38,7 @@
         </activity>
 
         <provider
-            android:name=".routes.RoutesContentProvider"
+            android:name=".routes.provider.RoutesContentProvider"
             android:authorities="me.vadik.instaclimb.routes.provider"
             android:exported="false" />
 

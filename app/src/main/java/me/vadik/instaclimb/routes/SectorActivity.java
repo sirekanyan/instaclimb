@@ -19,14 +19,14 @@ import android.widget.TextView;
 import java.util.List;
 
 import me.vadik.instaclimb.R;
-import me.vadik.instaclimb.routes.dummy.DummyContent;
+import me.vadik.instaclimb.routes.dummy.DummyItem;
 import me.vadik.instaclimb.routes.dummy.DummyItemsHelper;
 
 /**
  * An activity representing a list of Routes. This activity
  * has different presentations for handset and tablet-size devices. On
  * handsets, the activity presents a list of items, which when touched,
- * lead to a {@link RouteDetailActivity} representing
+ * lead to a {@link RouteActivity} representing
  * item details. On tablets, the activity presents the list of items and
  * item details side-by-side using two vertical panes.
  */
@@ -80,7 +80,7 @@ public class SectorActivity extends AppCompatActivity implements FilterDialog.On
         String[] statusFilterArgsArray = statusFilterArgs.toArray(new String[statusFilterArgs.size()]);
         String[] gradeFilterArgsArray = gradeFilterArgs.toArray(new String[gradeFilterArgs.size()]);
 
-        List<DummyContent.DummyItem> dummyItems = DummyItemsHelper.getDummyItems(this, statusFilterArgsArray, gradeFilterArgsArray, -1);
+        List<DummyItem> dummyItems = DummyItemsHelper.getDummyItems(this, statusFilterArgsArray, gradeFilterArgsArray, -1);
         recyclerView.setAdapter(new SimpleItemRecyclerViewAdapter(this, getSupportFragmentManager(), dummyItems, mTwoPane));
     }
 
@@ -112,8 +112,9 @@ public class SectorActivity extends AppCompatActivity implements FilterDialog.On
     @Override
     public void onFilterPicked(int which) {
         TextView clearFilterDialog = (TextView) this.findViewById(R.id.clear_filter_dialog);
-        if (which >= 0 && which < FilterDialog.GRADES.length) {
-            clearFilterDialog.setText("×   Filtered on: " + FilterDialog.GRADES[which]);
+        String[] grades = getResources().getStringArray(R.array.grades);
+        if (which >= 0 && which < grades.length) {
+            clearFilterDialog.setText("×   Filtered on: " + grades[which]);
         }
         if (clearFilterDialog != null)
             clearFilterDialog.setVisibility(View.VISIBLE);

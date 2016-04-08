@@ -1,4 +1,4 @@
-package me.vadik.instaclimb.routes;
+package me.vadik.instaclimb.routes.provider;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;

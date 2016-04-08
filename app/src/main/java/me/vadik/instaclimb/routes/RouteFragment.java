@@ -1,24 +1,28 @@
 package me.vadik.instaclimb.routes;
 
 import android.app.Activity;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import me.vadik.instaclimb.R;
-import me.vadik.instaclimb.routes.dummy.DummyContent;
+import me.vadik.instaclimb.routes.dummy.DummyItem;
+import me.vadik.instaclimb.routes.provider.RoutesContentProvider;
 
 /**
  * A fragment representing a single Route detail screen.
  * This fragment is either contained in a {@link SectorActivity}
- * in two-pane mode (on tablets) or a {@link RouteDetailActivity}
+ * in two-pane mode (on tablets) or a {@link RouteActivity}
  * on handsets.
  */
-public class RouteDetailFragment extends Fragment {
+public class RouteFragment extends Fragment {
     /**
      * The fragment argument representing the item ID that this fragment
      * represents.
@@ -28,13 +32,13 @@ public class RouteDetailFragment extends Fragment {
     /**
      * The dummy content this fragment is presenting.
      */
-    private DummyContent.DummyItem mItem;
+    private DummyItem mItem;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
      * fragment (e.g. upon screen orientation changes).
      */
-    public RouteDetailFragment() {
+    public RouteFragment() {
     }
 
     @Override
@@ -42,10 +46,35 @@ public class RouteDetailFragment extends Fragment {
         super.onCreate(savedInstanceState);
 
         if (getArguments().containsKey(ARG_ITEM_ID)) {
-            // Load the dummy content specified by the fragment
+            // Load the dummy content specified by the fragment //TODO
             // arguments. In a real-world scenario, use a Loader
             // to load content from a content provider.
-            mItem = DummyContent.ITEM_MAP.get(getArguments().getString(ARG_ITEM_ID));
+
+            String itemId = getArguments().getString(ARG_ITEM_ID);
+            Log.e("me", ARG_ITEM_ID + " => " + getArguments().getString(ARG_ITEM_ID));
+
+            Uri myUri = Uri.withAppendedPath(RoutesContentProvider.CONTENT_URI, "routes");
+            //TODO simplify call to content provider
+            //TODO use loader here
+
+            Cursor cursor = getActivity().getContentResolver().query(
+                    myUri,
+                    null,
+                    "id = ?",
+                    new String[]{itemId},
+                    null);
+
+            try {
+                if (cursor != null && cursor.moveToFirst()) {
+                    Integer id = cursor.getInt(cursor.getColumnIndex("id"));
+                    String name = cursor.getString(cursor.getColumnIndex("name"));
+                    mItem = new DummyItem(id.toString(), name, cursor);
+                }
+            } finally {
+                if (cursor != null) {
+                    cursor.close();
+                }
+            }
 
             Activity activity = this.getActivity();
             CollapsingToolbarLayout appBarLayout = (CollapsingToolbarLayout) activity.findViewById(R.id.toolbar_layout);

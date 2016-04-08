@@ -18,13 +18,6 @@
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             app:popupTheme="@style/AppTheme.PopupOverlay" />
-
-        <android.support.design.widget.TabLayout
-            android:id="@+id/sectors_tabs"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:tabMode="fixed"
-            app:tabGravity="fill"/>
     </android.support.design.widget.AppBarLayout>
 
     <LinearLayout
@@ -46,12 +39,6 @@
             android:paddingTop="8dp"
             android:textColor="@android:color/white"
             android:visibility="gone" />
-
-        <android.support.v4.view.ViewPager
-            android:id="@+id/viewpager1"
-            android:layout_width="match_parent"
-            android:layout_height="150dp"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
         <include layout="@layout/route_list" />
     </LinearLayout>

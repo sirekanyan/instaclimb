@@ -7,6 +7,7 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -14,7 +15,7 @@ import android.widget.TextView;
 import java.util.List;
 
 import me.vadik.instaclimb.R;
-import me.vadik.instaclimb.routes.dummy.DummyContent;
+import me.vadik.instaclimb.routes.dummy.DummyItem;
 import me.vadik.instaclimb.routes.dummy.DummyItemsHelper;
 
 public class SectorFragment extends Fragment implements FilterDialog.OnFilterPickedListener {
@@ -71,20 +72,26 @@ public class SectorFragment extends Fragment implements FilterDialog.OnFilterPic
         String[] statusFilterArgsArray = statusFilterArgs.toArray(new String[statusFilterArgs.size()]);
         String[] gradeFilterArgsArray = gradeFilterArgs.toArray(new String[gradeFilterArgs.size()]);
 
-        List<DummyContent.DummyItem> dummyItems = DummyItemsHelper.getDummyItems(getActivity(), statusFilterArgsArray, gradeFilterArgsArray, mSectorId);
-        recyclerView.setAdapter(new SimpleItemRecyclerViewAdapter(getActivity(), getActivity().getSupportFragmentManager(), dummyItems, mTwoPane));
+        List<DummyItem> dummyItems = DummyItemsHelper.getDummyItems(getActivity(), statusFilterArgsArray, gradeFilterArgsArray, mSectorId);
+        recyclerView.setAdapter(new SimpleItemRecyclerViewAdapter(getActivity(), getChildFragmentManager(), dummyItems, mTwoPane));
     }
 
     @Override
     public void onFilterPicked(int which) {
         TextView clearFilterDialog = (TextView) getActivity().findViewById(R.id.clear_filter_dialog);
-        if (which >= 0 && which < FilterDialog.GRADES.length) {
-            clearFilterDialog.setText("×   Filtered on: " + FilterDialog.GRADES[which]);
+        String[] grades = getResources().getStringArray(R.array.grades);
+        if (which >= 0 && which < grades.length) {
+            clearFilterDialog.setText("×   Filtered on: " + grades[which]);
         }
         if (clearFilterDialog != null)
             clearFilterDialog.setVisibility(View.VISIBLE);
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
         preferences.edit().putInt("grade", which).commit();
 //        reloadRoutes();
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        return super.onOptionsItemSelected(item);
     }
 }

@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.Map;
 
 import me.vadik.instaclimb.R;
-import me.vadik.instaclimb.routes.dummy.DummyContent;
+import me.vadik.instaclimb.routes.dummy.DummyItem;
 import me.vadik.instaclimb.routes.dummy.DummyItemsHelper;
 
 /**
@@ -27,10 +27,10 @@ public class SimpleItemRecyclerViewAdapter
 
     private final Context context;
     private final FragmentManager fragmentManager;
-    private final List<DummyContent.DummyItem> mValues;
+    private final List<DummyItem> mValues;
     private final boolean mTwoPane;
 
-    public SimpleItemRecyclerViewAdapter(Context context, FragmentManager fragmentManager, List<DummyContent.DummyItem> items, boolean mTwoPane) {
+    public SimpleItemRecyclerViewAdapter(Context context, FragmentManager fragmentManager, List<DummyItem> items, boolean mTwoPane) {
         this.context = context;
         this.fragmentManager = fragmentManager;
         this.mValues = items;
@@ -56,7 +56,7 @@ public class SimpleItemRecyclerViewAdapter
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
-        DummyContent.DummyItem item = mValues.get(position);
+        DummyItem item = mValues.get(position);
         holder.mItem = item;
         holder.routeNameView.setText(item.name);
         holder.routeGradeView.setText(item.grade);
@@ -76,16 +76,16 @@ public class SimpleItemRecyclerViewAdapter
             public void onClick(View v) {
                 if (mTwoPane) {
                     Bundle arguments = new Bundle();
-                    arguments.putString(RouteDetailFragment.ARG_ITEM_ID, holder.mItem.id);
-                    RouteDetailFragment fragment = new RouteDetailFragment();
+                    arguments.putString(RouteFragment.ARG_ITEM_ID, holder.mItem.id);
+                    RouteFragment fragment = new RouteFragment();
                     fragment.setArguments(arguments);
                     fragmentManager.beginTransaction()
                             .replace(R.id.route_detail_container, fragment)
                             .commit();
                 } else {
                     Context context = v.getContext();
-                    Intent intent = new Intent(context, RouteDetailActivity.class);
-                    intent.putExtra(RouteDetailFragment.ARG_ITEM_ID, holder.mItem.id);
+                    Intent intent = new Intent(context, RouteActivity.class);
+                    intent.putExtra(RouteFragment.ARG_ITEM_ID, holder.mItem.id);
 
                     context.startActivity(intent);
                 }
@@ -105,7 +105,7 @@ public class SimpleItemRecyclerViewAdapter
         private final View marker1View;
         private final View marker2View;
         private final View marker3View;
-        public DummyContent.DummyItem mItem;
+        public DummyItem mItem;
 
         public ViewHolder(View view) {
             super(view);
