@@ -47,15 +47,6 @@ public class SectorActivity extends AppCompatActivity implements FilterDialog.On
         setSupportActionBar(toolbar);
         toolbar.setTitle(getTitle());
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "ОЛОЛОЛО", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
-
         reloadRoutes();
 
         if (findViewById(R.id.route_detail_container) != null) {

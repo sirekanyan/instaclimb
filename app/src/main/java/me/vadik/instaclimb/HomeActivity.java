@@ -1,6 +1,5 @@
 package me.vadik.instaclimb;
 
-import android.app.DialogFragment;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
@@ -15,7 +14,6 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
@@ -72,9 +70,6 @@ public class HomeActivity extends AppCompatActivity implements
             super.onBackPressed();
         }
     }
-
-
-
 
     private static Map<Integer, Integer> GYM_IDS;
 
