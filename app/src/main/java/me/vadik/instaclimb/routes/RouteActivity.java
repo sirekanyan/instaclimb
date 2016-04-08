@@ -2,6 +2,7 @@ package me.vadik.instaclimb.routes;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.ColorStateList;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
@@ -15,7 +16,6 @@ import android.support.v7.app.ActionBar;
 import android.support.v4.app.NavUtils;
 import android.view.MenuItem;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.NetworkImageView;
@@ -35,24 +35,38 @@ public class RouteActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_route_detail);
+        setContentView(R.layout.activity_route);
         Toolbar toolbar = (Toolbar) findViewById(R.id.detail_toolbar);
         setSupportActionBar(toolbar);
 
         final Context context = this;
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        final FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         assert fab != null;
+
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Трасса отмечена пройденной", Snackbar.LENGTH_LONG)
-                        .setAction("Flash", new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                Toast.makeText(context, "Трасса отмечена пройденной с первой попытки", Toast.LENGTH_LONG).show();
-                            }
-                        }).show();
+            public void onClick(final View view) {
+
+                boolean checked = fab.getBackgroundTintList().getDefaultColor() != getResources().getColor(R.color.colorAccent);
+
+                if (checked) {
+                    fab.setImageResource(R.drawable.ic_add_white_24dp);
+                    fab.setBackgroundTintList(getResources().getColorStateList(R.color.colorAccent));
+                } else {
+                    fab.setImageResource(R.drawable.ic_done_white_24dp);
+                    fab.setBackgroundTintList(getResources().getColorStateList(R.color.colorSuccessAccent));
+                    Snackbar.make(view, "Трасса пройдена", Snackbar.LENGTH_LONG)
+                            .setAction("Flash", new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    fab.setImageResource(R.drawable.ic_done_all_white_24dp);
+                                    fab.setBackgroundTintList(getResources().getColorStateList(R.color.colorSuccessAccent));
+                                    Snackbar.make(view, "Трасса пройдена с первой попытки", Snackbar.LENGTH_LONG).show();
+                                }
+                            }).show();
+                }
+
             }
         });
 

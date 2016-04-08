@@ -3,7 +3,6 @@
     package="me.vadik.instaclimb">
 
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.READ_CONTACTS" /><!--TODO remove-->
 
     <application
         android:allowBackup="true"
@@ -45,10 +44,10 @@
         <activity
             android:name=".routes.SettingsActivity"
             android:label="@string/menu_settings"
-            android:parentActivityName=".routes.SectorActivity">
+            android:parentActivityName=".HomeActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".routes.SectorActivity" />
+                android:value=".HomeActivity" />
         </activity>
 
         <activity

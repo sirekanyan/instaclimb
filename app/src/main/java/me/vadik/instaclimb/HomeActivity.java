@@ -1,5 +1,6 @@
 package me.vadik.instaclimb;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
@@ -22,7 +23,6 @@ import android.widget.Toast;
 import java.util.HashMap;
 import java.util.Map;
 
-import me.vadik.instaclimb.routes.ContactsFragment;
 import me.vadik.instaclimb.routes.FilterDialog;
 import me.vadik.instaclimb.routes.GymFragment;
 import me.vadik.instaclimb.routes.Sector2Fragment;
@@ -42,12 +42,14 @@ public class HomeActivity extends AppCompatActivity implements
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        final Context context = this;
+
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        assert fab != null;
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                Toast.makeText(context, "Добавление трасс в стадии разработки", Toast.LENGTH_LONG).show();
             }
         });
 
@@ -100,11 +102,6 @@ public class HomeActivity extends AppCompatActivity implements
         }
 
         switch (itemId) {
-            case R.id.contacts_nav:
-                Fragment ex111 = new ContactsFragment();
-                getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.gym_fragment_container, ex111).commit();
-                break;
             case R.id.sector_fragment_list:
                 Fragment ex11 = new Sector2Fragment();
                 getSupportFragmentManager().beginTransaction()

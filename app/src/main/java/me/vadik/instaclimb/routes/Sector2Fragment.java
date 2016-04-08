@@ -16,7 +16,11 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ListView;
 
+import java.util.Map;
+
+import me.vadik.instaclimb.R;
 import me.vadik.instaclimb.routes.contract.Routes;
+import me.vadik.instaclimb.routes.dummy.DummyItemsHelper;
 import me.vadik.instaclimb.routes.provider.RoutesContentProvider;
 
 /**
@@ -42,14 +46,63 @@ public class Sector2Fragment extends ListFragment
 
         // Create an empty adapter we will use to display the loaded data.
         mAdapter = new SimpleCursorAdapter(getActivity(),
-                android.R.layout.simple_list_item_2, null,
-                new String[]{Routes.NAME, Routes.GRADE},
-                new int[]{android.R.id.text1, android.R.id.text2}, 0);
+                R.layout.route_list_content, null,
+                new String[]{Routes.COLOR, Routes.NAME, Routes.GRADE},
+                new int[]{R.id.route_list_content, R.id.route_name, R.id.route_grade}, 0);
         setListAdapter(mAdapter);
+
+
+        SimpleCursorAdapter.ViewBinder binder = new SimpleCursorAdapter.ViewBinder() {
+            @Override
+            public boolean setViewValue(View view, Cursor cursor, int columnIndex) {
+                String name = cursor.getColumnName(columnIndex);
+                if (Routes.COLOR.equals(name)) {
+                    String color = cursor.getString(columnIndex);
+
+                    color = color.replaceAll("^,", ""); //TODO remove replacement
+
+                    String firstColor = null;
+                    String secondColor = null;
+                    String thirdColor = null;
+
+                    if (!color.isEmpty()) {
+                        String[] colors = color.split(",");
+                        switch (colors.length) {
+                            case 3:
+                                thirdColor = colors[2];
+                            case 2:
+                                secondColor = colors[1];
+                            case 1:
+                                firstColor = colors[0];
+                        }
+                    }
+
+                    setMarkerColor(view, R.id.marker1, firstColor);
+                    setMarkerColor(view, R.id.marker2, secondColor);
+                    setMarkerColor(view, R.id.marker3, thirdColor);
+
+                    return true;
+                }
+                return false;
+            }
+        };
+
+        mAdapter.setViewBinder(binder);
 
         // Prepare the loader.  Either re-connect with an existing one,
         // or start a new one.
         getLoaderManager().initLoader(0, null, this);
+    }
+
+    private void setMarkerColor(View view1, int resId, String colorName) {
+        View view = view1.findViewById(resId);
+        Map<String, Integer> colors = DummyItemsHelper.COLORS;
+        if (colors.containsKey(colorName)) {
+            view.setBackgroundResource(colors.get(colorName));
+            view.setVisibility(View.VISIBLE);
+        } else {
+            view.setVisibility(View.INVISIBLE);
+        }
     }
 
     @Override
