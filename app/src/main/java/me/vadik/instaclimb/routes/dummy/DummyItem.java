@@ -12,32 +12,6 @@ public class DummyItem {
     public final String grade;
     public final Integer pictureId;
 
-    private String firstColor = null;
-    private String secondColor = null;
-    private String thirdColor = null;
-
-    public String getFirstColor() {
-        return firstColor;
-    }
-
-    public String getSecondColor() {
-        return secondColor;
-    }
-
-    public String getThirdColor() {
-        return thirdColor;
-    }
-
-    public boolean isArchived() {
-        return archived;
-    }
-
-    public boolean isDraft() {
-        return draft;
-    }
-
-    private final boolean archived;
-    private final boolean draft;
     public String details;
 
     public DummyItem(String id, String content, Cursor cursor) {
@@ -60,20 +34,8 @@ public class DummyItem {
 
         color = color.replaceAll("^,", ""); //TODO remove replacement
 
-        if (!color.isEmpty()) {
-            String[] colors = color.split(",");
-            switch (colors.length) {
-                case 3:
-                    thirdColor = colors[2];
-                case 2:
-                    secondColor = colors[1];
-                case 1:
-                    firstColor = colors[0];
-            }
-        }
-
-        this.archived = "Архив".equals(status);
-        this.draft = "Черновик".equals(status);
+        boolean archived = "Архив".equals(status);
+        boolean draft = "Черновик".equals(status);
 
         if (archived || draft) {
             this.name += " (" + status.toLowerCase() + ")";

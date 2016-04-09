@@ -1,4 +1,4 @@
-package me.vadik.instaclimb.routes;
+package me.vadik.instaclimb.settings;
 
 import android.content.res.Configuration;
 import android.os.Bundle;

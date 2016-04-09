@@ -22,18 +22,13 @@
         </activity>
 
         <activity
-            android:name=".routes.SectorActivity"
-            android:label="@string/app_name"
-            android:theme="@style/AppTheme.NoActionBar" />
-
-        <activity
             android:name=".routes.RouteActivity"
             android:label="@string/title_route_detail"
-            android:parentActivityName=".routes.SectorActivity"
+            android:parentActivityName=".HomeActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".routes.SectorActivity" />
+                android:value=".HomeActivity" />
         </activity>
 
         <provider
@@ -42,7 +37,7 @@
             android:exported="false" />
 
         <activity
-            android:name=".routes.SettingsActivity"
+            android:name=".settings.SettingsActivity"
             android:label="@string/menu_settings"
             android:parentActivityName=".HomeActivity">
             <meta-data
