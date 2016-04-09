@@ -108,7 +108,7 @@ public class SectorFragment extends ListFragment implements
                         textView.setTextColor(getResources().getColor(android.R.color.black));
                     } else {
                         textView.setText(textView.getText() + " (" + status.toLowerCase() + ")");
-                        textView.setTextColor(getResources().getColor(android.R.color.holo_red_dark));
+                        textView.setTextColor(getResources().getColor(android.R.color.darker_gray));
                     }
                     return true;
                 } else if (Routes.COLOR.equals(columnName)) {
