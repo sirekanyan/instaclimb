@@ -6,21 +6,43 @@ import android.preference.PreferenceManager;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
+import me.vadik.instaclimb.R;
 
 /**
  * User: vadik
  * Date: 4/7/16
  */
-public class SimpleItemRecyclerViewHelper {
+public class FilterHelper {
+
+    public static Map<String, Integer> COLORS;
+
+    static {
+        COLORS = new HashMap<>();
+        COLORS.put("черный", R.drawable.rect_black);
+        COLORS.put("синий", R.drawable.rect_blue);
+        COLORS.put("голубой", R.drawable.rect_blue_light);
+        COLORS.put("коричневый", R.drawable.rect_brown);
+        COLORS.put("серый", R.drawable.rect_gray);
+        COLORS.put("зеленый", R.drawable.rect_green);
+        COLORS.put("оранжевый", R.drawable.rect_orange);
+        COLORS.put("розовый", R.drawable.rect_pink);
+        COLORS.put("фиолетовый", R.drawable.rect_purple);
+        COLORS.put("красный", R.drawable.rect_red);
+        COLORS.put("белый", R.drawable.rect_white);
+        COLORS.put("желтый", R.drawable.rect_yellow);
+    }
 
     public static List<String> getStatusFilterArgs(Context context) {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
 
         List<String> statusFilterArgs = new ArrayList<>();
-        if (preferences.getBoolean("show_active", true)) {
-            statusFilterArgs.add("Активна");
-        }
+
+        statusFilterArgs.add("Активна");
+
         if (preferences.getBoolean("show_archived", false)) {
             statusFilterArgs.add("Архив");
         }

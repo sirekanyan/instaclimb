@@ -63,24 +63,6 @@
         </menu>
     </item>
 
-    <!--TODO: remove items below-->
-    <item android:title="Debug">
-        <menu>
-            <item
-                android:id="@+id/sector_fragment_list"
-                android:icon="@drawable/ic_menu_slideshow"
-                android:title="Сектор2 (фрагмент)" />
-            <item
-                android:id="@+id/temprorary_route_list_activity_item"
-                android:icon="@drawable/ic_menu_slideshow"
-                android:title="Список трасс (активити)" />
-            <item
-                android:id="@+id/temprorary_route_list_fragment_item"
-                android:icon="@drawable/ic_menu_slideshow"
-                android:title="Список трасс (фрагмент)" />
-        </menu>
-    </item>
-
     <!--
     <group android:checkableBehavior="single">
         <item

@@ -1,8 +1,6 @@
 package me.vadik.instaclimb.routes;
 
-import android.app.DialogFragment;
 import android.content.Context;
-import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
@@ -13,9 +11,6 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -69,7 +64,7 @@ public class GymFragment extends Fragment {
 
         if (mGymId == ALL_GYMS) {
             sectors = new ArrayList<>();
-            sectors.add(new Sector(SectorFragment.ALL_SECTORS, "All"));
+            sectors.add(new Sector(-1, "All"));
         } else {
             sectors = getSectors(mGymId);
         }
@@ -162,7 +157,6 @@ public class GymFragment extends Fragment {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getChildFragmentManager());
         for (Sector sector : sectors) {
             SectorFragment f = SectorFragment.newInstance(sector.getId());
-//            f.setTargetFragment(); //TODO
             adapter.addFragment(f, sector.getName());
         }
         viewPager.setAdapter(adapter);
@@ -195,29 +189,5 @@ public class GymFragment extends Fragment {
         public CharSequence getPageTitle(int position) {
             return mFragmentTitleList.get(position);
         }
-    }
-
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        super.onCreateOptionsMenu(menu,inflater);
-        inflater.inflate(R.menu.menu, menu);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.reload_button:
-//                reloadRoutes(); //TODO
-                return true;
-            case R.id.filter_button:
-                DialogFragment filterDialog = new FilterDialog();
-                filterDialog.show(getActivity().getFragmentManager(), "Lalala");
-                return true;
-            case R.id.settings:
-                getActivity().startActivity(new Intent(getActivity(), SettingsActivity.class));
-                return true;
-        }
-
-        return super.onOptionsItemSelected(item);
     }
 }

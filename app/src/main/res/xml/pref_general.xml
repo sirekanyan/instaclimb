@@ -1,11 +1,6 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
     <SwitchPreference
-        android:defaultValue="true"
-        android:key="show_active"
-        android:title="@string/pref_title_show_active_routes" />
-
-    <SwitchPreference
         android:defaultValue="false"
         android:key="show_archived"
         android:title="@string/pref_title_show_archived_routes" />

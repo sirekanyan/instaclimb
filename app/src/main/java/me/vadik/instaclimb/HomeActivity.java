@@ -2,38 +2,31 @@ package me.vadik.instaclimb;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import me.vadik.instaclimb.routes.FilterDialog;
 import me.vadik.instaclimb.routes.GymFragment;
-import me.vadik.instaclimb.routes.Sector2Fragment;
-import me.vadik.instaclimb.routes.SectorActivity;
 import me.vadik.instaclimb.routes.SectorFragment;
 import me.vadik.instaclimb.routes.SettingsActivity;
 
 public class HomeActivity extends AppCompatActivity implements
         NavigationView.OnNavigationItemSelectedListener,
-        GymFragment.OnFragmentInteractionListener,
-        FilterDialog.OnFilterPickedListener {
+        GymFragment.OnFragmentInteractionListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -102,19 +95,6 @@ public class HomeActivity extends AppCompatActivity implements
         }
 
         switch (itemId) {
-            case R.id.sector_fragment_list:
-                Fragment ex11 = new Sector2Fragment();
-                getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.gym_fragment_container, ex11).commit();
-                break;
-            case R.id.temprorary_route_list_activity_item:
-                startActivity(new Intent(this, SectorActivity.class));
-                break;
-            case R.id.temprorary_route_list_fragment_item:
-                Fragment example5 = new SectorFragment();
-                getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.gym_fragment_container, example5).commit();
-                break;
             case R.id.nav_all_routes:
                 gymId = GymFragment.ALL_GYMS;
                 gymName = item.getTitle().toString();
@@ -153,22 +133,19 @@ public class HomeActivity extends AppCompatActivity implements
     }
 
     @Override
-    public void onFilterPicked(int which) {
-        TextView clearFilterDialog = (TextView) this.findViewById(R.id.clear_filter_dialog);
-        String[] grades = getResources().getStringArray(R.array.grades);
-        if (which >= 0 && which < grades.length) {
-            clearFilterDialog.setText("×   Filtered on: " + grades[which]);
-        }
-        if (clearFilterDialog != null)
-            clearFilterDialog.setVisibility(View.VISIBLE);
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
-        preferences.edit().putInt("grade", which).commit();
-        getSupportFragmentManager().findFragmentByTag("");
-//        reloadRoutes(); //TODO
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu, menu);
+        return true;
     }
 
-    public void clearFilters(View view) {
-        onFilterPicked(-1);
-        view.setVisibility(View.GONE);
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.settings:
+                this.startActivity(new Intent(this, SettingsActivity.class));
+                return true;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 }

@@ -146,7 +146,7 @@ public class RouteActivity extends AppCompatActivity {
             //
             // http://developer.android.com/design/patterns/navigation.html#up-vs-back
             //
-            NavUtils.navigateUpTo(this, new Intent(this, SectorActivity.class));
+            NavUtils.navigateUpTo(this, new Intent(this, SectorFragment.class));
             return true;
         }
         return super.onOptionsItemSelected(item);
