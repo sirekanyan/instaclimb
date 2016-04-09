@@ -43,7 +43,7 @@ public class HomeActivity extends AppCompatActivity implements
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(context, "Добавление трасс в стадии разработки", Toast.LENGTH_LONG).show();
+                Toast.makeText(context, R.string.adding_route_is_under_construction, Toast.LENGTH_LONG).show();
             }
         });
 
@@ -56,9 +56,9 @@ public class HomeActivity extends AppCompatActivity implements
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        setTitle("Все трассы");
+        setTitle(R.string.all_routes_title);
 
-        Fragment gymFragment = GymFragment.newInstance(GymFragment.ALL_GYMS, "Все трассы");
+        Fragment gymFragment = GymFragment.newInstance(GymFragment.ALL_GYMS, getTitle().toString());
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.gym_fragment_container, gymFragment).commit();
     }
@@ -133,7 +133,7 @@ public class HomeActivity extends AppCompatActivity implements
                 break;
             case R.id.nav_share:
             default:
-                Toast.makeText(this, "Sorry, not implemented yet", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, R.string.not_implemented_yet, Toast.LENGTH_SHORT).show();
                 break;
         }
 

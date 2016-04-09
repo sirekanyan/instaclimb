@@ -39,8 +39,6 @@ public class RouteActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.detail_toolbar);
         setSupportActionBar(toolbar);
 
-        final Context context = this;
-
         final FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         assert fab != null;
 
@@ -56,13 +54,13 @@ public class RouteActivity extends AppCompatActivity {
                 } else {
                     fab.setImageResource(R.drawable.ic_done_white_24dp);
                     fab.setBackgroundTintList(getResources().getColorStateList(R.color.colorSuccessAccent));
-                    Snackbar.make(view, "Трасса пройдена", Snackbar.LENGTH_LONG)
-                            .setAction("Flash", new View.OnClickListener() {
+                    Snackbar.make(view, R.string.route_completed, Snackbar.LENGTH_LONG)
+                            .setAction(R.string.flash_button, new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
                                     fab.setImageResource(R.drawable.ic_done_all_white_24dp);
                                     fab.setBackgroundTintList(getResources().getColorStateList(R.color.colorSuccessAccent));
-                                    Snackbar.make(view, "Трасса пройдена с первой попытки", Snackbar.LENGTH_LONG).show();
+                                    Snackbar.make(view, R.string.route_completed_flash, Snackbar.LENGTH_LONG).show();
                                 }
                             }).show();
                 }

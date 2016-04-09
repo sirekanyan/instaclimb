@@ -4,62 +4,62 @@
     <group android:checkableBehavior="single">
         <item
             android:id="@+id/nav_all_routes"
-            android:icon="@drawable/ic_menu_slideshow"
             android:checked="true"
-            android:title="Все трассы" />
+            android:icon="@drawable/ic_menu_slideshow"
+            android:title="@string/all_routes_title" />
         <item
             android:id="@+id/nav_skalatoria"
             android:icon="@drawable/ic_menu_gallery"
-            android:title="Скалатория" />
+            android:title="@string/skalatoria_gym_name" />
         <item
             android:id="@+id/nav_bigwall"
             android:icon="@drawable/ic_menu_gallery"
-            android:title="BigWall" />
+            android:title="@string/bigwall_gym_name" />
         <item
             android:id="@+id/nav_rockzona"
             android:icon="@drawable/ic_menu_gallery"
-            android:title="RockZona" />
+            android:title="@string/rockzona_gym_name" />
         <item
             android:id="@+id/nav_cherepaha"
             android:icon="@drawable/ic_menu_gallery"
-            android:title="МАИ Черепаха" />
+            android:title="@string/cherepaha_gym_name" />
         <item
             android:id="@+id/nav_mgtu"
             android:icon="@drawable/ic_menu_gallery"
-            android:title="МГТУ им.Баумана" />
+            android:title="@string/mgtu_gym_name" />
         <item
             android:id="@+id/nav_x8"
             android:icon="@drawable/ic_menu_gallery"
-            android:title="X8" />
+            android:title="@string/x8_gym_name" />
         <item
             android:id="@+id/nav_tramontana"
             android:icon="@drawable/ic_menu_gallery"
-            android:title="Трамонтана" />
+            android:title="@string/tramontana_gym_name" />
         <item
             android:id="@+id/nav_atmosfera"
             android:icon="@drawable/ic_menu_gallery"
-            android:title="Атмосфера" />
+            android:title="@string/atmosfera_gym_name" />
     </group>
 
-    <item android:title="Settings">
+    <item android:title="@string/nav_group_settings">
         <menu>
             <item
                 android:id="@+id/nav_settings"
                 android:icon="@drawable/ic_menu_manage"
-                android:title="Settings" />
+                android:title="@string/menu_settings" />
         </menu>
     </item>
 
-    <item android:title="Communicate">
+    <item android:title="@string/nav_group_communicate">
         <menu>
             <item
                 android:id="@+id/nav_send"
                 android:icon="@drawable/ic_menu_send"
-                android:title="Send feedback" />
+                android:title="@string/nav_send_feedback" />
             <item
                 android:id="@+id/nav_share"
                 android:icon="@drawable/ic_menu_share"
-                android:title="Share with friends" />
+                android:title="@string/nav_share_application_with_friends" />
         </menu>
     </item>
 
