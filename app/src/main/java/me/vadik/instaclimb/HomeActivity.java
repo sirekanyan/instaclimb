@@ -123,6 +123,14 @@ public class HomeActivity extends AppCompatActivity implements
                 startActivity(new Intent(this, SettingsActivity.class));
                 break;
             case R.id.nav_send:
+                Intent intent = new Intent(Intent.ACTION_SENDTO);
+                intent.setData(Uri.parse("mailto:instaclimb@vadik.me"));
+                intent.putExtra(Intent.EXTRA_EMAIL, "instaclimb@vadik.me");
+                intent.putExtra(Intent.EXTRA_SUBJECT, "Instaclimb for Android Feedback");
+                if (intent.resolveActivity(getPackageManager()) != null) {
+                    startActivity(intent);
+                }
+                break;
             case R.id.nav_share:
             default:
                 Toast.makeText(this, "Sorry, not implemented yet", Toast.LENGTH_SHORT).show();
