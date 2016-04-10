@@ -2,7 +2,11 @@ package me.vadik.instaclimb.routes;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.TypedArray;
 import android.database.Cursor;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.GradientDrawable;
+import android.graphics.drawable.ShapeDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
@@ -11,6 +15,7 @@ import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v7.widget.SearchView;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -25,6 +30,7 @@ import java.util.Map;
 
 import me.vadik.instaclimb.R;
 import me.vadik.instaclimb.routes.contract.Routes;
+import me.vadik.instaclimb.routes.contract.StatusValues;
 import me.vadik.instaclimb.routes.provider.RoutesContentProvider;
 
 /**
@@ -64,10 +70,10 @@ public class SectorFragment extends ListFragment implements
 //    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 //        View view = inflater.inflate(R.layout.fragment_sector, container, false);
 //        if (view.findViewById(R.id.route_detail_container) != null) {
-            // The detail container view will be present only in the
-            // large-screen layouts (res/values-w900dp).
-            // If this view is present, then the
-            // activity should be in two-pane mode.
+    // The detail container view will be present only in the
+    // large-screen layouts (res/values-w900dp).
+    // If this view is present, then the
+    // activity should be in two-pane mode.
 //            mTwoPane = true;
 //        }
 //        return view;
@@ -87,8 +93,8 @@ public class SectorFragment extends ListFragment implements
         // Create an empty adapter we will use to display the loaded data.
         mAdapter = new SimpleCursorAdapter(getActivity(),
                 R.layout.route_list_content, null,
-                new String[]{Routes.COLOR, Routes.NAME, Routes.STATUS, Routes.GRADE},
-                new int[]{R.id.route_list_content, R.id.route_name, R.id.route_name, R.id.route_grade}, 0);
+                new String[]{Routes.COLOR1, Routes.COLOR2, Routes.COLOR3, Routes.NAME, Routes.STATUS, Routes.GRADE},
+                new int[]{R.id.marker1, R.id.marker2, R.id.marker3, R.id.route_name, R.id.route_name, R.id.route_grade}, 0);
         setListAdapter(mAdapter);
 
 
@@ -96,47 +102,21 @@ public class SectorFragment extends ListFragment implements
             @Override
             public boolean setViewValue(View view, Cursor cursor, int columnIndex) {
                 String columnName = cursor.getColumnName(columnIndex);
-                if (Routes.NAME.equals(columnName)) {
-                    //TODO remove this replacement
-                    String name = cursor.getString(columnIndex);
-                    ((TextView) view).setText(name.replaceAll(" \\(.*?\\)$", ""));
-                    return true;
-                } else if (Routes.STATUS.equals(columnName)) {
-                    String status = cursor.getString(columnIndex);
+                if (Routes.STATUS.equals(columnName)) {
+                    Integer status = cursor.getInt(columnIndex);
                     TextView textView = (TextView) view;
-                    if ("Активна".equals(status)) {
+                    if (StatusValues.ACTIVE.equals(status)) {
                         textView.setTextColor(getResources().getColor(android.R.color.black));
                     } else {
-                        textView.setText(textView.getText() + " (" + status.toLowerCase() + ")");
+                        textView.setText(textView.getText() + " (" + status.toString() + ")");
                         textView.setTextColor(getResources().getColor(android.R.color.darker_gray));
                     }
                     return true;
-                } else if (Routes.COLOR.equals(columnName)) {
-
-                    String color = cursor.getString(columnIndex);
-
-                    color = color.replaceAll("^,", ""); //TODO remove replacement
-
-                    String firstColor = null;
-                    String secondColor = null;
-                    String thirdColor = null;
-
-                    if (!color.isEmpty()) {
-                        String[] colors = color.split(",");
-                        switch (colors.length) {
-                            case 3:
-                                thirdColor = colors[2];
-                            case 2:
-                                secondColor = colors[1];
-                            case 1:
-                                firstColor = colors[0];
-                        }
-                    }
-
-                    setMarkerColor(view, R.id.marker1, firstColor);
-                    setMarkerColor(view, R.id.marker2, secondColor);
-                    setMarkerColor(view, R.id.marker3, thirdColor);
-
+                } else if (Routes.COLOR1.equals(columnName)
+                        || Routes.COLOR2.equals(columnName)
+                        || Routes.COLOR3.equals(columnName)) {
+                    int color = cursor.getInt(columnIndex);
+                    setMarkerColor(view, color, Routes.COLOR1.equals(columnName));
                     return true;
                 }
                 return false;
@@ -150,15 +130,14 @@ public class SectorFragment extends ListFragment implements
         getLoaderManager().initLoader(0, null, this);
     }
 
-    private void setMarkerColor(View view1, int resId, String colorName) {
-        View view = view1.findViewById(resId);
-        Map<String, Integer> colors = FilterHelper.COLORS;
-        if (colors.containsKey(colorName)) {
-            view.setBackgroundResource(colors.get(colorName));
-            view.setVisibility(View.VISIBLE);
+    private void setMarkerColor(View view, int color, boolean isFirst) {
+        TypedArray colors = getResources().obtainTypedArray(R.array.colors);
+        if (color == 0 && isFirst) {
+            view.setBackgroundResource(R.drawable.rect_dashed);
         } else {
-            view.setVisibility(View.INVISIBLE);
+            view.setBackgroundResource(colors.getResourceId(color, 0));
         }
+        colors.recycle();
     }
 
     @Override
@@ -208,10 +187,12 @@ public class SectorFragment extends ListFragment implements
 
     // These are the Contacts rows that we will retrieve.
     static final String[] ROUTES_SUMMARY_PROJECTION = new String[]{
-            Routes.ID + " as _id",
+            Routes._ID,
             Routes.NAME,
             Routes.GRADE,
-            Routes.COLOR,
+            Routes.COLOR1,
+            Routes.COLOR2,
+            Routes.COLOR3,
             Routes.STATUS,
     };
 
@@ -255,7 +236,7 @@ public class SectorFragment extends ListFragment implements
         // Now create and return a CursorLoader that will take care of
         // creating a Cursor for the data being displayed.
         return new CursorLoader(getActivity(), baseUri,
-                ROUTES_SUMMARY_PROJECTION, select, selectArgs.toArray(new String[selectArgs.size()]), "id desc");
+                ROUTES_SUMMARY_PROJECTION, select, selectArgs.toArray(new String[selectArgs.size()]), "_id desc");
     }
 
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {

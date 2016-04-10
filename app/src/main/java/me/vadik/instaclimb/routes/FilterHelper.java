@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Map;
 
 import me.vadik.instaclimb.R;
+import me.vadik.instaclimb.routes.contract.StatusValues;
 
 /**
  * User: vadik
@@ -18,36 +19,18 @@ import me.vadik.instaclimb.R;
  */
 public class FilterHelper {
 
-    public static Map<String, Integer> COLORS;
-
-    static {
-        COLORS = new HashMap<>();
-        COLORS.put("черный", R.drawable.rect_black);
-        COLORS.put("синий", R.drawable.rect_blue);
-        COLORS.put("голубой", R.drawable.rect_blue_light);
-        COLORS.put("коричневый", R.drawable.rect_brown);
-        COLORS.put("серый", R.drawable.rect_gray);
-        COLORS.put("зеленый", R.drawable.rect_green);
-        COLORS.put("оранжевый", R.drawable.rect_orange);
-        COLORS.put("розовый", R.drawable.rect_pink);
-        COLORS.put("фиолетовый", R.drawable.rect_purple);
-        COLORS.put("красный", R.drawable.rect_red);
-        COLORS.put("белый", R.drawable.rect_white);
-        COLORS.put("желтый", R.drawable.rect_yellow);
-    }
-
     public static List<String> getStatusFilterArgs(Context context) {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
 
         List<String> statusFilterArgs = new ArrayList<>();
 
-        statusFilterArgs.add("Активна");
+        statusFilterArgs.add(StatusValues.ACTIVE.toString());
 
         if (preferences.getBoolean("show_archived", false)) {
-            statusFilterArgs.add("Архив");
+            statusFilterArgs.add(StatusValues.ARCHIVE.toString());
         }
         if (preferences.getBoolean("show_draft", false)) {
-            statusFilterArgs.add("Черновик");
+            statusFilterArgs.add(StatusValues.DRAFT.toString());
         }
 
         return statusFilterArgs;

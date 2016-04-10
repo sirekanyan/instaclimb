@@ -21,6 +21,7 @@ import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.NetworkImageView;
 
 import me.vadik.instaclimb.R;
+import me.vadik.instaclimb.routes.contract.Routes;
 import me.vadik.instaclimb.routes.dummy.DummyItem;
 import me.vadik.instaclimb.routes.provider.RoutesContentProvider;
 
@@ -107,14 +108,14 @@ public class RouteActivity extends AppCompatActivity {
             Cursor cursor = this.getContentResolver().query(
                     myUri,
                     null,
-                    "id = ?",
+                    "_id = ?",
                     new String[]{argItemId},
                     null);
 
             try {
                 if (cursor != null && cursor.moveToFirst()) {
-                    Integer id = cursor.getInt(cursor.getColumnIndex("id"));
-                    String name = cursor.getString(cursor.getColumnIndex("name"));
+                    Integer id = cursor.getInt(cursor.getColumnIndex(Routes._ID));
+                    String name = cursor.getString(cursor.getColumnIndex(Routes.NAME));
                     mItem = new DummyItem(id.toString(), name, cursor);
                 }
             } finally {

@@ -16,6 +16,22 @@
         <item>7c—8c (hardcore)</item>
     </array>
 
+    <array name="colors">
+        <item>@drawable/rect_invisible</item>
+        <item>@drawable/rect_black</item>
+        <item>@drawable/rect_blue</item>
+        <item>@drawable/rect_blue_light</item>
+        <item>@drawable/rect_brown</item>
+        <item>@drawable/rect_gray</item>
+        <item>@drawable/rect_green</item>
+        <item>@drawable/rect_orange</item>
+        <item>@drawable/rect_pink</item>
+        <item>@drawable/rect_purple</item>
+        <item>@drawable/rect_red</item>
+        <item>@drawable/rect_white</item>
+        <item>@drawable/rect_yellow</item>
+    </array>
+
     <!-- START Strings related to Settings -->
 
     <!-- Example General settings -->

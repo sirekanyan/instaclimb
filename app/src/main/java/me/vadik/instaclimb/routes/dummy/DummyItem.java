@@ -2,6 +2,8 @@ package me.vadik.instaclimb.routes.dummy;
 
 import android.database.Cursor;
 
+import me.vadik.instaclimb.routes.contract.StatusValues;
+
 /**
  * User: vadik
  * Date: 4/8/16
@@ -14,9 +16,9 @@ public class DummyItem {
 
     public String details;
 
-    public DummyItem(String id, String content, Cursor cursor) {
+    public DummyItem(String id, String name, Cursor cursor) {
         this.id = id;
-        this.name = content.replaceAll(" \\(.*?\\)$", ""); //TODO remove replacement
+        this.name = name;
         this.details = "";
 
         this.pictureId = cursor.getInt(cursor.getColumnIndex("picture_id"));
@@ -24,21 +26,21 @@ public class DummyItem {
 
         String grade_author = cursor.getString(cursor.getColumnIndex("grade_author"));
         String grade_users = cursor.getString(cursor.getColumnIndex("grade_users"));
-        String color = cursor.getString(cursor.getColumnIndex("color"));
+        int color1 = cursor.getInt(cursor.getColumnIndex("color1"));
+        int color2 = cursor.getInt(cursor.getColumnIndex("color2"));
+        int color3 = cursor.getInt(cursor.getColumnIndex("color3"));
         String author = cursor.getString(cursor.getColumnIndex("author"));
         String comment = cursor.getString(cursor.getColumnIndex("comment"));
         String created_when = cursor.getString(cursor.getColumnIndex("created_when"));
         String destroyed_when = cursor.getString(cursor.getColumnIndex("destroyed_when"));
-        String status = cursor.getString(cursor.getColumnIndex("status"));
+        Integer status = cursor.getInt(cursor.getColumnIndex("status"));
         Integer sector_id = cursor.getInt(cursor.getColumnIndex("sector_id"));
 
-        color = color.replaceAll("^,", ""); //TODO remove replacement
-
-        boolean archived = "Архив".equals(status);
-        boolean draft = "Черновик".equals(status);
+        boolean archived = StatusValues.ARCHIVE.equals(status);
+        boolean draft = StatusValues.DRAFT.equals(status);
 
         if (archived || draft) {
-            this.name += " (" + status.toLowerCase() + ")";
+            this.name += " (" + status.toString() + ")";
         }
 
         if (!grade.isEmpty())
@@ -47,8 +49,9 @@ public class DummyItem {
             details += "Оценка автора: " + grade_author + "\n";
         if (!grade_users.isEmpty() && !"(нет оценок)".equals(grade_users))
             details += "Оценка юзеров: " + grade_users + "\n";
-        if (!color.isEmpty())
-            details += "Цвет меток: " + color + "\n";
+
+        details += "Цвет меток: " + String.valueOf(color1) + " " + String.valueOf(color2) + " " + String.valueOf(color3) + "\n";
+
         if (!author.isEmpty())
             details += "Автор: " + author + "\n";
         if (!comment.isEmpty())
@@ -57,8 +60,9 @@ public class DummyItem {
             details += "Дата накрутки: " + created_when + "\n";
         if (!destroyed_when.isEmpty() && !"Не задан".equals(destroyed_when))
             details += "Дата скрутки: " + destroyed_when + "\n";
-        if (!status.isEmpty())
-            details += "Статус: " + status + "\n";
+
+        details += "Статус: " + status.toString() + "\n";
+
         if (!sector_id.toString().isEmpty())
             details += "Сектор: " + sector_id + "\n";
     }

@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import me.vadik.instaclimb.R;
+import me.vadik.instaclimb.routes.contract.Sectors;
 import me.vadik.instaclimb.routes.provider.RoutesContentProvider;
 
 public class GymFragment extends Fragment {
@@ -113,7 +114,7 @@ public class GymFragment extends Fragment {
     private List<Sector> getSectors(Integer gymId) {
         List<Sector> sectors = new ArrayList<>();
 
-        Uri myUri = Uri.withAppendedPath(RoutesContentProvider.CONTENT_URI, "sectors_gyms");
+        Uri myUri = Uri.withAppendedPath(RoutesContentProvider.CONTENT_URI, "sectors");
 
         Cursor cursor = getActivity().getContentResolver().query(myUri, null,
                 "gym_id = ?", new String[]{String.valueOf(gymId)}, null);
@@ -121,8 +122,8 @@ public class GymFragment extends Fragment {
         try {
             if (cursor != null && cursor.moveToFirst()) {
                 do {
-                    Integer id = cursor.getInt(cursor.getColumnIndex("id"));
-                    String name = cursor.getString(cursor.getColumnIndex("name"));
+                    Integer id = cursor.getInt(cursor.getColumnIndex(Sectors._ID));
+                    String name = cursor.getString(cursor.getColumnIndex(Sectors.NAME));
                     sectors.add(new Sector(id, name));
                 } while (cursor.moveToNext());
             }
