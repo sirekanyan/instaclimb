@@ -29,7 +29,7 @@ public class DummyItem {
         int color1 = cursor.getInt(cursor.getColumnIndex("color1"));
         int color2 = cursor.getInt(cursor.getColumnIndex("color2"));
         int color3 = cursor.getInt(cursor.getColumnIndex("color3"));
-        String author = cursor.getString(cursor.getColumnIndex("author"));
+        int author = cursor.getInt(cursor.getColumnIndex("user_id"));
         String comment = cursor.getString(cursor.getColumnIndex("comment"));
         String created_when = cursor.getString(cursor.getColumnIndex("created_when"));
         String destroyed_when = cursor.getString(cursor.getColumnIndex("destroyed_when"));
@@ -52,8 +52,8 @@ public class DummyItem {
 
         details += "Цвет меток: " + String.valueOf(color1) + " " + String.valueOf(color2) + " " + String.valueOf(color3) + "\n";
 
-        if (!author.isEmpty())
-            details += "Автор: " + author + "\n";
+        details += "Автор: " + author + "\n";
+
         if (!comment.isEmpty())
             details += "Комментарий: " + comment + "\n";
         if (!created_when.isEmpty())

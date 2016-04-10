@@ -20,8 +20,12 @@ import android.widget.TextView;
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.NetworkImageView;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import me.vadik.instaclimb.R;
 import me.vadik.instaclimb.routes.contract.Routes;
+import me.vadik.instaclimb.routes.contract.UsersRoutes;
 import me.vadik.instaclimb.routes.dummy.DummyItem;
 import me.vadik.instaclimb.routes.provider.RoutesContentProvider;
 
@@ -124,12 +128,36 @@ public class RouteActivity extends AppCompatActivity {
                 }
             }
 
-            if (mNetworkImageToolbarView != null) {
-                if (mItem == null) {
-                    Log.e("me", "mItem is null, wtf? argItemId: " + argItemId);
-                } else {
-                    mNetworkImageToolbarView.setImageUrl(mItem.getSmallPictureUrl(), mImageLoader);
+            boolean isClimbed = false;
+
+            Uri myUri2 = Uri.withAppendedPath(RoutesContentProvider.CONTENT_URI, "users_routes");
+            //TODO simplify call to content provider
+            //TODO use loader here
+
+            Cursor cursor2 = this.getContentResolver().query(
+                    myUri2,
+                    null,
+                    "route_id = ? and user_id = 1561",
+                    new String[]{argItemId},
+                    null);
+
+            try {
+                if (cursor2 != null && cursor2.moveToFirst()) {
+                    isClimbed = true;
                 }
+            } finally {
+                if (cursor2 != null) {
+                    cursor2.close();
+                }
+            }
+
+            if (isClimbed) {
+                fab.setImageResource(R.drawable.ic_done_white_24dp);
+                fab.setBackgroundTintList(getResources().getColorStateList(R.color.colorSuccessAccent));
+            }
+
+            if (mNetworkImageToolbarView != null) {
+                mNetworkImageToolbarView.setImageUrl(mItem.getSmallPictureUrl(), mImageLoader);
             }
         }
     }

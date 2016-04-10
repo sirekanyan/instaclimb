@@ -4,9 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.res.TypedArray;
 import android.database.Cursor;
-import android.graphics.drawable.Drawable;
-import android.graphics.drawable.GradientDrawable;
-import android.graphics.drawable.ShapeDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
@@ -15,18 +12,17 @@ import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v7.widget.SearchView;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import me.vadik.instaclimb.R;
 import me.vadik.instaclimb.routes.contract.Routes;
@@ -205,10 +201,8 @@ public class SectorFragment extends ListFragment implements
         String select = "";
         List<String> selectArgs = new ArrayList<>();
         if (mCurFilter != null) {
-            select = "(name like ? or grade like ? or author like ? or color like ?) and ";
+            select = "(name like ? or grade like ?) and ";
             String like = "%" + mCurFilter + "%";
-            selectArgs.add(like);
-            selectArgs.add(like);
             selectArgs.add(like);
             selectArgs.add(like);
         }

@@ -13,7 +13,7 @@ public class Routes {
     public static final String COLOR1 = "color1";
     public static final String COLOR2 = "color2";
     public static final String COLOR3 = "color3";
-    public static final String AUTHOR = "author";
+    public static final String USER_ID = "user_id";
     public static final String COMMENT = "comment";
     public static final String CREATED_WHEN = "created_when";
     public static final String DESTROYED_WHEN = "destroyed_when";

@@ -17,4 +17,18 @@
         android:layout_height="0dp"
         android:visibility="gone" />
 
+    <TextView
+        style="?android:attr/textAppearanceLarge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="16dp"
+        android:text="Кто пролез:" />
+
+    <TextView
+        android:id="@+id/climbed"
+        style="?android:attr/textAppearanceLarge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="16dp" />
+
 </LinearLayout>
