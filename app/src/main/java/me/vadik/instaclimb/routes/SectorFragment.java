@@ -230,7 +230,7 @@ public class SectorFragment extends ListFragment implements
         if (preferences.getBoolean("show_archived", false)) {
             select += "1 = 1";
         } else {
-            select += "is_active = true";
+            select += "is_active = 1";
         }
 
 //        if (mCurFilter != null) {
