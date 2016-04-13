@@ -20,14 +20,14 @@ import java.util.List;
 import me.vadik.instaclimb.R;
 import me.vadik.instaclimb.common.CommonActivity;
 import me.vadik.instaclimb.contract.RouteContract;
-import me.vadik.instaclimb.contract.ViewUsersRoutesContract;
 import me.vadik.instaclimb.model.RouteDetail;
-import me.vadik.instaclimb.provider.RoutesContentProvider;
 import me.vadik.instaclimb.model.User;
+import me.vadik.instaclimb.provider.RoutesContentProvider;
 
 public class RouteActivity extends CommonActivity {
 
     public static final String ARG_ROUTE_ID = "me.vadik.instaclimb.route_id";
+    public static final String ARG_ROUTE_NAME = "me.vadik.instaclimb.route_name";
 
     private static final int LOADER_ID = 0;
     private static final int LOADER_FAB_CHECKED = 1;
@@ -40,13 +40,31 @@ public class RouteActivity extends CommonActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        final FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         if (fab != null) {
             fab.setOnClickListener(new View.OnClickListener() {
                 @Override
-                public void onClick(View view) {
-                    Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                            .setAction("Action", null).show();
+                public void onClick(final View view) {
+
+                    boolean checked = fab.getBackgroundTintList().getDefaultColor() != getResources().getColor(R.color.colorAccent);
+
+                    if (checked) {
+                        fab.setImageResource(R.drawable.ic_add_white_24dp);
+                        fab.setBackgroundTintList(getResources().getColorStateList(R.color.colorAccent));
+                    } else {
+                        fab.setImageResource(R.drawable.ic_done_white_24dp);
+                        fab.setBackgroundTintList(getResources().getColorStateList(R.color.colorSuccessAccent));
+                        Snackbar.make(view, R.string.route_completed, Snackbar.LENGTH_LONG)
+                                .setAction(R.string.flash_button, new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        fab.setImageResource(R.drawable.ic_done_all_white_24dp);
+                                        fab.setBackgroundTintList(getResources().getColorStateList(R.color.colorSuccessAccent));
+                                        Snackbar.make(view, R.string.route_completed_flash, Snackbar.LENGTH_LONG).show();
+                                    }
+                                }).show();
+                    }
+
                 }
             });
         }
@@ -56,6 +74,9 @@ public class RouteActivity extends CommonActivity {
         }
 
         String routeId = getIntent().getStringExtra(ARG_ROUTE_ID);
+        String routeName = getIntent().getStringExtra(ARG_ROUTE_NAME);
+
+        getSupportActionBar().setTitle(routeName);
 
         Bundle b = new Bundle();
         b.putString(ARG_ROUTE_ID, routeId);
@@ -139,11 +160,8 @@ public class RouteActivity extends CommonActivity {
                 try {
                     if (cursor != null && cursor.moveToFirst()) {
                         do {
-                            Integer userId = cursor.getInt(cursor.getColumnIndex(ViewUsersRoutesContract.USER_ID));
-                            String userName = cursor.getString(cursor.getColumnIndex(ViewUsersRoutesContract.USER_NAME));
-                            boolean isFlash = 1 == cursor.getInt(cursor.getColumnIndex(ViewUsersRoutesContract.IS_FLASH));
-                            String date = cursor.getString(cursor.getColumnIndex(ViewUsersRoutesContract.DATE));
-                            whoClimbed.add(new User(userId, userName, isFlash, date));
+
+                            whoClimbed.add(new User(cursor));
                         } while (cursor.moveToNext());
                     }
                 } finally {

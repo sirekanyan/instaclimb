@@ -15,42 +15,58 @@
         android:layout_centerVertical="true"
         android:layout_marginRight="16dp">
 
-        <ImageView
+        <me.vadik.android.MyNetworkImageView
             android:id="@+id/cicon"
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:contentDescription="icon"
             android:scaleType="centerCrop"/>
 
-        <TextView
-            android:id="@+id/generictext"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_gravity="center"
-            android:gravity="center"
-            android:singleLine="true"
-            android:textColor="@android:color/darker_gray"
-            android:textSize="12dp"
-            android:textStyle="bold"/>
-    </FrameLayout>
+        <!--<TextView-->
+        <!--android:id="@+id/generictext"-->
+        <!--android:layout_width="40dp"-->
+        <!--android:layout_height="40dp"-->
+        <!--android:layout_gravity="center"-->
+        <!--android:gravity="center"-->
+        <!--android:singleLine="true"-->
+        <!--android:textColor="@android:color/darker_gray"-->
+        <!--android:textSize="12dp"-->
+        <!--android:textStyle="bold"/>-->
 
-    <ImageButton
-        android:id="@+id/properties"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_centerVertical="true"
-        android:layout_marginLeft="16dp"
-        android:background="@drawable/ripple"
-        android:clickable="true"
-        android:padding="8dp"
-        android:src="@drawable/ic_more_vert_black_48dp"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:layout_gravity="center_vertical">
+
+            <View
+                android:id="@+id/marker1"
+                android:layout_width="30dp"
+                android:layout_height="10dp"
+                android:layout_gravity="center"
+                android:background="@drawable/rect_invisible"/>
+
+            <View
+                android:id="@+id/marker2"
+                android:layout_width="5dp"
+                android:layout_height="10dp"
+                android:layout_gravity="center"
+                android:background="@drawable/rect_invisible"/>
+
+            <View
+                android:id="@+id/marker3"
+                android:layout_width="5dp"
+                android:layout_height="10dp"
+                android:layout_gravity="center"
+                android:background="@drawable/rect_invisible"/>
+
+        </LinearLayout>
+    </FrameLayout>
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
-        android:layout_toLeftOf="@id/properties"
         android:layout_toRightOf="@id/iconframe">
 
         <TextView

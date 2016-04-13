@@ -4,9 +4,10 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
+import com.android.volley.toolbox.NetworkImageView;
 
 import java.util.List;
 
@@ -29,7 +30,7 @@ public abstract class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerV
         public TextView secondLine;
         public TextView date;
         public TextView permissions;
-        public ImageView image;
+        public NetworkImageView image;
 
         public ViewHolder(RelativeLayout v) {
             super(v);
@@ -38,7 +39,7 @@ public abstract class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerV
             secondLine = (TextView) v.findViewById(R.id.secondLine);
             date = (TextView) v.findViewById(R.id.date);
             permissions = (TextView) v.findViewById(R.id.permis);
-            image = (ImageView) v.findViewById(R.id.cicon);
+            image = (NetworkImageView) v.findViewById(R.id.cicon);
         }
     }
 

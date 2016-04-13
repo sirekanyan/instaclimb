@@ -6,4 +6,7 @@ package me.vadik.instaclimb.contract;
  */
 public interface ViewRoutesUsersContract extends UsersRoutesContract {
     String ROUTE_NAME = "route_name";
+    String COLOR1 = "color1";
+    String COLOR2 = "color2";
+    String COLOR3 = "color3";
 }

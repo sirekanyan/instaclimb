@@ -97,7 +97,6 @@ public class SectorFragment extends ListFragment implements
                 }, 0);
         setListAdapter(mAdapter);
 
-
         SimpleCursorAdapter.ViewBinder binder = new SimpleCursorAdapter.ViewBinder() {
             @Override
             public boolean setViewValue(View view, Cursor cursor, int columnIndex) {
@@ -184,8 +183,12 @@ public class SectorFragment extends ListFragment implements
     @Override
     public void onListItemClick(ListView l, View v, int position, long id) {
         Context context = v.getContext();
+        TextView textView = (TextView) v.findViewById(R.id.firstLine);
         Intent intent = new Intent(context, RouteActivity.class);
         intent.putExtra(RouteActivity.ARG_ROUTE_ID, String.valueOf(id));
+        if (textView != null) {
+            intent.putExtra(RouteActivity.ARG_ROUTE_NAME, textView.getText());
+        }
         context.startActivity(intent);
     }
 

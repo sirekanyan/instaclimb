@@ -6,4 +6,5 @@ package me.vadik.instaclimb.contract;
  */
 public interface ViewUsersRoutesContract extends UsersRoutesContract {
     String USER_NAME = "user_name";
+    String HAS_PICTURE = "has_picture";
 }

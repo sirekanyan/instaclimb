@@ -4,6 +4,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.view.View;
 
+import com.android.volley.toolbox.ImageLoader;
+import com.android.volley.toolbox.NetworkImageView;
+
 import java.util.List;
 
 import me.vadik.instaclimb.R;
@@ -34,13 +37,21 @@ public class RouteUsersAdapter extends RecyclerViewAdapter {
         holder.date.setText(user.getDate());
 //        holder.secondLine.setText("");
 //        holder.permissions.setText("");
-        holder.image.setImageResource(R.drawable.me);
+//        holder.image.setImageResource(R.drawable.me);
+
+        holder.image.setDefaultImageResId(R.drawable.blackface);
+        if (user.hasPicture()) {
+            ImageLoader mImageLoader = VolleySingleton.getInstance(context).getImageLoader();
+            holder.image.setImageUrl("https://vadik.me/userpic/" + String.valueOf(user.getId()) + ".jpg", mImageLoader);
+        }
+
 //        ((TextView) holder.root.findViewById(R.id.generictext)).setText("юзверь");
         holder.root.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(context, UserActivity.class);
                 intent.putExtra(UserActivity.ARG_USER_ID, String.valueOf(user.getId()));
+                intent.putExtra(UserActivity.ARG_USER_NAME, String.valueOf(user.getName()));
                 context.startActivity(intent);
             }
         });
