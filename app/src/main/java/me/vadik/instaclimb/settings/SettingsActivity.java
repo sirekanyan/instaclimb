@@ -18,6 +18,7 @@ import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 import android.preference.RingtonePreference;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.MenuItem;
 import android.support.v4.app.NavUtils;
 
@@ -31,7 +32,7 @@ import me.vadik.instaclimb.R;
  * settings are split by category, with category headers shown to the left of
  * the list of settings.
  * <p/>
- * See <a href="http://developer.android.com/design/patterns/settings.html">
+ * See <a href="http://deve loper.android.com/design/patterns/settings.html">
  * Android Design: Settings</a> for design guidelines and the <a
  * href="http://developer.android.com/guide/topics/ui/settings.html">Settings
  * API Guide</a> for more information on developing a Settings UI.
@@ -45,6 +46,8 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
         @Override
         public boolean onPreferenceChange(Preference preference, Object value) {
             String stringValue = value.toString();
+
+            Log.e("me", preference.getKey() + " => " + String.valueOf(value));
 
             if (preference instanceof ListPreference) {
                 // For list preferences, look up the correct display value in
@@ -254,6 +257,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
             // updated to reflect the new value, per the Android Design
             // guidelines.
             bindPreferenceSummaryToValue(findPreference("sync_frequency"));
+            bindPreferenceSummaryToValue(findPreference("user_id"));
         }
 
         @Override
@@ -266,4 +270,6 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
             return super.onOptionsItemSelected(item);
         }
     }
+
+
 }

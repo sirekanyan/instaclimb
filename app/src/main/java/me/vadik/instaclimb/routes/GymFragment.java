@@ -18,8 +18,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import me.vadik.instaclimb.R;
-import me.vadik.instaclimb.routes.contract.Sectors;
-import me.vadik.instaclimb.routes.provider.RoutesContentProvider;
+import me.vadik.instaclimb.contract.Sectors;
+import me.vadik.instaclimb.provider.RoutesContentProvider;
 
 public class GymFragment extends Fragment {
 

@@ -1,4 +1,4 @@
-package me.vadik.instaclimb.routes.provider;
+package me.vadik.instaclimb.provider;
 
 import android.content.ContentProvider;
 import android.content.ContentValues;
@@ -21,7 +21,7 @@ public class RoutesContentProvider extends ContentProvider {
     private SQLiteDatabase sqLiteDatabase;
     public static final String AUTHORITY = "me.vadik.instaclimb.routes.provider";
     public static final Uri CONTENT_URI = Uri.parse("content://" + AUTHORITY);
-    private static final String DATABASE_NAME = "routes.db";
+    private static final String DATABASE_NAME = "instaclimb.db";
 
     @Override
     public boolean onCreate() {

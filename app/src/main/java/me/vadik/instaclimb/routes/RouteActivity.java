@@ -1,33 +1,26 @@
 package me.vadik.instaclimb.routes;
 
-import android.content.Context;
 import android.content.Intent;
-import android.content.res.ColorStateList;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
-import android.support.v7.widget.Toolbar;
-import android.util.Log;
-import android.view.View;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.app.ActionBar;
 import android.support.v4.app.NavUtils;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
+import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.TextView;
+import android.view.View;
 
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.NetworkImageView;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import me.vadik.instaclimb.R;
-import me.vadik.instaclimb.routes.contract.Routes;
-import me.vadik.instaclimb.routes.contract.UsersRoutes;
-import me.vadik.instaclimb.routes.dummy.DummyItem;
-import me.vadik.instaclimb.routes.provider.RoutesContentProvider;
+import me.vadik.instaclimb.contract.Routes;
+import me.vadik.instaclimb.provider.RoutesContentProvider;
+import me.vadik.instaclimb.users.UserActivity;
 
 /**
  * An activity representing a single Route detail screen. This
@@ -36,6 +29,8 @@ import me.vadik.instaclimb.routes.provider.RoutesContentProvider;
  * in a {@link SectorActivity}.
  */
 public class RouteActivity extends AppCompatActivity {
+
+    private DummyItem mItem;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -100,12 +95,9 @@ public class RouteActivity extends AppCompatActivity {
                     .add(R.id.route_detail_container, fragment)
                     .commit();
 
-            NetworkImageView mNetworkImageToolbarView = (NetworkImageView) this.findViewById(R.id.route_image_toolbar);
-            ImageLoader mImageLoader = VolleySingleton.getInstance(this).getImageLoader();
+            mItem = null;
 
-            DummyItem mItem = null;
-
-            Uri myUri = Uri.withAppendedPath(RoutesContentProvider.CONTENT_URI, "routes");
+            Uri myUri = Uri.withAppendedPath(RoutesContentProvider.CONTENT_URI, "routes_view");
             //TODO simplify call to content provider
             //TODO use loader here
 
@@ -156,10 +148,22 @@ public class RouteActivity extends AppCompatActivity {
                 fab.setBackgroundTintList(getResources().getColorStateList(R.color.colorSuccessAccent));
             }
 
-            if (mNetworkImageToolbarView != null) {
-                mNetworkImageToolbarView.setImageUrl(mItem.getSmallPictureUrl(), mImageLoader);
-            }
+            setupToolbarImage(mItem.getSmallPictureUrl());
         }
+    }
+
+    private void setupToolbarImage(String url) {
+        NetworkImageView mNetworkImageToolbarView = (NetworkImageView) this.findViewById(R.id.route_image_toolbar);
+        ImageLoader mImageLoader = VolleySingleton.getInstance(this).getImageLoader();
+        if (mNetworkImageToolbarView != null) {
+            mNetworkImageToolbarView.setImageUrl(url, mImageLoader);
+        }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu, menu);
+        return true;
     }
 
     @Override
@@ -180,15 +184,21 @@ public class RouteActivity extends AppCompatActivity {
     }
 
     public void showRouteFullscreen(View view) {
-        TextView pictureId = (TextView) this.findViewById(R.id.picture_id);
+        Integer pictureId = mItem.getPictureId();
         Intent showRouteIntent = new Intent(this, RouteImageActivity.class);
         if (pictureId != null) {
-            String pictureIdString = pictureId.getText().toString();
+            String pictureIdString = pictureId.toString();
             if (!pictureIdString.isEmpty()) {
                 String uriString = DummyItem.getSmallPictureUrl(pictureIdString);
                 showRouteIntent.setData(Uri.parse(uriString));
             }
         }
         startActivity(showRouteIntent);
+    }
+
+    public void showUser(View view) {
+        Intent i = new Intent(this, UserActivity.class);
+        i.putExtra("user_id", String.valueOf(mItem.getAuthorId()));
+        this.startActivity(i);
     }
 }

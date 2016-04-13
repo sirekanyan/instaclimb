@@ -3,6 +3,11 @@
 
     <group android:checkableBehavior="single">
         <item
+            android:id="@+id/nav_swipe"
+            android:checked="true"
+            android:icon="@drawable/ic_menu_slideshow"
+            android:title="Свайп вью" />
+        <item
             android:id="@+id/nav_all_routes"
             android:checked="true"
             android:icon="@drawable/ic_menu_slideshow"

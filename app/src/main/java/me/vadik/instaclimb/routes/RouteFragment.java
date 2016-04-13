@@ -6,20 +6,16 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import me.vadik.instaclimb.R;
-import me.vadik.instaclimb.routes.contract.Routes;
-import me.vadik.instaclimb.routes.contract.UsersRoutes;
-import me.vadik.instaclimb.routes.dummy.DummyItem;
-import me.vadik.instaclimb.routes.provider.RoutesContentProvider;
+import me.vadik.instaclimb.contract.Routes;
+import me.vadik.instaclimb.contract.UsersRoutes;
+import me.vadik.instaclimb.contract.UsersRoutesView;
+import me.vadik.instaclimb.provider.RoutesContentProvider;
 
 /**
  * A fragment representing a single Route detail screen.
@@ -47,6 +43,8 @@ public class RouteFragment extends Fragment {
     public RouteFragment() {
     }
 
+    //TODO newInstance method
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -58,7 +56,7 @@ public class RouteFragment extends Fragment {
 
             String itemId = getArguments().getString(ARG_ITEM_ID);
 
-            Uri myUri = Uri.withAppendedPath(RoutesContentProvider.CONTENT_URI, "routes");
+            Uri myUri = Uri.withAppendedPath(RoutesContentProvider.CONTENT_URI, "routes_view");
             //TODO simplify call to content provider
             //TODO use loader here
 
@@ -90,7 +88,7 @@ public class RouteFragment extends Fragment {
 
             users = "";
 
-            Uri myUri2 = Uri.withAppendedPath(RoutesContentProvider.CONTENT_URI, "users_routes");
+            Uri myUri2 = Uri.withAppendedPath(RoutesContentProvider.CONTENT_URI, "users_routes_view");
             //TODO simplify call to content provider
             //TODO use loader here
 
@@ -105,9 +103,10 @@ public class RouteFragment extends Fragment {
                 if (cursor2 != null && cursor2.moveToFirst()) {
                     do {
                         Integer userId = cursor2.getInt(cursor2.getColumnIndex(UsersRoutes.USER_ID));
-                        String flash = cursor2.getString(cursor2.getColumnIndex(UsersRoutes.FLASH));
+                        String userName = cursor2.getString(cursor2.getColumnIndex(UsersRoutesView.USER_NAME));
+                        String isFlash = cursor2.getString(cursor2.getColumnIndex(UsersRoutes.IS_FLASH));
                         String date = cursor2.getString(cursor2.getColumnIndex(UsersRoutes.DATE));
-                        users += userId.toString() + " => " + date + "\n";
+                        users += userName.toString() + ", \n";
                     } while (cursor2.moveToNext());
                 }
             } finally {
@@ -115,6 +114,13 @@ public class RouteFragment extends Fragment {
                     cursor2.close();
                 }
             }
+
+
+            Fragment climbedFragment = ClimbedUsersFragment.newInstance(mItem.id);
+
+            getChildFragmentManager().beginTransaction()
+                    .add(R.id.climbed_users_fragment, climbedFragment)
+                    .commit();
         }
     }
 
@@ -126,12 +132,10 @@ public class RouteFragment extends Fragment {
         // Show the dummy content as text in a TextView.
         if (mItem != null) {
             ((TextView) rootView.findViewById(R.id.route_detail)).setText(mItem.details);
+            ((TextView) rootView.findViewById(R.id.author_name)).setText(mItem.getAuthor());
             if (users != null) {
                 ((TextView) rootView.findViewById(R.id.climbed)).setText(users);
             }
-
-            TextView picIdTextView = (TextView) rootView.findViewById(R.id.picture_id);
-            picIdTextView.setText(mItem.getPictureId().toString());
         }
 
         return rootView;

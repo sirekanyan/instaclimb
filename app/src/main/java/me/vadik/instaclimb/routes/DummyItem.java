@@ -1,8 +1,6 @@
-package me.vadik.instaclimb.routes.dummy;
+package me.vadik.instaclimb.routes;
 
 import android.database.Cursor;
-
-import me.vadik.instaclimb.routes.contract.StatusValues;
 
 /**
  * User: vadik
@@ -10,7 +8,9 @@ import me.vadik.instaclimb.routes.contract.StatusValues;
  */
 public class DummyItem {
     public final String id;
-    public String name;
+    private final String author;
+    private final Integer author_id;
+    public final String name;
     public final String grade;
     public final Integer pictureId;
 
@@ -19,52 +19,37 @@ public class DummyItem {
     public DummyItem(String id, String name, Cursor cursor) {
         this.id = id;
         this.name = name;
+
+        this.author = cursor.getString(cursor.getColumnIndex("user_name"));
+        this.author_id = cursor.getInt(cursor.getColumnIndex("user_id"));
+
         this.details = "";
 
         this.pictureId = cursor.getInt(cursor.getColumnIndex("picture_id"));
         this.grade = cursor.getString(cursor.getColumnIndex("grade"));
 
-        String grade_author = cursor.getString(cursor.getColumnIndex("grade_author"));
-        String grade_users = cursor.getString(cursor.getColumnIndex("grade_users"));
         int color1 = cursor.getInt(cursor.getColumnIndex("color1"));
         int color2 = cursor.getInt(cursor.getColumnIndex("color2"));
         int color3 = cursor.getInt(cursor.getColumnIndex("color3"));
-        int author = cursor.getInt(cursor.getColumnIndex("user_id"));
-        String comment = cursor.getString(cursor.getColumnIndex("comment"));
+        String comment = "";//TODO cursor.getString(cursor.getColumnIndex("comment"));
         String created_when = cursor.getString(cursor.getColumnIndex("created_when"));
-        String destroyed_when = cursor.getString(cursor.getColumnIndex("destroyed_when"));
-        Integer status = cursor.getInt(cursor.getColumnIndex("status"));
+//        Integer status = cursor.getInt(cursor.getColumnIndex("status"));
         Integer sector_id = cursor.getInt(cursor.getColumnIndex("sector_id"));
-
-        boolean archived = StatusValues.ARCHIVE.equals(status);
-        boolean draft = StatusValues.DRAFT.equals(status);
-
-        if (archived || draft) {
-            this.name += " (" + status.toString() + ")";
-        }
 
         if (!grade.isEmpty())
             details += "Сложность: " + grade + "\n";
-        if (!grade_author.isEmpty())
-            details += "Оценка автора: " + grade_author + "\n";
-        if (!grade_users.isEmpty() && !"(нет оценок)".equals(grade_users))
-            details += "Оценка юзеров: " + grade_users + "\n";
 
         details += "Цвет меток: " + String.valueOf(color1) + " " + String.valueOf(color2) + " " + String.valueOf(color3) + "\n";
-
-        details += "Автор: " + author + "\n";
 
         if (!comment.isEmpty())
             details += "Комментарий: " + comment + "\n";
         if (!created_when.isEmpty())
             details += "Дата накрутки: " + created_when + "\n";
-        if (!destroyed_when.isEmpty() && !"Не задан".equals(destroyed_when))
-            details += "Дата скрутки: " + destroyed_when + "\n";
-
-        details += "Статус: " + status.toString() + "\n";
 
         if (!sector_id.toString().isEmpty())
             details += "Сектор: " + sector_id + "\n";
+
+        details += "Скалодром: ?\n";
     }
 
     @Override
@@ -90,5 +75,13 @@ public class DummyItem {
 
     public Integer getPictureId() {
         return pictureId;
+    }
+
+    public String getAuthor() {
+        return author;
+    }
+
+    public Integer getAuthorId() {
+        return author_id;
     }
 }

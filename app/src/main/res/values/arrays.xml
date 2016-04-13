@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="lalalas">
+        <item>123</item>
+        <item>123123</item>
+        <item>653365</item>
+        <item>3456</item>
+    </string-array>
+    <string-array name="search_suggestions">asdf</string-array>
+</resources>

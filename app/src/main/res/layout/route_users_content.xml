@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/route_users_list_content"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:padding="16dp">
+
+    <!--<TextView-->
+        <!--android:id="@+id/user_routes_name1"-->
+        <!--android:layout_width="0dp"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_weight="1"-->
+        <!--android:text="@string/default_route_author"-->
+        <!--android:textColor="@color/link"-->
+        <!--android:textSize="20sp" />-->
+
+    <TextView
+        android:id="@+id/user_routes_name"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="@string/default_route_author"
+        android:textColor="@color/link"
+        android:textSize="20sp" />
+
+    <TextView
+        android:layout_toRightOf="@+id/user_routes_name"
+        android:layout_toEndOf="@+id/user_routes_name"
+        android:id="@+id/user_routes_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/default_route_date" />
+
+    <!--<TextView-->
+        <!--android:id="@+id/user_id"-->
+        <!--android:layout_width="0dp"-->
+        <!--android:layout_height="0dp"-->
+        <!--android:text="-1"-->
+        <!--android:visibility="gone" />-->
+
+</RelativeLayout>

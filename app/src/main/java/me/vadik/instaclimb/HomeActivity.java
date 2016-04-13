@@ -23,6 +23,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import me.vadik.instaclimb.routes.GymFragment;
+import me.vadik.instaclimb.routes.example.SwipeView;
 import me.vadik.instaclimb.settings.SettingsActivity;
 
 public class HomeActivity extends AppCompatActivity implements
@@ -102,6 +103,9 @@ public class HomeActivity extends AppCompatActivity implements
         }
 
         switch (itemId) {
+            case R.id.nav_swipe:
+                startActivity(new Intent(this, SwipeView.class));
+                break;
             case R.id.nav_all_routes:
                 gymId = GymFragment.ALL_GYMS;
                 gymName = item.getTitle().toString();

@@ -10,24 +10,26 @@ import android.support.v4.app.ListFragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
+import android.support.v4.widget.CursorAdapter;
+import android.support.v4.widget.SimpleCursorAdapter;
 import android.support.v7.widget.SearchView;
 import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ListAdapter;
+import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import me.vadik.instaclimb.R;
-import me.vadik.instaclimb.routes.contract.Routes;
-import me.vadik.instaclimb.routes.contract.StatusValues;
-import me.vadik.instaclimb.routes.provider.RoutesContentProvider;
+import me.vadik.instaclimb.contract.Routes;
+import me.vadik.instaclimb.contract.RoutesView;
+import me.vadik.instaclimb.contract.StatusValues;
+import me.vadik.instaclimb.provider.RoutesContentProvider;
 
 /**
  * User: vadik
@@ -89,8 +91,26 @@ public class SectorFragment extends ListFragment implements
         // Create an empty adapter we will use to display the loaded data.
         mAdapter = new SimpleCursorAdapter(getActivity(),
                 R.layout.route_list_content, null,
-                new String[]{Routes.COLOR1, Routes.COLOR2, Routes.COLOR3, Routes.NAME, Routes.STATUS, Routes.GRADE},
-                new int[]{R.id.marker1, R.id.marker2, R.id.marker3, R.id.route_name, R.id.route_name, R.id.route_grade}, 0);
+                new String[]{
+                        Routes.COLOR1,
+                        Routes.COLOR2,
+                        Routes.COLOR3,
+                        Routes.NAME,
+                        Routes.IS_ACTIVE,
+                        RoutesView.USER_NAME,
+                        Routes.GRADE,
+                        Routes.CREATED_WHEN,
+                },
+                new int[]{
+                        R.id.marker1,
+                        R.id.marker2,
+                        R.id.marker3,
+                        R.id.firstLine,
+                        R.id.firstLine,
+                        R.id.secondLine,
+                        R.id.rightLabel,
+                        R.id.thirdLine,
+                }, 0);
         setListAdapter(mAdapter);
 
 
@@ -98,21 +118,31 @@ public class SectorFragment extends ListFragment implements
             @Override
             public boolean setViewValue(View view, Cursor cursor, int columnIndex) {
                 String columnName = cursor.getColumnName(columnIndex);
-                if (Routes.STATUS.equals(columnName)) {
-                    Integer status = cursor.getInt(columnIndex);
-                    TextView textView = (TextView) view;
-                    if (StatusValues.ACTIVE.equals(status)) {
-                        textView.setTextColor(getResources().getColor(android.R.color.black));
-                    } else {
-                        textView.setText(textView.getText() + " (" + status.toString() + ")");
-                        textView.setTextColor(getResources().getColor(android.R.color.darker_gray));
+                if (Routes.NAME.equals(columnName)) {
+                    String routeName = cursor.getString(columnIndex);
+                    if (routeName.matches(".?\\d*?")) {
+                        routeName = getResources().getString(R.string.route) + " " + routeName;
                     }
+                    ((TextView) view).setText(routeName);
                     return true;
-                } else if (Routes.COLOR1.equals(columnName)
-                        || Routes.COLOR2.equals(columnName)
+                } else if (Routes.IS_ACTIVE.equals(columnName)) {
+                    int colorRes;
+                    if (StatusValues.ACTIVE == cursor.getInt(columnIndex)) {
+                        // TODO: why need i this line here?
+                        colorRes = android.R.color.black;
+                    } else {
+                        colorRes = android.R.color.darker_gray;
+                    }
+                    ((TextView) view).setTextColor(getResources().getColor(colorRes));
+                    return true;
+                } else if (Routes.COLOR1.equals(columnName)) {
+                    int color = cursor.getInt(columnIndex);
+                    setMarkerColor(view, color, R.drawable.rect_dashed);
+                    return true;
+                } else if (Routes.COLOR2.equals(columnName)
                         || Routes.COLOR3.equals(columnName)) {
                     int color = cursor.getInt(columnIndex);
-                    setMarkerColor(view, color, Routes.COLOR1.equals(columnName));
+                    setMarkerColor(view, color, R.drawable.rect_invisible);
                     return true;
                 }
                 return false;
@@ -126,10 +156,10 @@ public class SectorFragment extends ListFragment implements
         getLoaderManager().initLoader(0, null, this);
     }
 
-    private void setMarkerColor(View view, int color, boolean isFirst) {
+    private void setMarkerColor(View view, int color, int defaultResId) {
         TypedArray colors = getResources().obtainTypedArray(R.array.colors);
-        if (color == 0 && isFirst) {
-            view.setBackgroundResource(R.drawable.rect_dashed);
+        if (color == 0) {
+            view.setBackgroundResource(defaultResId);
         } else {
             view.setBackgroundResource(colors.getResourceId(color, 0));
         }
@@ -143,6 +173,14 @@ public class SectorFragment extends ListFragment implements
         item.setIcon(android.R.drawable.ic_menu_search);
         item.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
         SearchView sv = new SearchView(getActivity());
+        //TODO: add suggestions with grades
+//        final String[] from = new String[] {"cityName"};
+//        final int[] to = new int[] {android.R.id.text1};
+//        sv.setSuggestionsAdapter(new SimpleCursorAdapter(
+//                getActivity(),
+//                android.R.layout.simple_dropdown_item_1line,
+//                from,
+//                to, CursorAdapter.FLAG_REGISTER_CONTENT_OBSERVER));
         sv.setOnQueryTextListener(this);
         item.setActionView(sv);
     }
@@ -189,7 +227,9 @@ public class SectorFragment extends ListFragment implements
             Routes.COLOR1,
             Routes.COLOR2,
             Routes.COLOR3,
-            Routes.STATUS,
+            Routes.IS_ACTIVE,
+            RoutesView.USER_NAME,
+            Routes.CREATED_WHEN,
     };
 
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
@@ -201,8 +241,9 @@ public class SectorFragment extends ListFragment implements
         String select = "";
         List<String> selectArgs = new ArrayList<>();
         if (mCurFilter != null) {
-            select = "(name like ? or grade like ?) and ";
+            select = "(name like ? or grade like ? or user_name like ?) and ";
             String like = "%" + mCurFilter + "%";
+            selectArgs.add(like);
             selectArgs.add(like);
             selectArgs.add(like);
         }
@@ -217,14 +258,14 @@ public class SectorFragment extends ListFragment implements
             statusPlaceHolders[i] = "?";
         }
 
-        select += "status in (" + TextUtils.join(",", statusPlaceHolders) + ")";
+        select += "is_active in (" + TextUtils.join(",", statusPlaceHolders) + ")";
         selectArgs.addAll(statusFilterArgs);
 
 //        if (mCurFilter != null) {
 //            baseUri = Uri.withAppendedPath(ContactsContract.Contacts.CONTENT_FILTER_URI,
 //                    Uri.encode(mCurFilter));
 //        } else {
-        baseUri = Uri.withAppendedPath(RoutesContentProvider.CONTENT_URI, "routes");
+        baseUri = Uri.withAppendedPath(RoutesContentProvider.CONTENT_URI, "routes_view");
 //        }
 
         // Now create and return a CursorLoader that will take care of

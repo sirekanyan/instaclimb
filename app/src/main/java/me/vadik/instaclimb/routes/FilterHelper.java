@@ -6,12 +6,9 @@ import android.preference.PreferenceManager;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
-import me.vadik.instaclimb.R;
-import me.vadik.instaclimb.routes.contract.StatusValues;
+import me.vadik.instaclimb.contract.StatusValues;
 
 /**
  * User: vadik
@@ -24,13 +21,10 @@ public class FilterHelper {
 
         List<String> statusFilterArgs = new ArrayList<>();
 
-        statusFilterArgs.add(StatusValues.ACTIVE.toString());
+        statusFilterArgs.add(String.valueOf(StatusValues.ACTIVE));
 
         if (preferences.getBoolean("show_archived", false)) {
-            statusFilterArgs.add(StatusValues.ARCHIVE.toString());
-        }
-        if (preferences.getBoolean("show_draft", false)) {
-            statusFilterArgs.add(StatusValues.DRAFT.toString());
+            statusFilterArgs.add(String.valueOf(StatusValues.ARCHIVE));
         }
 
         return statusFilterArgs;
