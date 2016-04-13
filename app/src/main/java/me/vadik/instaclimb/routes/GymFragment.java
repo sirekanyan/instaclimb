@@ -18,7 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import me.vadik.instaclimb.R;
-import me.vadik.instaclimb.contract.Sectors;
+import me.vadik.instaclimb.contract.SectorContract;
 import me.vadik.instaclimb.provider.RoutesContentProvider;
 
 public class GymFragment extends Fragment {
@@ -122,8 +122,8 @@ public class GymFragment extends Fragment {
         try {
             if (cursor != null && cursor.moveToFirst()) {
                 do {
-                    Integer id = cursor.getInt(cursor.getColumnIndex(Sectors._ID));
-                    String name = cursor.getString(cursor.getColumnIndex(Sectors.NAME));
+                    Integer id = cursor.getInt(cursor.getColumnIndex(SectorContract._ID));
+                    String name = cursor.getString(cursor.getColumnIndex(SectorContract.NAME));
                     sectors.add(new Sector(id, name));
                 } while (cursor.moveToNext());
             }

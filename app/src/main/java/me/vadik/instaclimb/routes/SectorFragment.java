@@ -2,15 +2,16 @@ package me.vadik.instaclimb.routes;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.TypedArray;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.ListFragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
-import android.support.v4.widget.CursorAdapter;
 import android.support.v4.widget.SimpleCursorAdapter;
 import android.support.v7.widget.SearchView;
 import android.text.TextUtils;
@@ -18,7 +19,6 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -26,9 +26,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import me.vadik.instaclimb.R;
-import me.vadik.instaclimb.contract.Routes;
-import me.vadik.instaclimb.contract.RoutesView;
-import me.vadik.instaclimb.contract.StatusValues;
+import me.vadik.instaclimb.contract.RouteContract;
+import me.vadik.instaclimb.contract.ViewRouteContract;
 import me.vadik.instaclimb.provider.RoutesContentProvider;
 
 /**
@@ -62,21 +61,6 @@ public class SectorFragment extends ListFragment implements
         }
     }
 
-    boolean mTwoPane = false;
-
-//    @Override
-//    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-//        View view = inflater.inflate(R.layout.fragment_sector, container, false);
-//        if (view.findViewById(R.id.route_detail_container) != null) {
-    // The detail container view will be present only in the
-    // large-screen layouts (res/values-w900dp).
-    // If this view is present, then the
-    // activity should be in two-pane mode.
-//            mTwoPane = true;
-//        }
-//        return view;
-//    }
-
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
@@ -92,14 +76,14 @@ public class SectorFragment extends ListFragment implements
         mAdapter = new SimpleCursorAdapter(getActivity(),
                 R.layout.route_list_content, null,
                 new String[]{
-                        Routes.COLOR1,
-                        Routes.COLOR2,
-                        Routes.COLOR3,
-                        Routes.NAME,
-                        Routes.IS_ACTIVE,
-                        RoutesView.USER_NAME,
-                        Routes.GRADE,
-                        Routes.CREATED_WHEN,
+                        RouteContract.COLOR1,
+                        RouteContract.COLOR2,
+                        RouteContract.COLOR3,
+                        RouteContract.NAME,
+                        RouteContract.IS_ACTIVE,
+                        ViewRouteContract.USER_NAME,
+                        RouteContract.GRADE,
+                        RouteContract.CREATED_WHEN,
                 },
                 new int[]{
                         R.id.marker1,
@@ -118,16 +102,13 @@ public class SectorFragment extends ListFragment implements
             @Override
             public boolean setViewValue(View view, Cursor cursor, int columnIndex) {
                 String columnName = cursor.getColumnName(columnIndex);
-                if (Routes.NAME.equals(columnName)) {
+                if (RouteContract.NAME.equals(columnName)) {
                     String routeName = cursor.getString(columnIndex);
-                    if (routeName.matches(".?\\d*?")) {
-                        routeName = getResources().getString(R.string.route) + " " + routeName;
-                    }
-                    ((TextView) view).setText(routeName);
+                    ((TextView) view).setText(RouteHelper.getName(getResources(), routeName));
                     return true;
-                } else if (Routes.IS_ACTIVE.equals(columnName)) {
+                } else if (RouteContract.IS_ACTIVE.equals(columnName)) {
                     int colorRes;
-                    if (StatusValues.ACTIVE == cursor.getInt(columnIndex)) {
+                    if (1 == cursor.getInt(columnIndex)) {
                         // TODO: why need i this line here?
                         colorRes = android.R.color.black;
                     } else {
@@ -135,12 +116,12 @@ public class SectorFragment extends ListFragment implements
                     }
                     ((TextView) view).setTextColor(getResources().getColor(colorRes));
                     return true;
-                } else if (Routes.COLOR1.equals(columnName)) {
+                } else if (RouteContract.COLOR1.equals(columnName)) {
                     int color = cursor.getInt(columnIndex);
                     setMarkerColor(view, color, R.drawable.rect_dashed);
                     return true;
-                } else if (Routes.COLOR2.equals(columnName)
-                        || Routes.COLOR3.equals(columnName)) {
+                } else if (RouteContract.COLOR2.equals(columnName)
+                        || RouteContract.COLOR3.equals(columnName)) {
                     int color = cursor.getInt(columnIndex);
                     setMarkerColor(view, color, R.drawable.rect_invisible);
                     return true;
@@ -202,34 +183,23 @@ public class SectorFragment extends ListFragment implements
 
     @Override
     public void onListItemClick(ListView l, View v, int position, long id) {
-        if (mTwoPane) {
-            Bundle arguments = new Bundle();
-            arguments.putString(RouteFragment.ARG_ITEM_ID, String.valueOf(id));
-            RouteFragment fragment = new RouteFragment();
-            fragment.setArguments(arguments);
-            getChildFragmentManager().beginTransaction()
-                    .replace(R.id.route_detail_container, fragment)
-                    .commit();
-        } else {
-            Context context = v.getContext();
-            Intent intent = new Intent(context, RouteActivity.class);
-            intent.putExtra(RouteFragment.ARG_ITEM_ID, String.valueOf(id));
-
-            context.startActivity(intent);
-        }
+        Context context = v.getContext();
+        Intent intent = new Intent(context, RouteActivity.class);
+        intent.putExtra(RouteActivity.ARG_ROUTE_ID, String.valueOf(id));
+        context.startActivity(intent);
     }
 
     // These are the Contacts rows that we will retrieve.
     static final String[] ROUTES_SUMMARY_PROJECTION = new String[]{
-            Routes._ID,
-            Routes.NAME,
-            Routes.GRADE,
-            Routes.COLOR1,
-            Routes.COLOR2,
-            Routes.COLOR3,
-            Routes.IS_ACTIVE,
-            RoutesView.USER_NAME,
-            Routes.CREATED_WHEN,
+            ViewRouteContract._ID,
+            ViewRouteContract.NAME,
+            ViewRouteContract.GRADE,
+            ViewRouteContract.COLOR1,
+            ViewRouteContract.COLOR2,
+            ViewRouteContract.COLOR3,
+            ViewRouteContract.IS_ACTIVE,
+            ViewRouteContract.USER_NAME,
+            ViewRouteContract.CREATED_WHEN,
     };
 
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
@@ -252,14 +222,13 @@ public class SectorFragment extends ListFragment implements
             selectArgs.add(mSectorId.toString());
         }
 
-        List<String> statusFilterArgs = FilterHelper.getStatusFilterArgs(getActivity());
-        String[] statusPlaceHolders = new String[statusFilterArgs.size()];
-        for (int i = 0; i < statusPlaceHolders.length; i++) {
-            statusPlaceHolders[i] = "?";
-        }
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
 
-        select += "is_active in (" + TextUtils.join(",", statusPlaceHolders) + ")";
-        selectArgs.addAll(statusFilterArgs);
+        if (preferences.getBoolean("show_archived", false)) {
+            select += "1 = 1";
+        } else {
+            select += "is_active = true";
+        }
 
 //        if (mCurFilter != null) {
 //            baseUri = Uri.withAppendedPath(ContactsContract.Contacts.CONTENT_FILTER_URI,

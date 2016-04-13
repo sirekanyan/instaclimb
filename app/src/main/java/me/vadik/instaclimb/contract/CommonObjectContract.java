@@ -2,9 +2,9 @@ package me.vadik.instaclimb.contract;
 
 /**
  * User: vadik
- * Date: 4/10/16
+ * Date: 4/13/16
  */
-public interface Sectors {
+interface CommonObjectContract {
     String _ID = "_id";
     String NAME = "name";
 }

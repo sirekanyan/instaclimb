@@ -26,7 +26,6 @@
                 android:id="@+id/user_image_toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:onClick="showRouteFullscreen"
                 android:scaleType="centerCrop" />
 
             <android.support.v7.widget.Toolbar

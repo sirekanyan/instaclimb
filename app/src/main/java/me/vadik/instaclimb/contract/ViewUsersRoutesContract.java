@@ -2,8 +2,8 @@ package me.vadik.instaclimb.contract;
 
 /**
  * User: vadik
- * Date: 4/11/16
+ * Date: 4/12/16
  */
-public interface RoutesView {
+public interface ViewUsersRoutesContract extends UsersRoutesContract {
     String USER_NAME = "user_name";
 }

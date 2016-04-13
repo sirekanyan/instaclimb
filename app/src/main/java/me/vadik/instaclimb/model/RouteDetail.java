@@ -1,4 +1,4 @@
-package me.vadik.instaclimb.routes;
+package me.vadik.instaclimb.model;
 
 import android.database.Cursor;
 
@@ -6,7 +6,7 @@ import android.database.Cursor;
  * User: vadik
  * Date: 4/8/16
  */
-public class DummyItem {
+public class RouteDetail {
     public final String id;
     private final String author;
     private final Integer author_id;
@@ -16,7 +16,7 @@ public class DummyItem {
 
     public String details;
 
-    public DummyItem(String id, String name, Cursor cursor) {
+    public RouteDetail(String id, String name, Cursor cursor) {
         this.id = id;
         this.name = name;
 

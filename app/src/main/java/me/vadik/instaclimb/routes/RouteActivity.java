@@ -1,204 +1,172 @@
 package me.vadik.instaclimb.routes;
 
-import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
-import android.support.v4.app.NavUtils;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
+import android.support.v4.content.CursorLoader;
+import android.support.v4.content.Loader;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 
-import com.android.volley.toolbox.ImageLoader;
-import com.android.volley.toolbox.NetworkImageView;
+import java.util.ArrayList;
+import java.util.List;
 
 import me.vadik.instaclimb.R;
-import me.vadik.instaclimb.contract.Routes;
+import me.vadik.instaclimb.common.CommonActivity;
+import me.vadik.instaclimb.contract.RouteContract;
+import me.vadik.instaclimb.contract.ViewUsersRoutesContract;
+import me.vadik.instaclimb.model.RouteDetail;
 import me.vadik.instaclimb.provider.RoutesContentProvider;
-import me.vadik.instaclimb.users.UserActivity;
+import me.vadik.instaclimb.model.User;
 
-/**
- * An activity representing a single Route detail screen. This
- * activity is only used narrow width devices. On tablet-size devices,
- * item details are presented side-by-side with a list of items
- * in a {@link SectorActivity}.
- */
-public class RouteActivity extends AppCompatActivity {
+public class RouteActivity extends CommonActivity {
 
-    private DummyItem mItem;
+    public static final String ARG_ROUTE_ID = "me.vadik.instaclimb.route_id";
+
+    private static final int LOADER_ID = 0;
+    private static final int LOADER_FAB_CHECKED = 1;
+    private static final int LOADER_WHO_CLIMBED = 2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_route);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.detail_toolbar);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        final FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        assert fab != null;
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        if (fab != null) {
+            fab.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+                            .setAction("Action", null).show();
+                }
+            });
+        }
 
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(final View view) {
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
 
-                boolean checked = fab.getBackgroundTintList().getDefaultColor() != getResources().getColor(R.color.colorAccent);
+        String routeId = getIntent().getStringExtra(ARG_ROUTE_ID);
 
-                if (checked) {
-                    fab.setImageResource(R.drawable.ic_add_white_24dp);
-                    fab.setBackgroundTintList(getResources().getColorStateList(R.color.colorAccent));
-                } else {
+        Bundle b = new Bundle();
+        b.putString(ARG_ROUTE_ID, routeId);
+        getSupportLoaderManager().initLoader(LOADER_ID, b, this);
+        getSupportLoaderManager().initLoader(LOADER_FAB_CHECKED, b, this);
+        getSupportLoaderManager().initLoader(LOADER_WHO_CLIMBED, b, this);
+
+        setupRecyclerView(new ArrayList<User>(), R.id.who_climbed_routes);
+    }
+
+    @Override
+    public Loader<Cursor> onCreateLoader(int id, Bundle bundle) {
+        Uri uri;
+        String[] projection = null;
+        String select;
+        String[] args;
+        String order = null;
+        switch (id) {
+            case LOADER_ID:
+                uri = Uri.withAppendedPath(RoutesContentProvider.CONTENT_URI, "routes_view");
+                select = "_id = ?";
+                args = new String[]{bundle.getString(ARG_ROUTE_ID)};
+                break;
+            case LOADER_FAB_CHECKED:
+                uri = Uri.withAppendedPath(RoutesContentProvider.CONTENT_URI, "users_routes");
+                select = "route_id = ? and user_id = ?";
+                SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+                String currentUserId = preferences.getString("user_id", "");
+                args = new String[]{bundle.getString(ARG_ROUTE_ID), currentUserId};
+                break;
+            case LOADER_WHO_CLIMBED:
+                uri = Uri.withAppendedPath(RoutesContentProvider.CONTENT_URI, "users_routes_view");
+                select = "route_id = ?";
+                args = new String[]{bundle.getString(ARG_ROUTE_ID)};
+                break;
+            default:
+                return null;
+        }
+        return new CursorLoader(this, uri, projection, select, args, order);
+    }
+
+    @Override
+    public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
+        switch (loader.getId()) {
+            case LOADER_ID:
+                try {
+                    if (cursor != null && cursor.moveToFirst()) {
+                        Integer id = cursor.getInt(cursor.getColumnIndex(RouteContract._ID));
+                        String name = cursor.getString(cursor.getColumnIndex(RouteContract.NAME));
+                        RouteDetail mItem = new RouteDetail(id.toString(), name, cursor);
+                        setupToolbarImage(mItem.getSmallPictureUrl(), R.id.route_image_toolbar);
+                    }
+                } finally {
+                    if (cursor != null) {
+                        cursor.close();
+                    }
+                }
+                break;
+            case LOADER_FAB_CHECKED:
+                boolean isClimbed = false;
+
+                try {
+                    if (cursor != null && cursor.moveToFirst()) {
+                        isClimbed = true;
+                    }
+                } finally {
+                    if (cursor != null) {
+                        cursor.close();
+                    }
+                }
+
+                FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+
+                if (isClimbed && fab != null) {
                     fab.setImageResource(R.drawable.ic_done_white_24dp);
                     fab.setBackgroundTintList(getResources().getColorStateList(R.color.colorSuccessAccent));
-                    Snackbar.make(view, R.string.route_completed, Snackbar.LENGTH_LONG)
-                            .setAction(R.string.flash_button, new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-                                    fab.setImageResource(R.drawable.ic_done_all_white_24dp);
-                                    fab.setBackgroundTintList(getResources().getColorStateList(R.color.colorSuccessAccent));
-                                    Snackbar.make(view, R.string.route_completed_flash, Snackbar.LENGTH_LONG).show();
-                                }
-                            }).show();
                 }
-
-            }
-        });
-
-        // Show the Up button in the action bar.
-        ActionBar actionBar = getSupportActionBar();
-        if (actionBar != null) {
-            actionBar.setDisplayHomeAsUpEnabled(true);
-        }
-
-        // savedInstanceState is non-null when there is fragment state
-        // saved from previous configurations of this activity
-        // (e.g. when rotating the screen from portrait to landscape).
-        // In this case, the fragment will automatically be re-added
-        // to its container so we don't need to manually add it.
-        // For more information, see the Fragments API guide at:
-        //
-        // http://developer.android.com/guide/components/fragments.html
-        //
-        if (savedInstanceState == null) {
-            // Create the detail fragment and add it to the activity
-            // using a fragment transaction.
-            Bundle arguments = new Bundle();
-            String argItemId = getIntent().getStringExtra(RouteFragment.ARG_ITEM_ID);
-            arguments.putString(RouteFragment.ARG_ITEM_ID, argItemId);
-            RouteFragment fragment = new RouteFragment();
-            fragment.setArguments(arguments);
-            getSupportFragmentManager().beginTransaction()
-                    .add(R.id.route_detail_container, fragment)
-                    .commit();
-
-            mItem = null;
-
-            Uri myUri = Uri.withAppendedPath(RoutesContentProvider.CONTENT_URI, "routes_view");
-            //TODO simplify call to content provider
-            //TODO use loader here
-
-            Cursor cursor = this.getContentResolver().query(
-                    myUri,
-                    null,
-                    "_id = ?",
-                    new String[]{argItemId},
-                    null);
-
-            try {
-                if (cursor != null && cursor.moveToFirst()) {
-                    Integer id = cursor.getInt(cursor.getColumnIndex(Routes._ID));
-                    String name = cursor.getString(cursor.getColumnIndex(Routes.NAME));
-                    mItem = new DummyItem(id.toString(), name, cursor);
+                break;
+            case LOADER_WHO_CLIMBED:
+                List<User> whoClimbed = new ArrayList<>();
+                try {
+                    if (cursor != null && cursor.moveToFirst()) {
+                        do {
+                            Integer userId = cursor.getInt(cursor.getColumnIndex(ViewUsersRoutesContract.USER_ID));
+                            String userName = cursor.getString(cursor.getColumnIndex(ViewUsersRoutesContract.USER_NAME));
+                            boolean isFlash = 1 == cursor.getInt(cursor.getColumnIndex(ViewUsersRoutesContract.IS_FLASH));
+                            String date = cursor.getString(cursor.getColumnIndex(ViewUsersRoutesContract.DATE));
+                            whoClimbed.add(new User(userId, userName, isFlash, date));
+                        } while (cursor.moveToNext());
+                    }
+                } finally {
+                    if (cursor != null) {
+                        cursor.close();
+                    }
                 }
-            } finally {
-                if (cursor != null) {
-                    cursor.close();
-                }
-            }
-
-            boolean isClimbed = false;
-
-            Uri myUri2 = Uri.withAppendedPath(RoutesContentProvider.CONTENT_URI, "users_routes");
-            //TODO simplify call to content provider
-            //TODO use loader here
-
-            Cursor cursor2 = this.getContentResolver().query(
-                    myUri2,
-                    null,
-                    "route_id = ? and user_id = 1561",
-                    new String[]{argItemId},
-                    null);
-
-            try {
-                if (cursor2 != null && cursor2.moveToFirst()) {
-                    isClimbed = true;
-                }
-            } finally {
-                if (cursor2 != null) {
-                    cursor2.close();
-                }
-            }
-
-            if (isClimbed) {
-                fab.setImageResource(R.drawable.ic_done_white_24dp);
-                fab.setBackgroundTintList(getResources().getColorStateList(R.color.colorSuccessAccent));
-            }
-
-            setupToolbarImage(mItem.getSmallPictureUrl());
+                setupRecyclerView(whoClimbed, R.id.who_climbed_routes);
+                break;
         }
     }
 
-    private void setupToolbarImage(String url) {
-        NetworkImageView mNetworkImageToolbarView = (NetworkImageView) this.findViewById(R.id.route_image_toolbar);
-        ImageLoader mImageLoader = VolleySingleton.getInstance(this).getImageLoader();
-        if (mNetworkImageToolbarView != null) {
-            mNetworkImageToolbarView.setImageUrl(url, mImageLoader);
-        }
+    private void setupRecyclerView(List<User> users, int recyclerViewResId) {
+        RecyclerView mRecyclerView = (RecyclerView) findViewById(recyclerViewResId);
+        mRecyclerView.setHasFixedSize(true);
+        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(this);
+        mRecyclerView.setLayoutManager(mLayoutManager);
+        RecyclerView.Adapter mAdapter = new RouteUsersAdapter(users);
+        mRecyclerView.setAdapter(mAdapter);
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-        if (id == android.R.id.home) {
-            // This ID represents the Home or Up button. In the case of this
-            // activity, the Up button is shown. Use NavUtils to allow users
-            // to navigate up one level in the application structure. For
-            // more details, see the Navigation pattern on Android Design:
-            //
-            // http://developer.android.com/design/patterns/navigation.html#up-vs-back
-            //
-            NavUtils.navigateUpTo(this, new Intent(this, SectorFragment.class));
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
-
-    public void showRouteFullscreen(View view) {
-        Integer pictureId = mItem.getPictureId();
-        Intent showRouteIntent = new Intent(this, RouteImageActivity.class);
-        if (pictureId != null) {
-            String pictureIdString = pictureId.toString();
-            if (!pictureIdString.isEmpty()) {
-                String uriString = DummyItem.getSmallPictureUrl(pictureIdString);
-                showRouteIntent.setData(Uri.parse(uriString));
-            }
-        }
-        startActivity(showRouteIntent);
-    }
-
-    public void showUser(View view) {
-        Intent i = new Intent(this, UserActivity.class);
-        i.putExtra("user_id", String.valueOf(mItem.getAuthorId()));
-        this.startActivity(i);
+    public void onLoaderReset(Loader<Cursor> loader) {
+        //TODO?
     }
 }

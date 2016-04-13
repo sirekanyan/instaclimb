@@ -8,11 +8,9 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.GravityCompat;
-import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.view.menu.MenuItemImpl;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -23,7 +21,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import me.vadik.instaclimb.routes.GymFragment;
-import me.vadik.instaclimb.routes.example.SwipeView;
 import me.vadik.instaclimb.settings.SettingsActivity;
 
 public class HomeActivity extends AppCompatActivity implements
@@ -103,9 +100,6 @@ public class HomeActivity extends AppCompatActivity implements
         }
 
         switch (itemId) {
-            case R.id.nav_swipe:
-                startActivity(new Intent(this, SwipeView.class));
-                break;
             case R.id.nav_all_routes:
                 gymId = GymFragment.ALL_GYMS;
                 gymName = item.getTitle().toString();
