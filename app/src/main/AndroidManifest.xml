@@ -30,15 +30,6 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".routes.XRouteActivity"
-            android:label="@string/title_route_detail"
-            android:parentActivityName=".HomeActivity"
-            android:theme="@style/AppTheme.NoActionBar">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".HomeActivity"/>
-        </activity>
-        <activity
             android:name=".settings.SettingsActivity"
             android:label="@string/menu_settings"
             android:parentActivityName=".HomeActivity">
@@ -47,24 +38,12 @@
                 android:value=".HomeActivity"/>
         </activity>
         <activity
-            android:name=".routes.RouteImageActivity"
-            android:theme="@style/AppTheme.NoActionBar"/>
-        <activity
             android:name=".users.UserActivity"
-            android:label="@string/title_activity_user_scrolling"
+            android:label="@string/title_activity_user"
             android:theme="@style/AppTheme.NoActionBar"/>
-        <activity
-            android:name=".routes.example.SwipeView"
-            android:label="@string/title_activity_swipe_view"
-            android:parentActivityName=".HomeActivity"
-            android:theme="@style/AppTheme.NoActionBar">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="me.vadik.instaclimb.HomeActivity"/>
-        </activity>
         <activity
             android:name=".routes.RouteActivity"
-            android:label="@string/title_activity_route_scrolling"
+            android:label="@string/title_activity_route"
             android:parentActivityName=".HomeActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data

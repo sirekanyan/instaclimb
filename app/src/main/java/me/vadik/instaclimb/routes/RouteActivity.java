@@ -1,5 +1,6 @@
 package me.vadik.instaclimb.routes;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
@@ -9,9 +10,13 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.ShareActionProvider;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 
 import java.util.ArrayList;
@@ -23,6 +28,7 @@ import me.vadik.instaclimb.contract.RouteContract;
 import me.vadik.instaclimb.model.RouteDetail;
 import me.vadik.instaclimb.model.User;
 import me.vadik.instaclimb.provider.RoutesContentProvider;
+import me.vadik.instaclimb.settings.SettingsActivity;
 
 public class RouteActivity extends CommonActivity {
 
@@ -186,5 +192,36 @@ public class RouteActivity extends CommonActivity {
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
         //TODO?
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_route, menu);
+        setShareIntent(menu.findItem(R.id.action_share_route));
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_settings:
+                startActivity(new Intent(this, SettingsActivity.class));
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    private void setShareIntent(MenuItem item) {
+        ShareActionProvider shareActionProvider
+                = (ShareActionProvider) MenuItemCompat.getActionProvider(item);
+
+        Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
+        sharingIntent.setType("text/plain");
+        String shareBody = "http://instaclimb.ru/route/" + getIntent().getStringExtra(ARG_ROUTE_ID);
+        sharingIntent.putExtra(Intent.EXTRA_TEXT, shareBody);
+
+        if (shareActionProvider != null) {
+            shareActionProvider.setShareIntent(sharingIntent);
+        }
     }
 }

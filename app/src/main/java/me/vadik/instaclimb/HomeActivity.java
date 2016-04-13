@@ -158,7 +158,6 @@ public class HomeActivity extends AppCompatActivity implements
                 this.startActivity(new Intent(this, SettingsActivity.class));
                 return true;
         }
-
         return super.onOptionsItemSelected(item);
     }
 }
