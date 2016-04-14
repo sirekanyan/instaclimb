@@ -2,6 +2,7 @@ package me.vadik.instaclimb.routes;
 
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import android.view.View;
 
 import com.android.volley.toolbox.ImageLoader;
@@ -37,11 +38,15 @@ public class RouteUsersAdapter extends RecyclerViewAdapter {
 //        holder.permissions.setText("");
 //        holder.image.setImageResource(R.drawable.me);
 
-        holder.image.setDefaultImageResId(R.drawable.blackface);
+        String url = null;
+
         if (user.hasPicture()) {
-            ImageLoader mImageLoader = VolleySingleton.getInstance(context).getImageLoader();
-            holder.image.setImageUrl("https://vadik.me/userpic/" + String.valueOf(user.getId()) + ".jpg", mImageLoader);
+            url = "https://vadik.me/userpic/" + String.valueOf(user.getId()) + ".jpg";
         }
+
+        ImageLoader mImageLoader = VolleySingleton.getInstance(context).getImageLoader();
+        holder.image.setDefaultImageResId(R.drawable.blackface);
+        holder.image.setImageUrl(url, mImageLoader);
 
 //        ((TextView) holder.root.findViewById(R.id.generictext)).setText("юзверь");
         holder.root.setOnClickListener(new View.OnClickListener() {

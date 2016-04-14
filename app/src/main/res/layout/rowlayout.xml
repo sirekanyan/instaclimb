@@ -22,17 +22,6 @@
             android:contentDescription="icon"
             android:scaleType="centerCrop"/>
 
-        <!--<TextView-->
-        <!--android:id="@+id/generictext"-->
-        <!--android:layout_width="40dp"-->
-        <!--android:layout_height="40dp"-->
-        <!--android:layout_gravity="center"-->
-        <!--android:gravity="center"-->
-        <!--android:singleLine="true"-->
-        <!--android:textColor="@android:color/darker_gray"-->
-        <!--android:textSize="12dp"-->
-        <!--android:textStyle="bold"/>-->
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"

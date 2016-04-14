@@ -65,6 +65,7 @@ public class UserActivity extends CommonActivity {
         }
 
         if (userId != 0) {
+            // todo check if user has a picture
             setupToolbarImage("https://vadik.me/userpic/" + String.valueOf(userId) + ".jpg", R.id.user_image_toolbar);
         }
 
