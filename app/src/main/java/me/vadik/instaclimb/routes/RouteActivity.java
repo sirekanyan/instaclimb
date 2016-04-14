@@ -15,6 +15,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.ShareActionProvider;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -32,12 +33,13 @@ import me.vadik.instaclimb.settings.SettingsActivity;
 
 public class RouteActivity extends CommonActivity {
 
-    public static final String ARG_ROUTE_ID = "me.vadik.instaclimb.route_id";
-    public static final String ARG_ROUTE_NAME = "me.vadik.instaclimb.route_name";
+    public static String ARG_ROUTE_ID = "me.vadik.instaclimb.route_id";
+    public static String ARG_ROUTE_NAME = "me.vadik.instaclimb.route_name";
 
     private static final int LOADER_ID = 0;
     private static final int LOADER_FAB_CHECKED = 1;
     private static final int LOADER_WHO_CLIMBED = 2;
+    private int routeId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,13 +81,15 @@ public class RouteActivity extends CommonActivity {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
 
-        String routeId = getIntent().getStringExtra(ARG_ROUTE_ID);
-        String routeName = getIntent().getStringExtra(ARG_ROUTE_NAME);
+        routeId = getItemId(ARG_ROUTE_ID);
+        String objectName = getItemName(ARG_ROUTE_NAME);
 
-        getSupportActionBar().setTitle(routeName);
+        if (objectName != null && getSupportActionBar() != null) {
+            getSupportActionBar().setTitle(objectName);
+        }
 
         Bundle b = new Bundle();
-        b.putString(ARG_ROUTE_ID, routeId);
+        b.putInt(ARG_ROUTE_ID, routeId);
         getSupportLoaderManager().initLoader(LOADER_ID, b, this);
         getSupportLoaderManager().initLoader(LOADER_FAB_CHECKED, b, this);
         getSupportLoaderManager().initLoader(LOADER_WHO_CLIMBED, b, this);
@@ -100,23 +104,24 @@ public class RouteActivity extends CommonActivity {
         String select;
         String[] args;
         String order = null;
+        String routeId = String.valueOf(bundle.getInt(ARG_ROUTE_ID));
         switch (id) {
             case LOADER_ID:
                 uri = Uri.withAppendedPath(RoutesContentProvider.CONTENT_URI, "routes_view");
                 select = "_id = ?";
-                args = new String[]{bundle.getString(ARG_ROUTE_ID)};
+                args = new String[]{routeId};
                 break;
             case LOADER_FAB_CHECKED:
                 uri = Uri.withAppendedPath(RoutesContentProvider.CONTENT_URI, "users_routes");
                 select = "route_id = ? and user_id = ?";
                 SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
                 String currentUserId = preferences.getString("user_id", "");
-                args = new String[]{bundle.getString(ARG_ROUTE_ID), currentUserId};
+                args = new String[]{routeId, currentUserId};
                 break;
             case LOADER_WHO_CLIMBED:
                 uri = Uri.withAppendedPath(RoutesContentProvider.CONTENT_URI, "users_routes_view");
                 select = "route_id = ?";
-                args = new String[]{bundle.getString(ARG_ROUTE_ID)};
+                args = new String[]{routeId};
                 break;
             default:
                 return null;
@@ -129,7 +134,7 @@ public class RouteActivity extends CommonActivity {
         switch (loader.getId()) {
             case LOADER_ID:
                 try {
-                    if (cursor != null && cursor.moveToFirst()) {
+                    if (cursor != null && !cursor.isClosed() && cursor.moveToFirst()) { //TODO remove isClosed check
                         Integer id = cursor.getInt(cursor.getColumnIndex(RouteContract._ID));
                         String name = cursor.getString(cursor.getColumnIndex(RouteContract.NAME));
                         RouteDetail mItem = new RouteDetail(id.toString(), name, cursor);
@@ -145,7 +150,7 @@ public class RouteActivity extends CommonActivity {
                 boolean isClimbed = false;
 
                 try {
-                    if (cursor != null && cursor.moveToFirst()) {
+                    if (cursor != null && !cursor.isClosed() && cursor.moveToFirst()) { //TODO remove isClosed check
                         isClimbed = true;
                     }
                 } finally {
@@ -164,7 +169,7 @@ public class RouteActivity extends CommonActivity {
             case LOADER_WHO_CLIMBED:
                 List<User> whoClimbed = new ArrayList<>();
                 try {
-                    if (cursor != null && cursor.moveToFirst()) {
+                    if (cursor != null && !cursor.isClosed() && cursor.moveToFirst()) { //TODO remove isClosed check
                         do {
 
                             whoClimbed.add(new User(cursor));
@@ -197,7 +202,9 @@ public class RouteActivity extends CommonActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_route, menu);
-        setShareIntent(menu.findItem(R.id.action_share_route));
+        MenuItem menuItem = menu.findItem(R.id.action_share_route);
+        shareActionProvider = (ShareActionProvider) MenuItemCompat.getActionProvider(menuItem);
+        setShareIntent(routeId);
         return true;
     }
 
@@ -211,17 +218,14 @@ public class RouteActivity extends CommonActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    private void setShareIntent(MenuItem item) {
-        ShareActionProvider shareActionProvider
-                = (ShareActionProvider) MenuItemCompat.getActionProvider(item);
+    @Override
+    protected void onResume() {
+        super.onResume();
+        setShareIntent(routeId);
+    }
 
-        Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
-        sharingIntent.setType("text/plain");
-        String shareBody = "http://instaclimb.ru/route/" + getIntent().getStringExtra(ARG_ROUTE_ID);
-        sharingIntent.putExtra(Intent.EXTRA_TEXT, shareBody);
-
-        if (shareActionProvider != null) {
-            shareActionProvider.setShareIntent(sharingIntent);
-        }
+    @Override
+    protected String getShareUrl() {
+        return "http://instaclimb.ru/route/";
     }
 }

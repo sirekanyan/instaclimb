@@ -40,7 +40,19 @@
         <activity
             android:name=".users.UserActivity"
             android:label="@string/title_activity_user"
-            android:theme="@style/AppTheme.NoActionBar"/>
+            android:theme="@style/AppTheme.NoActionBar">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW"/>
+
+                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.BROWSABLE"/>
+
+                <data
+                    android:host="instaclimb.ru"
+                    android:pathPrefix="/climber"
+                    android:scheme="http"/>
+            </intent-filter>
+        </activity>
         <activity
             android:name=".routes.RouteActivity"
             android:label="@string/title_activity_route"
@@ -49,6 +61,17 @@
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="me.vadik.instaclimb.HomeActivity"/>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW"/>
+
+                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.BROWSABLE"/>
+
+                <data
+                    android:host="instaclimb.ru"
+                    android:pathPrefix="/route"
+                    android:scheme="http"/>
+            </intent-filter>
         </activity>
     </application>
 

@@ -185,7 +185,7 @@ public class SectorFragment extends ListFragment implements
         Context context = v.getContext();
         TextView textView = (TextView) v.findViewById(R.id.firstLine);
         Intent intent = new Intent(context, RouteActivity.class);
-        intent.putExtra(RouteActivity.ARG_ROUTE_ID, String.valueOf(id));
+        intent.putExtra(RouteActivity.ARG_ROUTE_ID, (int) id);
         if (textView != null) {
             intent.putExtra(RouteActivity.ARG_ROUTE_NAME, textView.getText());
         }

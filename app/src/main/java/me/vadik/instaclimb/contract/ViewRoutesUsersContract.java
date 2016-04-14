@@ -9,4 +9,5 @@ public interface ViewRoutesUsersContract extends UsersRoutesContract {
     String COLOR1 = "color1";
     String COLOR2 = "color2";
     String COLOR3 = "color3";
+    String GRADE = "grade";
 }

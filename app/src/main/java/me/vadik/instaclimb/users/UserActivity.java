@@ -1,5 +1,6 @@
 package me.vadik.instaclimb.users;
 
+import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
@@ -7,9 +8,13 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.ShareActionProvider;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 
 import java.util.ArrayList;
@@ -21,16 +26,18 @@ import me.vadik.instaclimb.common.CommonActivity;
 import me.vadik.instaclimb.contract.RouteContract;
 import me.vadik.instaclimb.contract.ViewRoutesUsersContract;
 import me.vadik.instaclimb.contract.ViewUsersRoutesContract;
-import me.vadik.instaclimb.provider.RoutesContentProvider;
 import me.vadik.instaclimb.model.Route;
+import me.vadik.instaclimb.provider.RoutesContentProvider;
 import me.vadik.instaclimb.routes.RouteHelper;
+import me.vadik.instaclimb.settings.SettingsActivity;
 
 public class UserActivity extends CommonActivity {
 
-    public static final String ARG_USER_ID = "me.vadik.instaclimb.user_id";
-    public static final String ARG_USER_NAME = "me.vadik.instaclimb.user_name";
+    public static String ARG_USER_ID = "me.vadik.instaclimb.user_id";
+    public static String ARG_USER_NAME = "me.vadik.instaclimb.user_name";
 
     private static final int LOADER_ID = 0;
+    private int userId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,18 +57,19 @@ public class UserActivity extends CommonActivity {
             });
         }
 
-        String userId = getIntent().getStringExtra(ARG_USER_ID);
-        if (userId != null) {
-            setupToolbarImage("https://vadik.me/userpic/" + userId + ".jpg", R.id.user_image_toolbar);
+        userId = getItemId(ARG_USER_ID);
+        String objectName = getItemName(ARG_USER_NAME);
+
+        if (objectName != null && getSupportActionBar() != null) {
+            getSupportActionBar().setTitle(objectName);
         }
 
-        String userName = getIntent().getStringExtra(ARG_USER_NAME);
-        if (userName != null && getSupportActionBar() != null) {
-            getSupportActionBar().setTitle(userName);
+        if (userId != 0) {
+            setupToolbarImage("https://vadik.me/userpic/" + String.valueOf(userId) + ".jpg", R.id.user_image_toolbar);
         }
 
         Bundle b = new Bundle();
-        b.putString(ARG_USER_ID, userId);
+        b.putInt(ARG_USER_ID, userId);
         getSupportLoaderManager().initLoader(LOADER_ID, b, this);
     }
 
@@ -91,6 +99,7 @@ public class UserActivity extends CommonActivity {
             ViewRoutesUsersContract.COLOR1,
             ViewRoutesUsersContract.COLOR2,
             ViewRoutesUsersContract.COLOR3,
+            ViewRoutesUsersContract.GRADE,
     };
 
     static final String[] ROUTES_PROJECTION = new String[]{
@@ -105,7 +114,7 @@ public class UserActivity extends CommonActivity {
         Uri uri;
         String[] projection;
         String select = "user_id = ?";
-        String[] args = new String[]{bundle.getString(ARG_USER_ID)};
+        String[] args = new String[]{String.valueOf(bundle.getInt(ARG_USER_ID))};
         String order = "date desc";
         switch (id) {
             case LOADER_ID:
@@ -128,7 +137,8 @@ public class UserActivity extends CommonActivity {
             case LOADER_ID:
                 List<Route> climbedRoutes = new ArrayList<>();
                 try {
-                    if (cursor != null && cursor.moveToFirst()) {
+                    //TODO: what should i do if cursor is closed?
+                    if (cursor != null && !cursor.isClosed() && cursor.moveToFirst()) { //TODO remove isClosed check
                         do {
                             CursorHelper h = new CursorHelper(cursor);
                             Integer routeId = h.getInt(RouteContract._ID);
@@ -138,7 +148,8 @@ public class UserActivity extends CommonActivity {
                             Integer c1 = h.getInt(RouteContract.COLOR1);
                             Integer c2 = h.getInt(RouteContract.COLOR2);
                             Integer c3 = h.getInt(RouteContract.COLOR3);
-                            climbedRoutes.add(new Route(routeId, routeName, routeDate, c1, c2, c3));
+                            String grade = h.getString(RouteContract.GRADE);
+                            climbedRoutes.add(new Route(routeId, routeName, routeDate, c1, c2, c3, grade));
                         } while (cursor.moveToNext());
                     }
                 } finally {
@@ -154,5 +165,61 @@ public class UserActivity extends CommonActivity {
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
         //TODO: do need i here something to write?
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_user, menu);
+        MenuItem menuItem = menu.findItem(R.id.action_share_user);
+        shareActionProvider = (ShareActionProvider) MenuItemCompat.getActionProvider(menuItem);
+        setShareIntent(userId);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_settings:
+                startActivity(new Intent(this, SettingsActivity.class));
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+//    @Override
+//    protected void onResume() {
+//        super.onResume();
+//        Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
+//        sharingIntent.setType("text/plain");
+//        if (userId != 0) {
+//            String shareBody = "http://instaclimb.ru/climber/" + String.valueOf(userId);
+//            sharingIntent.putExtra(Intent.EXTRA_TEXT, shareBody);
+//            setShareIntent(sharingIntent);
+//        }
+//    }
+
+    //    @Override
+//    public void onSaveInstanceState(Bundle savedInstanceState) {
+//        savedInstanceState.putInt(ARG_USER_ID, objectId);
+//        savedInstanceState.putString(ARG_USER_NAME, objectName);
+//        super.onSaveInstanceState(savedInstanceState);
+//    }
+//
+//    @Override
+//    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+//        super.onRestoreInstanceState(savedInstanceState);
+//        objectId = savedInstanceState.getInt(ARG_USER_ID);
+//        objectName = savedInstanceState.getString(ARG_USER_NAME);
+//    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        setShareIntent(userId);
+    }
+
+    @Override
+    protected String getShareUrl() {
+        return "http://instaclimb.ru/climber/";
     }
 }

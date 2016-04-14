@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.res.TypedArray;
 import android.view.View;
-import android.widget.TextView;
 
 import java.util.List;
 
@@ -42,12 +41,14 @@ public class UserRoutesAdapter extends RecyclerViewAdapter {
         setMarkerColor(context, holder.root.findViewById(R.id.marker2), route.getColor2(), R.drawable.rect_invisible);
         setMarkerColor(context, holder.root.findViewById(R.id.marker3), route.getColor3(), R.drawable.rect_invisible);
 
+        holder.permissions.setText(route.getGrade());
+
         holder.root.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(context, RouteActivity.class);
-                intent.putExtra(RouteActivity.ARG_ROUTE_ID, String.valueOf(route.getId()));
-                intent.putExtra(RouteActivity.ARG_ROUTE_NAME, String.valueOf(route.getName()));
+                intent.putExtra(RouteActivity.ARG_ROUTE_ID, route.getId());
+                intent.putExtra(RouteActivity.ARG_ROUTE_NAME, route.getName());
                 context.startActivity(intent);
             }
         });

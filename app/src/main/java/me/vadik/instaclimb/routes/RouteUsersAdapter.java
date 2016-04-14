@@ -5,14 +5,12 @@ import android.content.Intent;
 import android.view.View;
 
 import com.android.volley.toolbox.ImageLoader;
-import com.android.volley.toolbox.NetworkImageView;
 
 import java.util.List;
 
 import me.vadik.instaclimb.R;
 import me.vadik.instaclimb.common.RecyclerViewAdapter;
 import me.vadik.instaclimb.model.User;
-import me.vadik.instaclimb.routes.RouteActivity;
 import me.vadik.instaclimb.users.UserActivity;
 
 /**
@@ -50,8 +48,8 @@ public class RouteUsersAdapter extends RecyclerViewAdapter {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(context, UserActivity.class);
-                intent.putExtra(UserActivity.ARG_USER_ID, String.valueOf(user.getId()));
-                intent.putExtra(UserActivity.ARG_USER_NAME, String.valueOf(user.getName()));
+                intent.putExtra(UserActivity.ARG_USER_ID, user.getId());
+                intent.putExtra(UserActivity.ARG_USER_NAME, user.getName());
                 context.startActivity(intent);
             }
         });

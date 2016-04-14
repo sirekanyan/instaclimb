@@ -27,6 +27,8 @@ public class HomeActivity extends AppCompatActivity implements
         NavigationView.OnNavigationItemSelectedListener,
         GymFragment.OnFragmentInteractionListener {
 
+    private String gymName;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -54,11 +56,28 @@ public class HomeActivity extends AppCompatActivity implements
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        setTitle(R.string.all_routes_title);
+        if (savedInstanceState == null) {
+            setTitle(R.string.all_routes_title);
+            Fragment gymFragment = GymFragment.newInstance(GymFragment.ALL_GYMS, getTitle().toString());
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.gym_fragment_container, gymFragment).commit();
+        } else {
+            if (savedInstanceState.getString("gymname") != null) {
+                setTitle(savedInstanceState.getString("gymname"));
+            }
+        }
+    }
 
-        Fragment gymFragment = GymFragment.newInstance(GymFragment.ALL_GYMS, getTitle().toString());
-        getSupportFragmentManager().beginTransaction()
-                .replace(R.id.gym_fragment_container, gymFragment).commit();
+    @Override
+    public void onSaveInstanceState(Bundle savedInstanceState) {
+        savedInstanceState.putString("gymname", gymName);
+        super.onSaveInstanceState(savedInstanceState);
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        gymName = savedInstanceState.getString("gymname");
+        super.onRestoreInstanceState(savedInstanceState);
     }
 
     @Override
@@ -92,7 +111,7 @@ public class HomeActivity extends AppCompatActivity implements
         Integer itemId = item.getItemId();
 
         Integer gymId = null;
-        String gymName = null;
+        gymName = null;
 
         if (GYM_IDS.containsKey(itemId)) {
             gymId = GYM_IDS.get(itemId);

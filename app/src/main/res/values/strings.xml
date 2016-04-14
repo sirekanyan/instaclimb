@@ -112,7 +112,7 @@
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
     <string name="action_settings">Settings</string>
-    <string name="action_share_route">Share</string>
+    <string name="action_share">Share</string>
     <string name="all_routes_title">Все трассы</string>
     <string name="skalatoria_gym_name">Скалатория</string>
     <string name="bigwall_gym_name">BigWall</string>
@@ -133,11 +133,11 @@
     <string name="flash_button">Flash</string>
     <string name="no_routes_found">Не найдено трасс по заданным критериям</string>
     <string name="no_users_found">Никто пока не пролез</string>
-    <string name="title_activity_user">UserActivity</string>
+    <string name="title_activity_user">Instaclimb Users</string>
+    <string name="title_activity_route">Instaclimb Routes</string>
     <string name="default_route_name">Без названия</string>
     <string name="default_route_author">Вася Пупкин</string>
     <string name="route">Трасса</string>
     <string name="default_route_grade">4C</string>
     <string name="default_route_date">1970/01/01</string>
-    <string name="title_activity_route">RouteActivity</string>
 </resources>
