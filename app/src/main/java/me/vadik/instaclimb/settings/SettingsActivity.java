@@ -5,6 +5,7 @@ import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.database.Cursor;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.net.Uri;
@@ -21,10 +22,15 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.MenuItem;
 import android.support.v4.app.NavUtils;
+import android.widget.Toast;
 
 import java.util.List;
 
 import me.vadik.instaclimb.R;
+import me.vadik.instaclimb.contract.UserContract;
+import me.vadik.instaclimb.provider.RoutesContentProvider;
+import me.vadik.instaclimb.provider.RoutesProvider;
+import me.vadik.instaclimb.provider.UserProvider;
 
 /**
  * A {@link PreferenceActivity} that presents a set of application settings. On
@@ -46,8 +52,6 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
         @Override
         public boolean onPreferenceChange(Preference preference, Object value) {
             String stringValue = value.toString();
-
-            Log.e("me", preference.getKey() + " => " + String.valueOf(value));
 
             if (preference instanceof ListPreference) {
                 // For list preferences, look up the correct display value in
@@ -111,12 +115,16 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
      * @see #sBindPreferenceSummaryToValueListener
      */
     private static void bindPreferenceSummaryToValue(Preference preference) {
+        bindPreferenceSummaryToValue(preference, sBindPreferenceSummaryToValueListener);
+    }
+
+    private static void bindPreferenceSummaryToValue(Preference preference, Preference.OnPreferenceChangeListener p) {
         // Set the listener to watch for value changes.
-        preference.setOnPreferenceChangeListener(sBindPreferenceSummaryToValueListener);
+        preference.setOnPreferenceChangeListener(p);
 
         // Trigger the listener immediately with the preference's
         // current value.
-        sBindPreferenceSummaryToValueListener.onPreferenceChange(preference,
+        p.onPreferenceChange(preference,
                 PreferenceManager
                         .getDefaultSharedPreferences(preference.getContext())
                         .getString(preference.getKey(), ""));
@@ -197,6 +205,29 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
             // guidelines.
 //            bindPreferenceSummaryToValue(findPreference("example_text"));
 //            bindPreferenceSummaryToValue(findPreference("example_list"));
+//            bindPreferenceSummaryToValue(findPreference("user_id"));
+
+            bindPreferenceSummaryToValue(
+                    findPreference("user_id"),
+                    new Preference.OnPreferenceChangeListener() {
+                        @Override
+                        public boolean onPreferenceChange(Preference preference, Object newValue) {
+                            String userId = String.valueOf(newValue);
+                            String userName = UserProvider.getUserName(getActivity(), userId);
+                            if (userName != null) {
+                                int c = RoutesProvider.prepareRoutesForUser(getActivity(), userId);
+                                String count = String.valueOf(c);
+                                preference.setSummary(userId + " — " + userName);
+                                Toast.makeText(getActivity(),
+                                        userName + " has climbed " + count + " routes",
+                                        Toast.LENGTH_LONG)
+                                        .show();
+                                return true;
+                            }
+                            Toast.makeText(getActivity(), "No user with id " + userId, Toast.LENGTH_LONG).show();
+                            return false;
+                        }
+                    });
         }
 
         @Override
@@ -256,8 +287,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
             // to their values. When their values change, their summaries are
             // updated to reflect the new value, per the Android Design
             // guidelines.
-            bindPreferenceSummaryToValue(findPreference("sync_frequency"));
-            bindPreferenceSummaryToValue(findPreference("user_id"));
+//            bindPreferenceSummaryToValue(findPreference("sync_frequency"));
         }
 
         @Override

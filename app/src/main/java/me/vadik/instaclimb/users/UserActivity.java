@@ -165,7 +165,9 @@ public class UserActivity extends CommonActivity {
 
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
-        //TODO: do need i here something to write?
+        Bundle b = new Bundle();
+        b.putInt(ARG_USER_ID, userId);
+        getSupportLoaderManager().restartLoader(LOADER_ID, b, this);
     }
 
     @Override

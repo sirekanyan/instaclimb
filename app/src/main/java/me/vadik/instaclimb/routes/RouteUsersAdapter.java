@@ -36,7 +36,6 @@ public class RouteUsersAdapter extends RecyclerViewAdapter {
         holder.date.setText(user.getDate());
 //        holder.secondLine.setText("");
 //        holder.permissions.setText("");
-//        holder.image.setImageResource(R.drawable.me);
 
         String url = null;
 
@@ -48,7 +47,6 @@ public class RouteUsersAdapter extends RecyclerViewAdapter {
         holder.image.setDefaultImageResId(R.drawable.blackface);
         holder.image.setImageUrl(url, mImageLoader);
 
-//        ((TextView) holder.root.findViewById(R.id.generictext)).setText("юзверь");
         holder.root.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

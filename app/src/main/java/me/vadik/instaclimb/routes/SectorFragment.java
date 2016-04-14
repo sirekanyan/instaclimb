@@ -19,6 +19,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -84,6 +85,7 @@ public class SectorFragment extends ListFragment implements
                         ViewRouteContract.USER_NAME,
                         RouteContract.GRADE,
                         RouteContract.CREATED_WHEN,
+                        RouteContract.DONE,
                 },
                 new int[]{
                         R.id.marker1,
@@ -94,6 +96,7 @@ public class SectorFragment extends ListFragment implements
                         R.id.secondLine,
                         R.id.rightLabel,
                         R.id.thirdLine,
+                        R.id.is_route_done,
                 }, 0);
         setListAdapter(mAdapter);
 
@@ -101,7 +104,24 @@ public class SectorFragment extends ListFragment implements
             @Override
             public boolean setViewValue(View view, Cursor cursor, int columnIndex) {
                 String columnName = cursor.getColumnName(columnIndex);
-                if (RouteContract.NAME.equals(columnName)) {
+                if (RouteContract.DONE.equals(columnName)) {
+                    int isDone = cursor.getInt(columnIndex);
+                    ImageView imageView = (ImageView) view;
+                    int iconResId = R.drawable.ic_done_white_24dp;
+                    switch (isDone) {
+                        case 2:
+                            iconResId = R.drawable.ic_done_all_black_24dp;
+                            break;
+                        case 1:
+                            iconResId = R.drawable.edit_doneblue;
+                            break;
+                        default:
+                            imageView.setVisibility(View.GONE);
+                            break;
+                    }
+                    imageView.setImageResource(iconResId);
+                    return true;
+                } else if (RouteContract.NAME.equals(columnName)) {
                     String routeName = cursor.getString(columnIndex);
                     ((TextView) view).setText(RouteHelper.getName(getResources(), routeName));
                     return true;
@@ -203,6 +223,7 @@ public class SectorFragment extends ListFragment implements
             ViewRouteContract.IS_ACTIVE,
             ViewRouteContract.USER_NAME,
             ViewRouteContract.CREATED_WHEN,
+            ViewRouteContract.DONE,
     };
 
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {

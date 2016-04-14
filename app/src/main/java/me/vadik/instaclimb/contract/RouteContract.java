@@ -18,4 +18,5 @@ public interface RouteContract extends CommonObjectContract {
     String IS_ACTIVE = "is_active";
     String PICTURE_ID = "picture_id";
     String SECTOR_ID = "sector_id";
+    String DONE = "done";
 }

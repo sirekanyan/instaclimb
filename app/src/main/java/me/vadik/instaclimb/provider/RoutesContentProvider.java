@@ -38,6 +38,7 @@ public class RoutesContentProvider extends ContentProvider {
 
     //TODO: remove this method
     private void copyDatabaseFromAssetsToData(Context context) {
+        Log.i("me", "Copying database from assets to " + databasePath());
         InputStream is = null;
         OutputStream os = null;
         try {
@@ -95,7 +96,7 @@ public class RoutesContentProvider extends ContentProvider {
 
     @Override
     public int update(@NonNull Uri uri, ContentValues values, String selection, String[] selectionArgs) {
-        throw new UnsupportedOperationException();
+        return sqLiteDatabase.update(getTableName(uri), values, selection, selectionArgs);
     }
 
     public static String getTableName(Uri uri) {

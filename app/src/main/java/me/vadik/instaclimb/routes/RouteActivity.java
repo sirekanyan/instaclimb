@@ -15,7 +15,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.ShareActionProvider;
 import android.support.v7.widget.Toolbar;
-import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -171,7 +170,6 @@ public class RouteActivity extends CommonActivity {
                 try {
                     if (cursor != null && !cursor.isClosed() && cursor.moveToFirst()) { //TODO remove isClosed check
                         do {
-
                             whoClimbed.add(new User(cursor));
                         } while (cursor.moveToNext());
                     }
@@ -187,16 +185,22 @@ public class RouteActivity extends CommonActivity {
 
     private void setupRecyclerView(List<User> users, int recyclerViewResId) {
         RecyclerView mRecyclerView = (RecyclerView) findViewById(recyclerViewResId);
-        mRecyclerView.setHasFixedSize(true);
-        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(this);
-        mRecyclerView.setLayoutManager(mLayoutManager);
-        RecyclerView.Adapter mAdapter = new RouteUsersAdapter(users);
-        mRecyclerView.setAdapter(mAdapter);
+        if (mRecyclerView != null) {
+            mRecyclerView.setHasFixedSize(true);
+            RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(this);
+            mRecyclerView.setLayoutManager(mLayoutManager);
+            RecyclerView.Adapter mAdapter = new RouteUsersAdapter(users);
+            mRecyclerView.setAdapter(mAdapter);
+        }
     }
 
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
-        //TODO?
+//        Bundle b = new Bundle();
+//        b.putInt(ARG_ROUTE_ID, routeId);
+//        getSupportLoaderManager().restartLoader(LOADER_ID, b, this);
+//        getSupportLoaderManager().restartLoader(LOADER_FAB_CHECKED, b, this);
+//        getSupportLoaderManager().restartLoader(LOADER_WHO_CLIMBED, b, this);
     }
 
     @Override

@@ -140,4 +140,6 @@
     <string name="route">Трасса</string>
     <string name="default_route_grade">4C</string>
     <string name="default_route_date">1970/01/01</string>
+    <string name="no_one_done_the_route">Никто пока не залез эту трассу</string>
+    <string name="content_description_done">done</string>
 </resources>
