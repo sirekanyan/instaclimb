@@ -27,7 +27,10 @@ import me.vadik.instaclimb.common.CommonActivity;
 import me.vadik.instaclimb.contract.RouteContract;
 import me.vadik.instaclimb.model.RouteDetail;
 import me.vadik.instaclimb.model.User;
+import me.vadik.instaclimb.provider.RouteProvider;
 import me.vadik.instaclimb.provider.RoutesContentProvider;
+import me.vadik.instaclimb.provider.RoutesProvider;
+import me.vadik.instaclimb.provider.UserProvider;
 import me.vadik.instaclimb.settings.SettingsActivity;
 
 public class RouteActivity extends CommonActivity {
@@ -81,10 +84,14 @@ public class RouteActivity extends CommonActivity {
         }
 
         routeId = getItemId(ARG_ROUTE_ID);
-        String objectName = getItemName(ARG_ROUTE_NAME);
+        String routeName = getItemName(ARG_ROUTE_NAME);
 
-        if (objectName != null && getSupportActionBar() != null) {
-            getSupportActionBar().setTitle(objectName);
+        if (routeName == null && routeId != 0) {
+            routeName = RouteProvider.getRouteName(this, String.valueOf(routeId));
+        }
+
+        if (routeName != null && getSupportActionBar() != null) {
+            getSupportActionBar().setTitle(routeName);
         }
 
         Bundle b = new Bundle();

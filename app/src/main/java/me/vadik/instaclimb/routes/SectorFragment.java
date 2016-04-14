@@ -123,7 +123,7 @@ public class SectorFragment extends ListFragment implements
                     return true;
                 } else if (RouteContract.NAME.equals(columnName)) {
                     String routeName = cursor.getString(columnIndex);
-                    ((TextView) view).setText(RouteHelper.getName(getResources(), routeName));
+                    ((TextView) view).setText(RouteHelper.getName(getActivity(), routeName));
                     return true;
                 } else if (RouteContract.IS_ACTIVE.equals(columnName)) {
                     int colorRes;

@@ -1,7 +1,6 @@
 package me.vadik.instaclimb.routes;
 
-import android.content.res.Resources;
-import android.support.v4.widget.SimpleCursorAdapter;
+import android.content.Context;
 
 import me.vadik.instaclimb.R;
 
@@ -10,9 +9,9 @@ import me.vadik.instaclimb.R;
  * Date: 4/13/16
  */
 public class RouteHelper {
-    public static String getName(Resources res, String routeName) {
+    public static String getName(Context context, String routeName) {
         if (routeName.matches(".?\\d*?")) {
-            routeName = res.getString(R.string.route) + " " + routeName;
+            routeName = context.getResources().getString(R.string.route) + " " + routeName;
         }
         return routeName;
     }

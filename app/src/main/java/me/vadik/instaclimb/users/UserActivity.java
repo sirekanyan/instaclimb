@@ -28,6 +28,7 @@ import me.vadik.instaclimb.contract.ViewRoutesUsersContract;
 import me.vadik.instaclimb.contract.ViewUsersRoutesContract;
 import me.vadik.instaclimb.model.Route;
 import me.vadik.instaclimb.provider.RoutesContentProvider;
+import me.vadik.instaclimb.provider.UserProvider;
 import me.vadik.instaclimb.routes.RouteHelper;
 import me.vadik.instaclimb.settings.SettingsActivity;
 
@@ -58,10 +59,14 @@ public class UserActivity extends CommonActivity {
         }
 
         userId = getItemId(ARG_USER_ID);
-        String objectName = getItemName(ARG_USER_NAME);
+        String userName = getItemName(ARG_USER_NAME);
 
-        if (objectName != null && getSupportActionBar() != null) {
-            getSupportActionBar().setTitle(objectName);
+        if (userName == null && userId != 0) {
+            userName = UserProvider.getUserName(this, String.valueOf(userId));
+        }
+
+        if (userName != null && getSupportActionBar() != null) {
+            getSupportActionBar().setTitle(userName);
         }
 
         if (userId != 0) {
@@ -144,8 +149,7 @@ public class UserActivity extends CommonActivity {
                             CursorHelper h = new CursorHelper(cursor);
                             Integer routeId = h.getInt(RouteContract._ID);
                             String routeDate = h.getString(ViewUsersRoutesContract.DATE);
-                            String routeName = RouteHelper.getName(getResources(),
-                                    h.getString(ViewRoutesUsersContract.ROUTE_NAME));
+                            String routeName = RouteHelper.getName(this, h.getString(ViewRoutesUsersContract.ROUTE_NAME));
                             Integer c1 = h.getInt(RouteContract.COLOR1);
                             Integer c2 = h.getInt(RouteContract.COLOR2);
                             Integer c3 = h.getInt(RouteContract.COLOR3);
