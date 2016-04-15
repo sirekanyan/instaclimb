@@ -20,6 +20,12 @@ import me.vadik.instaclimb.R;
 public abstract class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder> {
     protected List mDataset;
 
+    public void addAll(List myDataset) {
+        mDataset.clear();
+        mDataset.addAll(myDataset);
+        this.notifyDataSetChanged();
+    }
+
     // Provide a reference to the views for each data item
     // Complex data items may need more than one view per item, and
     // you provide access to all the views for a data item in a view holder

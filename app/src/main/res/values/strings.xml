@@ -1,6 +1,5 @@
 <resources>
-    <string name="app_name">Instaclimb Routes</string>
-    <string name="title_route_detail">Route Detail</string>
+    <string name="app_name">Instaclimb</string>
 
     <string name="menu_settings">Settings</string>
 

@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.res.TypedArray;
 import android.view.View;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import me.vadik.instaclimb.R;
@@ -17,8 +18,8 @@ import me.vadik.instaclimb.routes.RouteActivity;
  * Date: 4/13/16
  */
 public class UserRoutesAdapter extends RecyclerViewAdapter {
-    public UserRoutesAdapter(List<Route> myDataset) {
-        super(myDataset);
+    public UserRoutesAdapter() {
+        super(new ArrayList<Route>());
     }
 
     @Override

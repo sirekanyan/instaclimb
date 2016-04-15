@@ -37,6 +37,7 @@ public class RouteActivity extends CommonActivity {
     private static final int LOADER_ID = 0;
     private static final int LOADER_WHO_CLIMBED = 1;
     private int routeId;
+    private RouteUsersAdapter mAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,12 +90,12 @@ public class RouteActivity extends CommonActivity {
             getSupportActionBar().setTitle(routeName);
         }
 
+        mAdapter = setupRecyclerView();
+
         Bundle b = new Bundle();
         b.putInt(ARG_ROUTE_ID, routeId);
         getSupportLoaderManager().initLoader(LOADER_ID, b, this);
         getSupportLoaderManager().initLoader(LOADER_WHO_CLIMBED, b, this);
-
-        setupRecyclerView(new ArrayList<User>(), R.id.who_climbed_routes);
     }
 
     @Override
@@ -163,20 +164,19 @@ public class RouteActivity extends CommonActivity {
                         cursor.close();
                     }
                 }
-                setupRecyclerView(whoClimbed, R.id.who_climbed_routes);
+                mAdapter.addAll(whoClimbed);
                 break;
         }
     }
 
-    private void setupRecyclerView(List<User> users, int recyclerViewResId) {
-        RecyclerView mRecyclerView = (RecyclerView) findViewById(recyclerViewResId);
-        if (mRecyclerView != null) {
-            mRecyclerView.setHasFixedSize(true);
-            RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(this);
-            mRecyclerView.setLayoutManager(mLayoutManager);
-            RecyclerView.Adapter mAdapter = new RouteUsersAdapter(users);
-            mRecyclerView.setAdapter(mAdapter);
-        }
+    private RouteUsersAdapter setupRecyclerView() {
+        RecyclerView mRecyclerView = (RecyclerView) findViewById(R.id.who_climbed_routes);
+        mRecyclerView.setHasFixedSize(true);
+        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(this);
+        mRecyclerView.setLayoutManager(mLayoutManager);
+        RouteUsersAdapter mAdapter = new RouteUsersAdapter();
+        mRecyclerView.setAdapter(mAdapter);
+        return mAdapter;
     }
 
     @Override

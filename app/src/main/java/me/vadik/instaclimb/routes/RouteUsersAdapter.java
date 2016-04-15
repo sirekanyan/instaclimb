@@ -7,6 +7,7 @@ import android.view.View;
 
 import com.android.volley.toolbox.ImageLoader;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import me.vadik.instaclimb.R;
@@ -19,8 +20,8 @@ import me.vadik.instaclimb.users.UserActivity;
  * Date: 4/13/16
  */
 public class RouteUsersAdapter extends RecyclerViewAdapter {
-    public RouteUsersAdapter(List<User> myDataset) {
-        super(myDataset);
+    public RouteUsersAdapter() {
+        super(new ArrayList<User>());
     }
 
     @Override

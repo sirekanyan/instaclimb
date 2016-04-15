@@ -39,6 +39,7 @@ public class UserActivity extends CommonActivity {
 
     private static final int LOADER_ID = 0;
     private int userId;
+    private UserRoutesAdapter mAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,24 +77,20 @@ public class UserActivity extends CommonActivity {
 
         Bundle b = new Bundle();
         b.putInt(ARG_USER_ID, userId);
+
+        mAdapter = setupRecyclerView();
+
         getSupportLoaderManager().initLoader(LOADER_ID, b, this);
     }
 
-    private void setupRecyclerView(List<Route> myDataset) {
+    private UserRoutesAdapter setupRecyclerView() {
         RecyclerView mRecyclerView = (RecyclerView) findViewById(R.id.user_climbed_routes);
-
-        // use this setting to improve performance if you know that changes
-        // in content do not change the layout size of the RecyclerView
         mRecyclerView.setHasFixedSize(true);
-
-        // use a linear layout manager
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLayoutManager);
-
-        // specify an adapter (see also next example)
-        RecyclerView.Adapter mAdapter = new UserRoutesAdapter(myDataset);
-
+        UserRoutesAdapter mAdapter = new UserRoutesAdapter();
         mRecyclerView.setAdapter(mAdapter);
+        return mAdapter;
     }
 
     static final String[] ROUTES_USERS_PROJECTION = new String[]{
@@ -162,7 +159,9 @@ public class UserActivity extends CommonActivity {
                         cursor.close();
                     }
                 }
-                setupRecyclerView(climbedRoutes);
+
+                mAdapter.addAll(climbedRoutes);
+
                 break;
         }
     }
