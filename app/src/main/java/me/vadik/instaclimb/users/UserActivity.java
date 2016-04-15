@@ -27,6 +27,7 @@ import me.vadik.instaclimb.contract.RouteContract;
 import me.vadik.instaclimb.contract.ViewRoutesUsersContract;
 import me.vadik.instaclimb.contract.ViewUsersRoutesContract;
 import me.vadik.instaclimb.model.Route;
+import me.vadik.instaclimb.model.User;
 import me.vadik.instaclimb.provider.RoutesContentProvider;
 import me.vadik.instaclimb.provider.UserProvider;
 import me.vadik.instaclimb.routes.RouteHelper;
@@ -70,8 +71,7 @@ public class UserActivity extends CommonActivity {
             getSupportActionBar().setTitle(userName);
         }
 
-        if (userId != 0) {
-            // todo check if user has a picture
+        if (userId != 0 && UserProvider.hasPicture(this, userId)) {
             setupToolbarImage("https://vadik.me/userpic/" + String.valueOf(userId) + ".jpg", R.id.user_image_toolbar);
         }
 

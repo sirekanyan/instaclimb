@@ -30,4 +30,24 @@ public class UserProvider {
         }
         return userName;
     }
+
+    public static boolean hasPicture(Context context, int userId) {
+        boolean hasPicture = false;
+        Cursor cursor = context.getContentResolver().query(
+                Uri.withAppendedPath(RoutesContentProvider.CONTENT_URI, "users"),
+                new String[]{UserContract.HAS_PICTURE},
+                UserContract._ID + " = ?",
+                new String[]{String.valueOf(userId)},
+                null);
+        try {
+            if (cursor != null && cursor.moveToFirst()) {
+                hasPicture = 1 == cursor.getInt(cursor.getColumnIndex(UserContract.HAS_PICTURE));
+            }
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+        }
+        return hasPicture;
+    }
 }
