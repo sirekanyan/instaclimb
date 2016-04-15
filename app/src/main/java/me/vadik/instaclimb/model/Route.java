@@ -12,8 +12,9 @@ public class Route {
     private final int color2;
     private final int color3;
     private String grade;
+    private final boolean flash;
 
-    public Route(Integer id, String name, String date, int c1, int c2, int c3, String grade) {
+    public Route(Integer id, String name, String date, int c1, int c2, int c3, String grade, boolean isFlash) {
         this.id = id;
         this.name = name;
         this.date = date;
@@ -21,6 +22,7 @@ public class Route {
         color2 = c2;
         color3 = c3;
         this.grade = grade;
+        this.flash = isFlash;
     }
 
     public String getName() {
@@ -49,5 +51,9 @@ public class Route {
 
     public String getGrade() {
         return grade;
+    }
+
+    public boolean isFlash() {
+        return flash;
     }
 }

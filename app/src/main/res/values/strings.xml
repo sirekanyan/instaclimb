@@ -22,7 +22,7 @@
     </array>
 
     <array name="colors">
-        <item>@drawable/rect_invisible</item>
+        <item>@drawable/rect_dashed</item>
         <item>@drawable/rect_black</item>
         <item>@drawable/rect_blue</item>
         <item>@drawable/rect_blue_light</item>

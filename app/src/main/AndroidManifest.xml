@@ -37,7 +37,7 @@
         </activity>
         <activity
             android:name=".users.UserActivity"
-            android:label="@string/title_activity_user">
+            android:label="@string/title_activity_home">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW"/>
 
@@ -52,7 +52,7 @@
         </activity>
         <activity
             android:name=".routes.RouteActivity"
-            android:label="@string/title_activity_route"
+            android:label="@string/title_activity_home"
             android:parentActivityName=".HomeActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"

@@ -143,12 +143,12 @@ public class SectorFragment extends ListFragment implements
                     return true;
                 } else if (RouteContract.COLOR1.equals(columnName)) {
                     int color = cursor.getInt(columnIndex);
-                    setMarkerColor(view, color, R.drawable.rect_dashed);
+                    RouteHelper.setMarkerColor(view, color, R.drawable.rect_dashed);
                     return true;
                 } else if (RouteContract.COLOR2.equals(columnName)
                         || RouteContract.COLOR3.equals(columnName)) {
                     int color = cursor.getInt(columnIndex);
-                    setMarkerColor(view, color, R.drawable.rect_invisible);
+                    RouteHelper.setMarkerColor(view, color);
                     return true;
                 }
                 return false;
@@ -160,16 +160,6 @@ public class SectorFragment extends ListFragment implements
         // Prepare the loader.  Either re-connect with an existing one,
         // or start a new one.
         getLoaderManager().initLoader(0, null, this);
-    }
-
-    private void setMarkerColor(View view, int color, int defaultResId) {
-        TypedArray colors = getResources().obtainTypedArray(R.array.colors);
-        if (color == 0) {
-            view.setBackgroundResource(defaultResId);
-        } else {
-            view.setBackgroundResource(colors.getResourceId(color, 0));
-        }
-        colors.recycle();
     }
 
     @Override

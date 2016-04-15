@@ -103,6 +103,7 @@ public class UserActivity extends CommonActivity {
             ViewRoutesUsersContract.COLOR2,
             ViewRoutesUsersContract.COLOR3,
             ViewRoutesUsersContract.GRADE,
+            ViewRoutesUsersContract.IS_FLASH,
     };
 
     static final String[] ROUTES_PROJECTION = new String[]{
@@ -144,14 +145,15 @@ public class UserActivity extends CommonActivity {
                     if (cursor != null && !cursor.isClosed() && cursor.moveToFirst()) { //TODO remove isClosed check
                         do {
                             CursorHelper h = new CursorHelper(cursor);
-                            Integer routeId = h.getInt(RouteContract._ID);
-                            String routeDate = h.getString(ViewUsersRoutesContract.DATE);
+                            Integer routeId = h.getInt(ViewRoutesUsersContract.ROUTE_ID);
+                            String routeDate = h.getString(ViewRoutesUsersContract.DATE);
                             String routeName = RouteHelper.getName(this, h.getString(ViewRoutesUsersContract.ROUTE_NAME));
-                            Integer c1 = h.getInt(RouteContract.COLOR1);
-                            Integer c2 = h.getInt(RouteContract.COLOR2);
-                            Integer c3 = h.getInt(RouteContract.COLOR3);
-                            String grade = h.getString(RouteContract.GRADE);
-                            climbedRoutes.add(new Route(routeId, routeName, routeDate, c1, c2, c3, grade));
+                            Integer c1 = h.getInt(ViewRoutesUsersContract.COLOR1);
+                            Integer c2 = h.getInt(ViewRoutesUsersContract.COLOR2);
+                            Integer c3 = h.getInt(ViewRoutesUsersContract.COLOR3);
+                            String grade = h.getString(ViewRoutesUsersContract.GRADE);
+                            boolean isFlash = h.getBoolean(ViewRoutesUsersContract.IS_FLASH);
+                            climbedRoutes.add(new Route(routeId, routeName, routeDate, c1, c2, c3, grade, isFlash));
                         } while (cursor.moveToNext());
                     }
                 } finally {
