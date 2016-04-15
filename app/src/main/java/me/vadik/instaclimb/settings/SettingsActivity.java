@@ -5,7 +5,6 @@ import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
-import android.database.Cursor;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.net.Uri;
@@ -19,7 +18,6 @@ import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 import android.preference.RingtonePreference;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.MenuItem;
 import android.support.v4.app.NavUtils;
 import android.widget.Toast;
@@ -27,8 +25,6 @@ import android.widget.Toast;
 import java.util.List;
 
 import me.vadik.instaclimb.R;
-import me.vadik.instaclimb.contract.UserContract;
-import me.vadik.instaclimb.provider.RoutesContentProvider;
 import me.vadik.instaclimb.provider.RoutesProvider;
 import me.vadik.instaclimb.provider.UserProvider;
 
@@ -114,14 +110,17 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
      *
      * @see #sBindPreferenceSummaryToValueListener
      */
-    private static void bindPreferenceSummaryToValue(Preference preference) {
-        bindPreferenceSummaryToValue(preference, sBindPreferenceSummaryToValueListener);
+    private static void bindAndApplyPreferenceSummaryToValue(Preference preference) {
+        bindAndApplyPreferenceSummaryToValue(preference, sBindPreferenceSummaryToValueListener);
+        applyPreferenceSummaryToValue(preference, sBindPreferenceSummaryToValueListener);
     }
 
-    private static void bindPreferenceSummaryToValue(Preference preference, Preference.OnPreferenceChangeListener p) {
+    private static void bindAndApplyPreferenceSummaryToValue(Preference preference, Preference.OnPreferenceChangeListener p) {
         // Set the listener to watch for value changes.
         preference.setOnPreferenceChangeListener(p);
+    }
 
+    private static void applyPreferenceSummaryToValue(Preference preference, Preference.OnPreferenceChangeListener p) {
         // Trigger the listener immediately with the preference's
         // current value.
         p.onPreferenceChange(preference,
@@ -203,11 +202,11 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
             // to their values. When their values change, their summaries are
             // updated to reflect the new value, per the Android Design
             // guidelines.
-//            bindPreferenceSummaryToValue(findPreference("example_text"));
-//            bindPreferenceSummaryToValue(findPreference("example_list"));
-//            bindPreferenceSummaryToValue(findPreference("user_id"));
+//            bindAndApplyPreferenceSummaryToValue(findPreference("example_text"));
+//            bindAndApplyPreferenceSummaryToValue(findPreference("example_list"));
+//            bindAndApplyPreferenceSummaryToValue(findPreference("user_id"));
 
-            bindPreferenceSummaryToValue(
+            bindAndApplyPreferenceSummaryToValue(
                     findPreference("user_id"),
                     new Preference.OnPreferenceChangeListener() {
                         @Override
@@ -225,6 +224,21 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
                                 return true;
                             }
                             Toast.makeText(getActivity(), "No user with id " + userId, Toast.LENGTH_LONG).show();
+                            return false;
+                        }
+                    });
+
+            applyPreferenceSummaryToValue(
+                    findPreference("user_id"),
+                    new Preference.OnPreferenceChangeListener() {
+                        @Override
+                        public boolean onPreferenceChange(Preference preference, Object newValue) {
+                            String userId = String.valueOf(newValue);
+                            String userName = UserProvider.getUserName(getActivity(), userId);
+                            if (userName != null) {
+                                preference.setSummary(userId + " — " + userName);
+                                return true;
+                            }
                             return false;
                         }
                     });
@@ -257,7 +271,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
             // to their values. When their values change, their summaries are
             // updated to reflect the new value, per the Android Design
             // guidelines.
-            bindPreferenceSummaryToValue(findPreference("notifications_new_message_ringtone"));
+            bindAndApplyPreferenceSummaryToValue(findPreference("notifications_new_message_ringtone"));
         }
 
         @Override
@@ -287,7 +301,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
             // to their values. When their values change, their summaries are
             // updated to reflect the new value, per the Android Design
             // guidelines.
-//            bindPreferenceSummaryToValue(findPreference("sync_frequency"));
+//            bindAndApplyPreferenceSummaryToValue(findPreference("sync_frequency"));
         }
 
         @Override

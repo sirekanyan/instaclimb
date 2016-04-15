@@ -5,6 +5,7 @@
     <EditTextPreference
         android:defaultValue="@string/pref_default_user_id"
         android:key="user_id"
+        android:inputType="number"
         android:maxLines="1"
         android:selectAllOnFocus="true"
         android:singleLine="true"
