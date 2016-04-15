@@ -44,8 +44,6 @@
 
     <string name="pref_title_show_archived_routes">Archived routes</string>
 
-    <string name="pref_title_show_draft_routes">Draft routes</string>
-
     <string name="pref_title_social_recommendations">Enable social recommendations</string>
     <string name="pref_description_social_recommendations">Recommendations for people to contact
         based on your message history
@@ -56,6 +54,8 @@
 
     <string name="pref_title_user_id">User ID</string>
     <string name="pref_default_user_id">1561</string>
+
+    <string name="pref_title_dark_theme">Use dark theme</string>
 
     <string name="pref_title_add_friends_to_messages">Add friends to messages</string>
     <string-array name="pref_example_list_titles">

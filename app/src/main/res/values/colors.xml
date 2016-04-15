@@ -19,6 +19,10 @@
     <color name="colorPrimaryDark">#1976d2</color>
     <color name="colorAccent">#ffab40</color>
 
+    <color name="dColorPrimary">#1976d2</color>
+    <color name="dColorPrimaryDark">#01579b</color>
+    <color name="dColorAccent">#ff9100</color>
+
     <color name="colorSuccessAccentLight">#69f0ae</color>
     <color name="colorSuccessAccent">#00e676</color>
 

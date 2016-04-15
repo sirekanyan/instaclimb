@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.TypedArray;
 import android.database.Cursor;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -128,14 +129,17 @@ public class SectorFragment extends ListFragment implements
                     ((TextView) view).setText(RouteHelper.getName(getActivity(), routeName));
                     return true;
                 } else if (RouteContract.IS_ACTIVE.equals(columnName)) {
-                    int colorRes;
+                    int color;
                     if (1 == cursor.getInt(columnIndex)) {
-                        // TODO: why need i this line here?
-                        colorRes = android.R.color.black;
+                        int[] attrs = new int[]{android.R.attr.textColorPrimary};
+                        TypedArray a = getActivity().getTheme().obtainStyledAttributes(attrs);
+                        int ddd = a.getColor(0, Color.BLACK);
+                        a.recycle();
+                        color = ddd;
                     } else {
-                        colorRes = android.R.color.darker_gray;
+                        color = Color.GRAY;
                     }
-                    ((TextView) view).setTextColor(getResources().getColor(colorRes));
+                    ((TextView) view).setTextColor(color);
                     return true;
                 } else if (RouteContract.COLOR1.equals(columnName)) {
                     int color = cursor.getInt(columnIndex);

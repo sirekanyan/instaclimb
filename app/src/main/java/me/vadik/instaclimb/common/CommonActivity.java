@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.support.v4.app.LoaderManager;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.ShareActionProvider;
 import android.util.Log;
 
@@ -13,13 +12,14 @@ import com.android.volley.toolbox.NetworkImageView;
 
 import java.util.List;
 
+import me.vadik.android.MyAppCompatActivity;
 import me.vadik.instaclimb.routes.VolleySingleton;
 
 /**
  * User: vadik
  * Date: 4/13/16
  */
-public abstract class CommonActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
+public abstract class CommonActivity extends MyAppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
 
     protected ShareActionProvider shareActionProvider;
 

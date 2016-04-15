@@ -10,7 +10,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -20,10 +19,11 @@ import android.widget.Toast;
 import java.util.HashMap;
 import java.util.Map;
 
+import me.vadik.android.MyAppCompatActivity;
 import me.vadik.instaclimb.routes.GymFragment;
 import me.vadik.instaclimb.settings.SettingsActivity;
 
-public class HomeActivity extends AppCompatActivity implements
+public class HomeActivity extends MyAppCompatActivity implements
         NavigationView.OnNavigationItemSelectedListener,
         GymFragment.OnFragmentInteractionListener {
 
