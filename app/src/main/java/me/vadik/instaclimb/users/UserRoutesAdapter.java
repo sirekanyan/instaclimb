@@ -6,7 +6,6 @@ import android.content.res.TypedArray;
 import android.view.View;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import me.vadik.instaclimb.R;
 import me.vadik.instaclimb.common.RecyclerViewAdapter;
