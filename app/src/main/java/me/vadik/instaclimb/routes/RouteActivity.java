@@ -1,11 +1,9 @@
 package me.vadik.instaclimb.routes;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.CursorLoader;
@@ -29,8 +27,6 @@ import me.vadik.instaclimb.model.RouteDetail;
 import me.vadik.instaclimb.model.User;
 import me.vadik.instaclimb.provider.RouteProvider;
 import me.vadik.instaclimb.provider.RoutesContentProvider;
-import me.vadik.instaclimb.provider.RoutesProvider;
-import me.vadik.instaclimb.provider.UserProvider;
 import me.vadik.instaclimb.settings.SettingsActivity;
 
 public class RouteActivity extends CommonActivity {
@@ -185,10 +181,7 @@ public class RouteActivity extends CommonActivity {
 
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
-//        Bundle b = new Bundle();
-//        b.putInt(ARG_ROUTE_ID, routeId);
-//        getSupportLoaderManager().restartLoader(LOADER_ID, b, this);
-//        getSupportLoaderManager().restartLoader(LOADER_WHO_CLIMBED, b, this);
+        // todo ?
     }
 
     @Override
@@ -213,6 +206,10 @@ public class RouteActivity extends CommonActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        Bundle b = new Bundle();
+        b.putInt(ARG_ROUTE_ID, routeId);
+        getSupportLoaderManager().restartLoader(LOADER_ID, b, this);
+        getSupportLoaderManager().restartLoader(LOADER_WHO_CLIMBED, b, this);
         setShareIntent(routeId);
     }
 

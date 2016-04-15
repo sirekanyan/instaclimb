@@ -169,9 +169,7 @@ public class UserActivity extends CommonActivity {
 
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
-        Bundle b = new Bundle();
-        b.putInt(ARG_USER_ID, userId);
-        getSupportLoaderManager().restartLoader(LOADER_ID, b, this);
+        // todo ?
     }
 
     @Override
@@ -194,18 +192,6 @@ public class UserActivity extends CommonActivity {
     }
 
 //    @Override
-//    protected void onResume() {
-//        super.onResume();
-//        Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
-//        sharingIntent.setType("text/plain");
-//        if (userId != 0) {
-//            String shareBody = "http://instaclimb.ru/climber/" + String.valueOf(userId);
-//            sharingIntent.putExtra(Intent.EXTRA_TEXT, shareBody);
-//            setShareIntent(sharingIntent);
-//        }
-//    }
-
-    //    @Override
 //    public void onSaveInstanceState(Bundle savedInstanceState) {
 //        savedInstanceState.putInt(ARG_USER_ID, objectId);
 //        savedInstanceState.putString(ARG_USER_NAME, objectName);
@@ -223,6 +209,9 @@ public class UserActivity extends CommonActivity {
     protected void onResume() {
         super.onResume();
         setShareIntent(userId);
+        Bundle b = new Bundle();
+        b.putInt(ARG_USER_ID, userId);
+        getSupportLoaderManager().restartLoader(LOADER_ID, b, this);
     }
 
     @Override
