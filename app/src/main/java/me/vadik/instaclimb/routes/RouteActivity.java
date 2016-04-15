@@ -39,8 +39,7 @@ public class RouteActivity extends CommonActivity {
     public static String ARG_ROUTE_NAME = "me.vadik.instaclimb.route_name";
 
     private static final int LOADER_ID = 0;
-    private static final int LOADER_FAB_CHECKED = 1;
-    private static final int LOADER_WHO_CLIMBED = 2;
+    private static final int LOADER_WHO_CLIMBED = 1;
     private int routeId;
 
     @Override
@@ -97,7 +96,6 @@ public class RouteActivity extends CommonActivity {
         Bundle b = new Bundle();
         b.putInt(ARG_ROUTE_ID, routeId);
         getSupportLoaderManager().initLoader(LOADER_ID, b, this);
-        getSupportLoaderManager().initLoader(LOADER_FAB_CHECKED, b, this);
         getSupportLoaderManager().initLoader(LOADER_WHO_CLIMBED, b, this);
 
         setupRecyclerView(new ArrayList<User>(), R.id.who_climbed_routes);
@@ -117,13 +115,6 @@ public class RouteActivity extends CommonActivity {
                 select = "_id = ?";
                 args = new String[]{routeId};
                 break;
-            case LOADER_FAB_CHECKED:
-                uri = Uri.withAppendedPath(RoutesContentProvider.CONTENT_URI, "users_routes");
-                select = "route_id = ? and user_id = ?";
-                SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
-                String currentUserId = preferences.getString("user_id", "");
-                args = new String[]{routeId, currentUserId};
-                break;
             case LOADER_WHO_CLIMBED:
                 uri = Uri.withAppendedPath(RoutesContentProvider.CONTENT_URI, "users_routes_view");
                 select = "route_id = ?";
@@ -139,10 +130,12 @@ public class RouteActivity extends CommonActivity {
     public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
         switch (loader.getId()) {
             case LOADER_ID:
+                int done = 0;
                 try {
                     if (cursor != null && !cursor.isClosed() && cursor.moveToFirst()) { //TODO remove isClosed check
                         Integer id = cursor.getInt(cursor.getColumnIndex(RouteContract._ID));
                         String name = cursor.getString(cursor.getColumnIndex(RouteContract.NAME));
+                        done = cursor.getInt(cursor.getColumnIndex(RouteContract.DONE));
                         RouteDetail mItem = new RouteDetail(id.toString(), name, cursor);
                         setupToolbarImage(mItem.getSmallPictureUrl(), R.id.route_image_toolbar);
                     }
@@ -151,24 +144,13 @@ public class RouteActivity extends CommonActivity {
                         cursor.close();
                     }
                 }
-                break;
-            case LOADER_FAB_CHECKED:
-                boolean isClimbed = false;
-
-                try {
-                    if (cursor != null && !cursor.isClosed() && cursor.moveToFirst()) { //TODO remove isClosed check
-                        isClimbed = true;
-                    }
-                } finally {
-                    if (cursor != null) {
-                        cursor.close();
-                    }
-                }
-
                 FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-
-                if (isClimbed && fab != null) {
-                    fab.setImageResource(R.drawable.ic_done_white_24dp);
+                if (fab != null && done > 0) {
+                    if (done == 1) {
+                        fab.setImageResource(R.drawable.ic_done_white_24dp);
+                    } else if (done == 2) {
+                        fab.setImageResource(R.drawable.ic_done_all_white_24dp);
+                    }
                     fab.setBackgroundTintList(getResources().getColorStateList(R.color.colorSuccessAccent));
                 }
                 break;
@@ -206,7 +188,6 @@ public class RouteActivity extends CommonActivity {
 //        Bundle b = new Bundle();
 //        b.putInt(ARG_ROUTE_ID, routeId);
 //        getSupportLoaderManager().restartLoader(LOADER_ID, b, this);
-//        getSupportLoaderManager().restartLoader(LOADER_FAB_CHECKED, b, this);
 //        getSupportLoaderManager().restartLoader(LOADER_WHO_CLIMBED, b, this);
     }
 

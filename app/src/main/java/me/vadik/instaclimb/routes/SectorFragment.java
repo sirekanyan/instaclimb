@@ -111,9 +111,11 @@ public class SectorFragment extends ListFragment implements
                     switch (isDone) {
                         case 2:
                             iconResId = R.drawable.ic_done_all_black_24dp;
+                            imageView.setVisibility(View.VISIBLE);
                             break;
                         case 1:
                             iconResId = R.drawable.edit_doneblue;
+                            imageView.setVisibility(View.VISIBLE);
                             break;
                         default:
                             imageView.setVisibility(View.GONE);
