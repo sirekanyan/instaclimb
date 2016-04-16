@@ -214,11 +214,15 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
                             String userId = String.valueOf(newValue);
                             String userName = UserProvider.getUserName(getActivity(), userId);
                             if (userName != null) {
-                                int c = RoutesProvider.prepareRoutesForUser(getActivity(), userId);
-                                String count = String.valueOf(c);
+                                RoutesProvider.clearClimbedRoutes(getActivity());
+                                int c1 = RoutesProvider.prepareRoutesForUser(getActivity(), userId);
+                                int c2 = RoutesProvider.prepareFlashRoutesForUser(getActivity(), userId);
+                                String count = String.valueOf(c1+c2);
+                                String flashCount = String.valueOf(c2);
                                 preference.setSummary(userId + " — " + userName);
                                 Toast.makeText(getActivity(),
-                                        userName + " has climbed " + count + " routes",
+                                        userName + " has climbed " + count + " routes " +
+                                                "(" + flashCount + " flashes)",
                                         Toast.LENGTH_LONG)
                                         .show();
                                 return true;
