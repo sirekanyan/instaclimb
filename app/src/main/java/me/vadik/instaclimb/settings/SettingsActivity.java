@@ -25,7 +25,6 @@ import android.widget.Toast;
 
 import java.util.List;
 
-import me.vadik.android.PreferencesHelper;
 import me.vadik.instaclimb.R;
 import me.vadik.instaclimb.provider.RoutesProvider;
 import me.vadik.instaclimb.provider.UserProvider;

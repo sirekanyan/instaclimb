@@ -23,7 +23,6 @@ import java.util.List;
 
 import me.vadik.instaclimb.R;
 import me.vadik.instaclimb.common.CommonActivity;
-import me.vadik.instaclimb.contract.RouteContract;
 import me.vadik.instaclimb.contract.ViewRouteContract;
 import me.vadik.instaclimb.model.Route;
 import me.vadik.instaclimb.model.RouteDetail;

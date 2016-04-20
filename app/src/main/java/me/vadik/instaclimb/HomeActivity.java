@@ -106,7 +106,7 @@ public class HomeActivity extends MyAppCompatActivity implements
             int count = preferences.getInt("user_climbed", 0);
             String countStr = String.valueOf(count);
             if (countStr.endsWith("1")) {
-                email.setText("Одна трасса пройдена");
+                email.setText(countStr + " трасса пройдена");
             } else if (countStr.endsWith("2") || countStr.endsWith("3") || countStr.endsWith("4")) {
                 email.setText(countStr + " трассы пройдено");
             } else {
