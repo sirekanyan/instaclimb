@@ -21,6 +21,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -111,7 +112,7 @@ public class SectorFragment extends ListFragment implements
                     int iconResId = R.drawable.ic_done_white_24dp;
                     switch (isDone) {
                         case 2:
-                            iconResId = R.drawable.ic_done_all_black_24dp;
+                            iconResId = R.drawable.ic_done_all_black_24dp; //TODO change icon
                             imageView.setVisibility(View.VISIBLE);
                             break;
                         case 1:
@@ -123,6 +124,23 @@ public class SectorFragment extends ListFragment implements
                             break;
                     }
                     imageView.setImageResource(iconResId);
+
+                    //TODO with appropriate colors
+//                    LinearLayout parent = (LinearLayout) imageView.getParent();
+//                    int colorRes;
+//                    switch (isDone) {
+//                        case 2:
+//                            colorRes = android.R.color.white;
+//                            break;
+//                        case 1:
+//                            colorRes = android.R.color.darker_gray;
+//                            break;
+//                        default:
+//                            colorRes = android.R.color.black;
+//                            break;
+//                    }
+//                    parent.setBackgroundResource(colorRes);
+
                     return true;
                 } else if (RouteContract.NAME.equals(columnName)) {
                     String routeName = cursor.getString(columnIndex);

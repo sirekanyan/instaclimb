@@ -2,16 +2,20 @@ package me.vadik.instaclimb.routes;
 
 import android.content.Context;
 import android.content.Intent;
-import android.util.Log;
+import android.support.v7.widget.CardView;
+import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.android.volley.toolbox.ImageLoader;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import me.vadik.instaclimb.R;
 import me.vadik.instaclimb.common.RecyclerViewAdapter;
+import me.vadik.instaclimb.model.Route;
 import me.vadik.instaclimb.model.User;
 import me.vadik.instaclimb.users.UserActivity;
 
@@ -20,16 +24,59 @@ import me.vadik.instaclimb.users.UserActivity;
  * Date: 4/13/16
  */
 public class RouteUsersAdapter extends RecyclerViewAdapter {
+    private Route route;
+
     public RouteUsersAdapter() {
         super(new ArrayList<User>());
     }
 
+    public void setRoute(Route route) {
+        this.route = route;
+        this.notifyDataSetChanged();
+    }
+
+    private static class CardViewHolder extends RecyclerView.ViewHolder {
+
+        public TextView routeGrade;
+        public TextView routeDate;
+        public TextView routeAuthor;
+        public View color1;
+        public View color2;
+        public View color3;
+
+        public CardViewHolder(CardView view) {
+            super(view);
+            routeGrade = (TextView) view.findViewById(R.id.card_view_route_grade);
+            routeDate = (TextView) view.findViewById(R.id.card_view_route_created_when);
+            routeAuthor = (TextView) view.findViewById(R.id.card_view_route_author);
+            color1 = view.findViewById(R.id.card_view_route_marker1);
+            color2 = view.findViewById(R.id.card_view_route_marker2);
+            color3 = view.findViewById(R.id.card_view_route_marker3);
+        }
+    }
+
     @Override
-    public void onBindViewHolder(final ViewHolder holder, int position) {
+    public void onBindViewHolder(final RecyclerView.ViewHolder viewHolder, int position) {
+
+        if (position == 0) {
+            if (route != null) {
+                CardViewHolder cardViewHolder = (CardViewHolder) viewHolder;
+                cardViewHolder.routeGrade.setText(route.getName() + " / " + route.getGrade());
+                cardViewHolder.routeDate.setText(route.getDate());
+                cardViewHolder.routeAuthor.setText(route.getAuthor().getName());
+                RouteHelper.setMarkerColor(cardViewHolder.color1, route.getColor1(), R.drawable.rect_dashed);
+                RouteHelper.setMarkerColor(cardViewHolder.color2, route.getColor2());
+                RouteHelper.setMarkerColor(cardViewHolder.color3, route.getColor3());
+            }
+            return;
+        }
+
+        ViewHolder holder = (ViewHolder) viewHolder;
+
         // - get element from your dataset at this position
         // - replace the contents of the view with that element
 
-        final User user = (User) mDataset.get(position);
+        final User user = (User) mDataset.get(position - 1);
 
         final Context context = holder.root.getContext();
 
@@ -57,5 +104,29 @@ public class RouteUsersAdapter extends RecyclerViewAdapter {
                 context.startActivity(intent);
             }
         });
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        if (position == 0) {
+            return 1;
+        }
+        return 0;
+    }
+
+    @Override
+    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        switch (viewType) {
+            case 1:
+                View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.route_card, parent, false);
+                return new CardViewHolder((CardView) v);
+            default:
+                return super.onCreateViewHolder(parent, viewType);
+        }
+    }
+
+    @Override
+    public int getItemCount() {
+        return super.getItemCount() + 1;
     }
 }

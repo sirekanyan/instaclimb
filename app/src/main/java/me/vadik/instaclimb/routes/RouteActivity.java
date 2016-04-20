@@ -13,6 +13,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.ShareActionProvider;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -23,6 +24,8 @@ import java.util.List;
 import me.vadik.instaclimb.R;
 import me.vadik.instaclimb.common.CommonActivity;
 import me.vadik.instaclimb.contract.RouteContract;
+import me.vadik.instaclimb.contract.ViewRouteContract;
+import me.vadik.instaclimb.model.Route;
 import me.vadik.instaclimb.model.RouteDetail;
 import me.vadik.instaclimb.model.User;
 import me.vadik.instaclimb.provider.RouteProvider;
@@ -52,7 +55,12 @@ public class RouteActivity extends CommonActivity {
                 @Override
                 public void onClick(final View view) {
 
-                    boolean checked = fab.getBackgroundTintList().getDefaultColor() != getResources().getColor(R.color.colorAccent);
+                    boolean checked //TODO refactoring
+                            = fab.getBackgroundTintList().getDefaultColor() != getResources().getColor(R.color.colorAccent)
+                            && fab.getBackgroundTintList().getDefaultColor() != getResources().getColor(R.color.dColorAccent);
+
+                    Log.e("me", "fab checked: " + checked);
+                    Log.e("me", "fab .getDefaultColor(): " + Integer.toHexString(fab.getBackgroundTintList().getDefaultColor()));
 
                     if (checked) {
                         fab.setImageResource(R.drawable.ic_add_white_24dp);
@@ -127,14 +135,24 @@ public class RouteActivity extends CommonActivity {
     public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
         switch (loader.getId()) {
             case LOADER_ID:
+                Route route = null;
                 int done = 0;
                 try {
                     if (cursor != null && !cursor.isClosed() && cursor.moveToFirst()) { //TODO remove isClosed check
-                        Integer id = cursor.getInt(cursor.getColumnIndex(RouteContract._ID));
-                        String name = cursor.getString(cursor.getColumnIndex(RouteContract.NAME));
-                        done = cursor.getInt(cursor.getColumnIndex(RouteContract.DONE));
+                        Integer id = cursor.getInt(cursor.getColumnIndex(ViewRouteContract._ID));
+                        String name = cursor.getString(cursor.getColumnIndex(ViewRouteContract.NAME));
+                        String date = cursor.getString(cursor.getColumnIndex(ViewRouteContract.CREATED_WHEN));
+                        int c1 = cursor.getInt(cursor.getColumnIndex(ViewRouteContract.COLOR1));
+                        int c2 = cursor.getInt(cursor.getColumnIndex(ViewRouteContract.COLOR2));
+                        int c3 = cursor.getInt(cursor.getColumnIndex(ViewRouteContract.COLOR3));
+                        String grade = cursor.getString(cursor.getColumnIndex(ViewRouteContract.GRADE));
+                        done = cursor.getInt(cursor.getColumnIndex(ViewRouteContract.DONE));
+                        int userId = cursor.getInt(cursor.getColumnIndex(ViewRouteContract.USER_ID));
+                        String userName = cursor.getString(cursor.getColumnIndex(ViewRouteContract.USER_NAME));
                         RouteDetail mItem = new RouteDetail(id.toString(), name, cursor);
                         setupToolbarImage(mItem.getSmallPictureUrl(), R.id.route_image_toolbar);
+                        route = new Route(id, name, date, c1, c2, c3, grade, done);
+                        route.setAuthor(new User(userId, userName));
                     }
                 } finally {
                     if (cursor != null) {
@@ -142,6 +160,8 @@ public class RouteActivity extends CommonActivity {
                     }
                 }
                 FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+                Log.e("me", "fab: " + fab);
+                Log.e("me", "done: " + done);
                 if (fab != null && done > 0) {
                     if (done == 1) {
                         fab.setImageResource(R.drawable.ic_done_white_24dp);
@@ -149,6 +169,9 @@ public class RouteActivity extends CommonActivity {
                         fab.setImageResource(R.drawable.ic_done_all_white_24dp);
                     }
                     fab.setBackgroundTintList(getResources().getColorStateList(R.color.colorSuccessAccent));
+                }
+                if (route != null) {
+                    mAdapter.setRoute(route);
                 }
                 break;
             case LOADER_WHO_CLIMBED:

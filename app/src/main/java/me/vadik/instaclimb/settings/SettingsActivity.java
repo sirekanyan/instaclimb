@@ -4,6 +4,7 @@ package me.vadik.instaclimb.settings;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
@@ -24,6 +25,7 @@ import android.widget.Toast;
 
 import java.util.List;
 
+import me.vadik.android.PreferencesHelper;
 import me.vadik.instaclimb.R;
 import me.vadik.instaclimb.provider.RoutesProvider;
 import me.vadik.instaclimb.provider.UserProvider;
@@ -217,7 +219,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
                                 RoutesProvider.clearClimbedRoutes(getActivity());
                                 int c1 = RoutesProvider.prepareRoutesForUser(getActivity(), userId);
                                 int c2 = RoutesProvider.prepareFlashRoutesForUser(getActivity(), userId);
-                                String count = String.valueOf(c1+c2);
+                                String count = String.valueOf(c1 + c2);
                                 String flashCount = String.valueOf(c2);
                                 preference.setSummary(userId + " — " + userName);
                                 Toast.makeText(getActivity(),
@@ -225,6 +227,14 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
                                                 "(" + flashCount + " flashes)",
                                         Toast.LENGTH_LONG)
                                         .show();
+
+                                SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
+                                SharedPreferences.Editor editor = preferences.edit();
+                                editor.putString("user_name", userName);
+                                editor.putInt("user_climbed", c1 + c2);
+                                editor.putInt("user_flashed", c2);
+                                editor.apply();
+
                                 return true;
                             }
                             Toast.makeText(getActivity(), "No user with id " + userId, Toast.LENGTH_LONG).show();

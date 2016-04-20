@@ -3,6 +3,7 @@ package me.vadik.instaclimb.users;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.TypedArray;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
 import java.util.ArrayList;
@@ -23,9 +24,11 @@ public class UserRoutesAdapter extends RecyclerViewAdapter {
     }
 
     @Override
-    public void onBindViewHolder(final ViewHolder holder, int position) {
+    public void onBindViewHolder(final RecyclerView.ViewHolder viewHolder, int position) {
         // - get element from your dataset at this position
         // - replace the contents of the view with that element
+
+        ViewHolder holder = (ViewHolder) viewHolder;
 
         final Route route = (Route) mDataset.get(position);
 

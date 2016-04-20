@@ -17,7 +17,7 @@ import me.vadik.instaclimb.R;
  * User: vadik
  * Date: 4/13/16
  */
-public abstract class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder> {
+public abstract class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     protected List mDataset;
 
     public void addAll(List myDataset) {
@@ -56,17 +56,12 @@ public abstract class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerV
 
     // Create new views (invoked by the layout manager)
     @Override
-    public RecyclerViewAdapter.ViewHolder onCreateViewHolder(ViewGroup parent,
-                                                             int viewType) {
+    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         // create a new view
-        View v = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.rowlayout, parent, false);
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.rowlayout, parent, false);
         // set the view's size, margins, paddings and layout parameters
-        ViewHolder vh = new ViewHolder((RelativeLayout) v);
-        return vh;
+        return new ViewHolder((RelativeLayout) v);
     }
-
-
 
 
     // Return the size of your dataset (invoked by the layout manager)

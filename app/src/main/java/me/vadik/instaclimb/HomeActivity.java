@@ -2,8 +2,10 @@ package me.vadik.instaclimb;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
@@ -11,17 +13,25 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
+
+import com.android.volley.toolbox.ImageLoader;
+import com.android.volley.toolbox.NetworkImageView;
 
 import java.util.HashMap;
 import java.util.Map;
 
 import me.vadik.android.MyAppCompatActivity;
 import me.vadik.instaclimb.routes.GymFragment;
+import me.vadik.instaclimb.routes.VolleySingleton;
 import me.vadik.instaclimb.settings.SettingsActivity;
+import me.vadik.instaclimb.users.UserActivity;
+import me.vadik.instaclimb.users.UserHelper;
 
 public class HomeActivity extends MyAppCompatActivity implements
         NavigationView.OnNavigationItemSelectedListener,
@@ -65,6 +75,45 @@ public class HomeActivity extends MyAppCompatActivity implements
             if (savedInstanceState.getString("gymname") != null) {
                 setTitle(savedInstanceState.getString("gymname"));
             }
+        }
+
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        View navViewHeader = navigationView.getHeaderView(0);
+
+        NetworkImageView navHeaderImageView = (NetworkImageView) navViewHeader.findViewById(R.id.navHeaderImageView);
+        if (navHeaderImageView != null) {
+            ImageLoader mImageLoader = VolleySingleton.getInstance(this).getImageLoader();
+            navHeaderImageView.setDefaultImageResId(R.drawable.blackface);
+            String userId = preferences.getString("user_id", null);
+            if (userId == null) {
+                navHeaderImageView.setImageUrl(null, mImageLoader);
+            } else {
+                navHeaderImageView.setImageUrl("https://vadik.me/userpic/" + userId + ".jpg", mImageLoader);
+            }
+        } else {
+            Log.e("me", "not found navHeaderImageView");
+        }
+
+        TextView caption = (TextView) navViewHeader.findViewById(R.id.caption);
+        if (caption != null) {
+            caption.setText(preferences.getString("user_name", "Пупкин"));
+        } else {
+            Log.e("me", "not found caption");
+        }
+
+        TextView email = (TextView) navViewHeader.findViewById(R.id.textView);
+        if (email != null) {
+            int count = preferences.getInt("user_climbed", 0);
+            String countStr = String.valueOf(count);
+            if (countStr.endsWith("1")) {
+                email.setText("Одна трасса пройдена");
+            } else if (countStr.endsWith("2") || countStr.endsWith("3") || countStr.endsWith("4")) {
+                email.setText(countStr + " трассы пройдено");
+            } else {
+                email.setText(countStr + " трасс пройдено");
+            }
+        } else {
+            Log.e("me", "not found caption");
         }
     }
 
@@ -178,5 +227,14 @@ public class HomeActivity extends MyAppCompatActivity implements
                 return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    public void gotoMyProfile(View view) {
+        Intent intent = new Intent(this, UserActivity.class);
+        String userId = UserHelper.getCurrentUserId(this);
+        if (userId != null) {
+            intent.putExtra(UserActivity.ARG_USER_ID, Integer.parseInt(userId));
+            startActivity(intent);
+        }
     }
 }

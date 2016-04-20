@@ -12,8 +12,13 @@ import me.vadik.instaclimb.contract.ViewUsersRoutesContract;
 public class User {
     private final Integer id;
     private final String name;
-    private final String date;
-    private final boolean hasPicture;
+    private String date;
+    private boolean hasPicture;
+
+    public User(int id, String name) {
+        this.id = id;
+        this.name = name;
+    }
 
     public User(Cursor cursor) {
         CursorHelper h = new CursorHelper(cursor);

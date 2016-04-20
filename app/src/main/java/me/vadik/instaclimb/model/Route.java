@@ -12,9 +12,10 @@ public class Route {
     private final int color2;
     private final int color3;
     private String grade;
-    private final boolean flash;
+    private final int done;
+    private User author;
 
-    public Route(Integer id, String name, String date, int c1, int c2, int c3, String grade, boolean isFlash) {
+    public Route(Integer id, String name, String date, int c1, int c2, int c3, String grade, int done) {
         this.id = id;
         this.name = name;
         this.date = date;
@@ -22,7 +23,7 @@ public class Route {
         color2 = c2;
         color3 = c3;
         this.grade = grade;
-        this.flash = isFlash;
+        this.done = done;
     }
 
     public String getName() {
@@ -53,7 +54,19 @@ public class Route {
         return grade;
     }
 
+    public boolean isDone() {
+        return done > 0;
+    }
+
     public boolean isFlash() {
-        return flash;
+        return done == 2;
+    }
+
+    public void setAuthor(User author) {
+        this.author = author;
+    }
+
+    public User getAuthor() {
+        return author;
     }
 }

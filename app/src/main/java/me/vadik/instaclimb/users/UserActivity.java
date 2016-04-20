@@ -153,7 +153,8 @@ public class UserActivity extends CommonActivity {
                             Integer c3 = h.getInt(ViewRoutesUsersContract.COLOR3);
                             String grade = h.getString(ViewRoutesUsersContract.GRADE);
                             boolean isFlash = h.getBoolean(ViewRoutesUsersContract.IS_FLASH);
-                            climbedRoutes.add(new Route(routeId, routeName, routeDate, c1, c2, c3, grade, isFlash));
+                            int done = isFlash ? 2 : 1;
+                            climbedRoutes.add(new Route(routeId, routeName, routeDate, c1, c2, c3, grade, done));
                         } while (cursor.moveToNext());
                     }
                 } finally {
