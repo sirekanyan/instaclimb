@@ -3,6 +3,9 @@
           package="me.vadik.instaclimb">
 
     <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.READ_SYNC_SETTINGS"/>
+    <uses-permission android:name="android.permission.WRITE_SYNC_SETTINGS"/>
+    <uses-permission android:name="android.permission.AUTHENTICATE_ACCOUNTS"/>
 
     <application
         android:allowBackup="true"
@@ -12,7 +15,8 @@
         <provider
             android:name=".provider.RoutesContentProvider"
             android:authorities="me.vadik.instaclimb.routes.provider"
-            android:exported="false"/>
+            android:exported="false"
+            android:syncable="true"/>
         <provider
             android:name=".provider.UsersContentProvider"
             android:authorities="me.vadik.instaclimb.users.provider"
@@ -69,6 +73,27 @@
                     android:scheme="http"/>
             </intent-filter>
         </activity>
+
+        <service
+            android:name="me.vadik.android.datasync.AuthenticatorService">
+            <intent-filter>
+                <action android:name="android.accounts.AccountAuthenticator"/>
+            </intent-filter>
+            <meta-data
+                android:name="android.accounts.AccountAuthenticator"
+                android:resource="@xml/authenticator"/>
+        </service>
+        <service
+            android:name="me.vadik.android.datasync.SyncService"
+            android:exported="true"
+            android:process=":sync">
+            <intent-filter>
+                <action android:name="android.content.SyncAdapter"/>
+            </intent-filter>
+            <meta-data
+                android:name="android.content.SyncAdapter"
+                android:resource="@xml/syncadapter"/>
+        </service>
     </application>
 
 </manifest>

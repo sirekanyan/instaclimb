@@ -1,5 +1,8 @@
 package me.vadik.instaclimb;
 
+import android.accounts.Account;
+import android.accounts.AccountManager;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -38,6 +41,11 @@ public class HomeActivity extends MyAppCompatActivity implements
         GymFragment.OnFragmentInteractionListener {
 
     private String gymName;
+
+    public static final String AUTHORITY = "me.vadik.instaclimb.routes.provider";
+    public static final String ACCOUNT_TYPE = "vadik.me";
+    public static final String ACCOUNT = "dummyaccount";
+    private Account mAccount;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -115,7 +123,49 @@ public class HomeActivity extends MyAppCompatActivity implements
         } else {
             Log.e("me", "not found caption");
         }
+
+        mAccount = CreateSyncAccount(this);
+
+        int syncFrequency = Integer.valueOf(preferences.getString("sync_frequency", "60"));
+
+        if (syncFrequency > 0) {
+
+            Log.e("me", "sync frequency is " + syncFrequency + " seconds");
+
+            ContentResolver.addPeriodicSync(
+                    mAccount,
+                    AUTHORITY,
+                    Bundle.EMPTY,
+                    syncFrequency);
+        }
     }
+
+    public static Account CreateSyncAccount(Context context) {
+        // Create the account type and default account
+        Account newAccount = new Account(ACCOUNT, ACCOUNT_TYPE);
+        // Get an instance of the Android account manager
+        AccountManager accountManager = (AccountManager) context.getSystemService(ACCOUNT_SERVICE);
+        /*
+         * Add the account and account type, no password or user data
+         * If successful, return the Account object, otherwise report an error.
+         */
+        if (accountManager.addAccountExplicitly(newAccount, null, null)) {
+            /*
+             * If you don't set android:syncable="true" in
+             * in your <provider> element in the manifest,
+             * then call context.setIsSyncable(account, AUTHORITY, 1)
+             * here.
+             */
+        } else {
+            /*
+             * The account exists or some other error occurred. Log this, report it,
+             * or handle it internally.
+             */
+            Log.e("me", "cannot add new account");
+        }
+        return newAccount;
+    }
+
 
     @Override
     public void onSaveInstanceState(Bundle savedInstanceState) {

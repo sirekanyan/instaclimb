@@ -74,6 +74,9 @@
 
     <string name="pref_title_sync_frequency">Sync frequency</string>
     <string-array name="pref_sync_frequency_titles">
+        <item>15 seconds (debug)</item><!-- TODO remove -->
+        <item>30 seconds (debug)</item><!-- TODO remove -->
+        <item>1 minute (debug)</item><!-- TODO remove -->
         <item>15 minutes</item>
         <item>30 minutes</item>
         <item>1 hour</item>
@@ -85,8 +88,11 @@
         <item>15</item>
         <item>30</item>
         <item>60</item>
-        <item>180</item>
-        <item>360</item>
+        <item>900</item>
+        <item>1800</item>
+        <item>3600</item>
+        <item>10800</item>
+        <item>21600</item>
         <item>-1</item>
     </string-array>
 
