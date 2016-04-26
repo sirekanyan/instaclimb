@@ -86,12 +86,13 @@ public class RoutesContentProvider extends ContentProvider {
     @Nullable
     @Override
     public Uri insert(@NonNull Uri uri, ContentValues values) {
-        throw new UnsupportedOperationException();
+        sqLiteDatabase.insert(getTableName(uri), null, values);
+        return null; //TODO return uri
     }
 
     @Override
     public int delete(@NonNull Uri uri, String selection, String[] selectionArgs) {
-        throw new UnsupportedOperationException();
+        return sqLiteDatabase.delete(getTableName(uri), selection, selectionArgs);
     }
 
     @Override

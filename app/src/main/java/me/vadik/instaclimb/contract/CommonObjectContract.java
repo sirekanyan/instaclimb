@@ -7,4 +7,5 @@ package me.vadik.instaclimb.contract;
 interface CommonObjectContract {
     String _ID = "_id";
     String NAME = "name";
+    String TS = "ts";
 }
