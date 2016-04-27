@@ -72,7 +72,9 @@ public class RouteUsersAdapter extends RecyclerViewAdapter {
                 int count = super.getItemCount();
                 if (count > 0) {
                     String countStr = String.valueOf(count);
-                    if (countStr.endsWith("1")) {
+                    if (count >= 5 && count <= 20) {
+                        cardViewHolder.numClimbed.setText("Трассу пролезли " + countStr + " человек");
+                    } else if (countStr.endsWith("1")) {
                         cardViewHolder.numClimbed.setText("Трассу пролез " + countStr + " человек");
                     } else if (countStr.endsWith("2") || countStr.endsWith("3") || countStr.endsWith("4")) {
                         cardViewHolder.numClimbed.setText("Трассу пролезло " + countStr + " человека");

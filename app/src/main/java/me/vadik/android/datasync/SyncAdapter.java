@@ -44,8 +44,8 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
 
     @Override
     public void onPerformSync(Account account, Bundle extras, String authority, ContentProviderClient provider, SyncResult syncResult) {
-        update("routes");
         update("users");
+        update("routes");
     }
 
     private int getMaxTs(String uriPath) {
@@ -71,6 +71,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
     }
 
     private void update(JSONArray response, String uriPath) {
+        Uri uri = Uri.withAppendedPath(RoutesContentProvider.CONTENT_URI, uriPath);
         for (int i = 0; i < response.length(); i++) {
             JSONObject jsonObject = null;
             try {
@@ -82,9 +83,11 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
 
                 ContentValues values = new ContentValues();
                 int id = 0;
+                String name = "";
 
                 try {
                     id = jsonObject.getInt("_id");
+                    name = jsonObject.getString("name");
                     putValueInt(jsonObject, values, "_id");
                     putValueString(jsonObject, values, "name");
                     putValueInt(jsonObject, values, "ts");
@@ -96,11 +99,11 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
                         putValueInt(jsonObject, values, "user_id");
                         putValueString(jsonObject, values, "comment");
                         putValueString(jsonObject, values, "created_when");
-                        putValueBoolean(jsonObject, values, "is_active");
+                        putValueInt(jsonObject, values, "is_active");
                         putValueInt(jsonObject, values, "picture_id");
                         putValueInt(jsonObject, values, "sector_id");
                     } else if ("users".equals(uriPath)) {
-                        putValueBoolean(jsonObject, values, "has_picture");
+                        putValueInt(jsonObject, values, "has_picture");
                         putValueInt(jsonObject, values, "rating");
                         putValueInt(jsonObject, values, "height");
                         putValueInt(jsonObject, values, "weight");
@@ -115,19 +118,13 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
                     Log.e("me", e.getMessage(), e);
                 }
                 if (values.size() > 0) {
-                    Uri uri = Uri.withAppendedPath(RoutesContentProvider.CONTENT_URI, uriPath);
                     mContentResolver.delete(uri, "_id = ?", new String[]{String.valueOf(id)});
                     mContentResolver.insert(uri, values);
-                    Log.d("me", String.valueOf(id) + " (" + uriPath + ")");
+                    Log.d("me", String.valueOf(id) + " " + name + " (" + uriPath + ")");
                 }
             }
         }
-    }
-
-    private void putValueBoolean(JSONObject jsonObject, ContentValues values, String name) throws JSONException {
-        if (!jsonObject.isNull(name)) {
-            values.put(name, jsonObject.getString(name));
-        }
+        mContentResolver.notifyChange(uri, null); // TODO does it really work?
     }
 
     private void putValueString(JSONObject jsonObject, ContentValues values, String name) throws JSONException {
@@ -145,7 +142,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
     public void update(final String uriPath) {
         final int maxTs = getMaxTs(uriPath);
 
-        String apiRequest = "https://climb.vadik.me/routes?ts=gt." + maxTs;
+        String apiRequest = "https://climb.vadik.me/" + uriPath + "?ts=gt." + maxTs;
 
         Log.d("me", apiRequest);
 
