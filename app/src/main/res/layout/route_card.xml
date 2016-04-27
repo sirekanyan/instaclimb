@@ -17,7 +17,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingTop="24dp"
-            android:text="grade"
+            android:text="Название"
             android:textSize="24sp"/>
 
         <TextView
@@ -25,7 +25,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingTop="12dp"
-            android:text="author"
+            android:text="Автор"
             android:textSize="14sp"/>
 
         <LinearLayout
@@ -43,8 +43,7 @@
                 android:layout_height="10dp"
                 android:layout_gravity="center"
                 android:layout_weight="1"
-                android:background="@drawable/rect_dashed"
-                android:visibility="gone"/>
+                android:background="@drawable/rect_dashed"/>
 
             <View
                 android:id="@+id/card_view_route_marker2"
@@ -66,7 +65,14 @@
             android:id="@+id/card_view_route_created_when"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="author"
+            android:text="@string/default_route_date"
+            android:textSize="14sp"/>
+
+        <TextView
+            android:id="@+id/card_view_route_num_climbed"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Трассу пока никто не пролез"
             android:textSize="14sp"/>
 
     </LinearLayout>

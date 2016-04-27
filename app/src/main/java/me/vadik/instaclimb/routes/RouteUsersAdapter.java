@@ -43,6 +43,7 @@ public class RouteUsersAdapter extends RecyclerViewAdapter {
         public View color1;
         public View color2;
         public View color3;
+        public TextView numClimbed;
 
         public CardViewHolder(CardView view) {
             super(view);
@@ -52,6 +53,7 @@ public class RouteUsersAdapter extends RecyclerViewAdapter {
             color1 = view.findViewById(R.id.card_view_route_marker1);
             color2 = view.findViewById(R.id.card_view_route_marker2);
             color3 = view.findViewById(R.id.card_view_route_marker3);
+            numClimbed = (TextView) view.findViewById(R.id.card_view_route_num_climbed);
         }
     }
 
@@ -63,10 +65,21 @@ public class RouteUsersAdapter extends RecyclerViewAdapter {
                 CardViewHolder cardViewHolder = (CardViewHolder) viewHolder;
                 cardViewHolder.routeGrade.setText(route.getName() + " / " + route.getGrade());
                 cardViewHolder.routeDate.setText(route.getDate());
-                cardViewHolder.routeAuthor.setText(route.getAuthor().getName());
+                cardViewHolder.routeAuthor.setText("Автор: " + route.getAuthor().getName());
                 RouteHelper.setMarkerColor(cardViewHolder.color1, route.getColor1(), R.drawable.rect_dashed);
                 RouteHelper.setMarkerColor(cardViewHolder.color2, route.getColor2());
                 RouteHelper.setMarkerColor(cardViewHolder.color3, route.getColor3());
+                int count = super.getItemCount();
+                if (count > 0) {
+                    String countStr = String.valueOf(count);
+                    if (countStr.endsWith("1")) {
+                        cardViewHolder.numClimbed.setText("Трассу пролез " + countStr + " человек");
+                    } else if (countStr.endsWith("2") || countStr.endsWith("3") || countStr.endsWith("4")) {
+                        cardViewHolder.numClimbed.setText("Трассу пролезло " + countStr + " человека");
+                    } else {
+                        cardViewHolder.numClimbed.setText("Трассу пролезли " + countStr + " человек");
+                    }
+                }
             }
             return;
         }
