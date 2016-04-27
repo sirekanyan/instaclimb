@@ -46,6 +46,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
     public void onPerformSync(Account account, Bundle extras, String authority, ContentProviderClient provider, SyncResult syncResult) {
         update("users");
         update("routes");
+        update("users_routes");
     }
 
     private int getMaxTs(String uriPath) {
@@ -82,61 +83,93 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
             if (jsonObject != null) {
 
                 ContentValues values = new ContentValues();
-                int id = 0;
-                String name = "";
 
-                try {
-                    id = jsonObject.getInt("_id");
-                    name = jsonObject.getString("name");
-                    putValueInt(jsonObject, values, "_id");
-                    putValueString(jsonObject, values, "name");
-                    putValueInt(jsonObject, values, "ts");
-                    if ("routes".equals(uriPath)) {
-                        putValueString(jsonObject, values, "grade");
-                        putValueInt(jsonObject, values, "color1");
-                        putValueInt(jsonObject, values, "color2");
-                        putValueInt(jsonObject, values, "color3");
-                        putValueInt(jsonObject, values, "user_id");
-                        putValueString(jsonObject, values, "comment");
-                        putValueString(jsonObject, values, "created_when");
-                        putValueInt(jsonObject, values, "is_active");
-                        putValueInt(jsonObject, values, "picture_id");
-                        putValueInt(jsonObject, values, "sector_id");
-                    } else if ("users".equals(uriPath)) {
-                        putValueInt(jsonObject, values, "has_picture");
-                        putValueInt(jsonObject, values, "rating");
-                        putValueInt(jsonObject, values, "height");
-                        putValueInt(jsonObject, values, "weight");
-                        putValueInt(jsonObject, values, "sex");
-                        putValueString(jsonObject, values, "flash_bouldering");
-                        putValueString(jsonObject, values, "redpoint_bouldering");
-                        putValueString(jsonObject, values, "flash_lead");
-                        putValueString(jsonObject, values, "redpoint_lead");
-                        putValueString(jsonObject, values, "about");
+                if ("users_routes".equals(uriPath)) {
+
+                    int userId = 0;
+                    int routeId = 0;
+
+                    try {
+                        userId = putValueInt(jsonObject, values, "user_id");
+                        routeId = putValueInt(jsonObject, values, "route_id");
+                        putValueInt(jsonObject, values, "is_flash");
+                        putValueString(jsonObject, values, "date");
+                        putValueInt(jsonObject, values, "ts");
+                    } catch (JSONException e) {
+                        Log.e("me", e.getMessage(), e);
                     }
-                } catch (JSONException e) {
-                    Log.e("me", e.getMessage(), e);
-                }
-                if (values.size() > 0) {
-                    mContentResolver.delete(uri, "_id = ?", new String[]{String.valueOf(id)});
-                    mContentResolver.insert(uri, values);
-                    Log.d("me", String.valueOf(id) + " " + name + " (" + uriPath + ")");
+                    if (values.size() > 0) {
+                        String userIdStr = String.valueOf(userId);
+                        String routeIdStr = String.valueOf(routeId);
+                        mContentResolver.delete(uri, "user_id = ? and route_id = ?",
+                                new String[]{userIdStr, routeIdStr});
+                        mContentResolver.insert(uri, values);
+                        Log.d("me", "user: " + userIdStr + " route:" + routeIdStr + " (" + uriPath + ")");
+                    }
+
+                } else {
+
+                    int id = 0;
+                    String name = "";
+
+                    try {
+                        id = putValueInt(jsonObject, values, "_id");
+                        name = putValueString(jsonObject, values, "name");
+                        putValueInt(jsonObject, values, "ts");
+                        if ("routes".equals(uriPath)) {
+                            putValueString(jsonObject, values, "grade");
+                            putValueInt(jsonObject, values, "color1");
+                            putValueInt(jsonObject, values, "color2");
+                            putValueInt(jsonObject, values, "color3");
+                            putValueInt(jsonObject, values, "user_id");
+                            putValueString(jsonObject, values, "comment");
+                            putValueString(jsonObject, values, "created_when");
+                            putValueInt(jsonObject, values, "is_active");
+                            putValueInt(jsonObject, values, "picture_id");
+                            putValueInt(jsonObject, values, "sector_id");
+                        } else if ("users".equals(uriPath)) {
+                            putValueInt(jsonObject, values, "has_picture");
+                            putValueInt(jsonObject, values, "rating");
+                            putValueInt(jsonObject, values, "height");
+                            putValueInt(jsonObject, values, "weight");
+                            putValueInt(jsonObject, values, "sex");
+                            putValueString(jsonObject, values, "flash_bouldering");
+                            putValueString(jsonObject, values, "redpoint_bouldering");
+                            putValueString(jsonObject, values, "flash_lead");
+                            putValueString(jsonObject, values, "redpoint_lead");
+                            putValueString(jsonObject, values, "about");
+                        }
+                    } catch (JSONException e) {
+                        Log.e("me", e.getMessage(), e);
+                    }
+                    if (values.size() > 0) {
+                        mContentResolver.delete(uri, "_id = ?", new String[]{String.valueOf(id)});
+                        mContentResolver.insert(uri, values);
+                        Log.d("me", String.valueOf(id) + " " + name + " (" + uriPath + ")");
+                    }
+
                 }
             }
         }
         mContentResolver.notifyChange(uri, null); // TODO does it really work?
     }
 
-    private void putValueString(JSONObject jsonObject, ContentValues values, String name) throws JSONException {
+    private String putValueString(JSONObject jsonObject, ContentValues values, String name) throws JSONException {
+        String value = "";
         if (!jsonObject.isNull(name)) {
-            values.put(name, jsonObject.getString(name));
+            value = jsonObject.getString(name);
+            values.put(name, value);
         }
+        return value;
     }
 
-    private void putValueInt(JSONObject jsonObject, ContentValues values, String name) throws JSONException {
+    private int putValueInt(JSONObject jsonObject, ContentValues values, String name) throws JSONException {
+        int value = 0;
         if (!jsonObject.isNull(name)) {
-            values.put(name, jsonObject.getInt(name));
+            value = jsonObject.getInt(name);
+            values.put(name, value);
         }
+        return value;
     }
 
     public void update(final String uriPath) {
