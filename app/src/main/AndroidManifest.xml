@@ -75,7 +75,7 @@
         </activity>
 
         <service
-            android:name="me.vadik.android.datasync.AuthenticatorService">
+            android:name=".datasync.AuthenticatorService">
             <intent-filter>
                 <action android:name="android.accounts.AccountAuthenticator"/>
             </intent-filter>
@@ -84,7 +84,7 @@
                 android:resource="@xml/authenticator"/>
         </service>
         <service
-            android:name="me.vadik.android.datasync.SyncService"
+            android:name=".datasync.SyncService"
             android:exported="true"
             android:process=":sync">
             <intent-filter>

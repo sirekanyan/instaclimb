@@ -29,7 +29,7 @@ import com.android.volley.toolbox.NetworkImageView;
 import java.util.HashMap;
 import java.util.Map;
 
-import me.vadik.android.MyAppCompatActivity;
+import me.vadik.instaclimb.android.MyAppCompatActivity;
 import me.vadik.instaclimb.routes.GymFragment;
 import me.vadik.instaclimb.routes.VolleySingleton;
 import me.vadik.instaclimb.settings.SettingsActivity;

@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     tools:context="me.vadik.instaclimb.routes.RouteImageActivity">
 
-    <me.vadik.android.MyNetworkImageView
+    <me.vadik.instaclimb.android.MyNetworkImageView
         android:id="@+id/fullscreen_image"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

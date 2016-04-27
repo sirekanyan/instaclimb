@@ -1,4 +1,4 @@
-package me.vadik.android;
+package me.vadik.instaclimb.android;
 
 import android.content.Context;
 import android.content.SharedPreferences;

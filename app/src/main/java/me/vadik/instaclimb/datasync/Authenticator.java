@@ -1,4 +1,4 @@
-package me.vadik.android.datasync;
+package me.vadik.instaclimb.datasync;
 
 import android.accounts.AbstractAccountAuthenticator;
 import android.accounts.Account;

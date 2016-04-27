@@ -15,7 +15,7 @@
         android:layout_centerVertical="true"
         android:layout_marginRight="16dp">
 
-        <me.vadik.android.MyNetworkImageView
+        <me.vadik.instaclimb.android.MyNetworkImageView
             android:id="@+id/cicon"
             android:layout_width="40dp"
             android:layout_height="40dp"

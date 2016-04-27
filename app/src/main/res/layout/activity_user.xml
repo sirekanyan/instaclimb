@@ -22,7 +22,7 @@
             app:contentScrim="?attr/colorPrimary"
             app:layout_scrollFlags="scroll|exitUntilCollapsed">
 
-            <me.vadik.android.MyNetworkImageView
+            <me.vadik.instaclimb.android.MyNetworkImageView
                 android:id="@+id/user_image_toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"

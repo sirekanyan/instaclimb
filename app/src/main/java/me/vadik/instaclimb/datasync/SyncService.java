@@ -1,4 +1,4 @@
-package me.vadik.android.datasync;
+package me.vadik.instaclimb.datasync;
 
 import android.app.Service;
 import android.content.Intent;

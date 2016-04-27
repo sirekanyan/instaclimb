@@ -1,4 +1,4 @@
-package me.vadik.android;
+package me.vadik.instaclimb.android;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
