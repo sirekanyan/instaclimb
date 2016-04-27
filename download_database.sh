@@ -1,0 +1,1 @@
+wget https://vadik.me/climb/ff5c02b3ba25b00e98347550863045404af8d4047c57e316309d5937ceffe995/instaclimb.db -P app/src/main/assets/
