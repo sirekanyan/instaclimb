@@ -13,7 +13,7 @@ public class RoutesProvider {
         Uri uri = Uri.withAppendedPath(RoutesContentProvider.CONTENT_URI, "routes");
         ContentValues values = new ContentValues();
         values.put("done", 1);
-        String select = "_id in (select route_id from users_routes where user_id = ? and is_flash <> 1)";
+        String select = "_id in (select route_id from users_routes where user_id = ? and done = 1)";
         String[] args = new String[]{userId};
         return context.getContentResolver().update(
                 uri,
@@ -26,7 +26,7 @@ public class RoutesProvider {
         Uri uri = Uri.withAppendedPath(RoutesContentProvider.CONTENT_URI, "routes");
         ContentValues values = new ContentValues();
         values.put("done", 2);
-        String select = "_id in (select route_id from users_routes where user_id = ? and is_flash = 1)";
+        String select = "_id in (select route_id from users_routes where user_id = ? and done = 2)";
         String[] args = new String[]{userId};
         return context.getContentResolver().update(
                 uri,

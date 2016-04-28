@@ -26,56 +26,11 @@ public class RoutesDatabaseHelper extends SQLiteOpenHelper {
 //        db.execSQL("insert into example (id, name) values (2, 'two')");
 //        db.execSQL("insert into example (id, name) values (3, 'three')");
 
-        //Create routes_view
-        db.execSQL("create view routes_view as\n" +
-                "select\n" +
-                "  r._id,\n" +
-                "  r.name,\n" +
-                "  r.grade,\n" +
-                "  r.color1,\n" +
-                "  r.color2,\n" +
-                "  r.color3,\n" +
-                "  r.user_id,\n" +
-                "  u.name user_name,\n" +
-                "  r.comment,\n" +
-                "  r.created_when,\n" +
-                "  r.destroyed_when,\n" +
-                "  r.is_active,\n" +
-                "  r.sector_id,\n" +
-                "  r.picture_id\n" +
-                "from\n" +
-                "  routes r,\n" +
-                "  users u\n" +
-                "where\n" +
-                "  r.user_id = u._id;");
+        // TODO create routes_view
 
-        //Create users_routes_view
-        db.execSQL("create view users_routes_view as\n" +
-                "select\n" +
-                "  ur.user_id,\n" +
-                "  u.name user_name,\n" +
-                "  ur.route_id,\n" +
-                "  ur.is_flash,\n" +
-                "  ur.date\n" +
-                "from\n" +
-                "  users_routes ur,\n" +
-                "  users u\n" +
-                "where\n" +
-                "  ur.user_id = u._id;");
+        // TODO create users_routes_view
 
-        //Create routes_users_view
-        db.execSQL("create view routes_users_view as\n" +
-                "select\n" +
-                "  ur.user_id,\n" +
-                "  ur.route_id,\n" +
-                "  r.name route_name,\n" +
-                "  ur.is_flash,\n" +
-                "  ur.date\n" +
-                "from\n" +
-                "  users_routes ur,\n" +
-                "  routes r\n" +
-                "where\n" +
-                "  ur.route_id = r._id;");
+        // TODO create routes_users_view
     }
 
     @Override

@@ -67,7 +67,6 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
                 cursor.close();
             }
         }
-        Log.e("me", "max ts for " + uriPath + " is: " + maxTs);
         return maxTs;
     }
 
@@ -92,7 +91,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
                     try {
                         userId = putValueInt(jsonObject, values, "user_id");
                         routeId = putValueInt(jsonObject, values, "route_id");
-                        putValueInt(jsonObject, values, "is_flash");
+                        putValueInt(jsonObject, values, "done");
                         putValueString(jsonObject, values, "date");
                         putValueInt(jsonObject, values, "ts");
                     } catch (JSONException e) {
@@ -104,7 +103,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
                         mContentResolver.delete(uri, "user_id = ? and route_id = ?",
                                 new String[]{userIdStr, routeIdStr});
                         mContentResolver.insert(uri, values);
-                        Log.d("me", "user: " + userIdStr + " route:" + routeIdStr + " (" + uriPath + ")");
+                        Log.d("me", "user:" + userIdStr + " route:" + routeIdStr + " (" + uriPath + ")");
                     }
 
                 } else {
@@ -151,6 +150,9 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
                 }
             }
         }
+
+        Log.d("me", String.valueOf(response.length()) + " rows updated");
+
         mContentResolver.notifyChange(uri, null); // TODO does it really work?
     }
 

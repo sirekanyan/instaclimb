@@ -30,6 +30,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import me.vadik.instaclimb.android.MyAppCompatActivity;
+import me.vadik.instaclimb.provider.RoutesProvider;
 import me.vadik.instaclimb.routes.GymFragment;
 import me.vadik.instaclimb.routes.VolleySingleton;
 import me.vadik.instaclimb.settings.SettingsActivity;
@@ -113,7 +114,9 @@ public class HomeActivity extends MyAppCompatActivity implements
         if (email != null) {
             int count = preferences.getInt("user_climbed", 0);
             String countStr = String.valueOf(count);
-            if (countStr.endsWith("1")) {
+            if (count >= 5 && count <= 20) {
+                email.setText(countStr + " трасс пройдено");
+            } else if (countStr.endsWith("1")) {
                 email.setText(countStr + " трасса пройдена");
             } else if (countStr.endsWith("2") || countStr.endsWith("3") || countStr.endsWith("4")) {
                 email.setText(countStr + " трассы пройдено");
@@ -137,6 +140,21 @@ public class HomeActivity extends MyAppCompatActivity implements
                     AUTHORITY,
                     Bundle.EMPTY,
                     syncFrequency);
+        }
+
+        String userId = preferences.getString("user_id", null);
+
+        if (userId != null) {
+            // TODO don't do it in the main thread!
+            RoutesProvider.clearClimbedRoutes(this);
+            int c1 = RoutesProvider.prepareRoutesForUser(this, userId);
+            int c2 = RoutesProvider.prepareFlashRoutesForUser(this, userId);
+            String count = String.valueOf(c1 + c2);
+            String flashCount = String.valueOf(c2);
+            Toast.makeText(this, "You've done " + count + " routes " +
+                            "(" + flashCount + " flashes)",
+                    Toast.LENGTH_LONG)
+                    .show();
         }
     }
 

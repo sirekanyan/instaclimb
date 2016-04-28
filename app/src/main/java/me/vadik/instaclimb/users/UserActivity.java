@@ -25,9 +25,7 @@ import me.vadik.instaclimb.android.CursorHelper;
 import me.vadik.instaclimb.common.CommonActivity;
 import me.vadik.instaclimb.contract.RouteContract;
 import me.vadik.instaclimb.contract.ViewRoutesUsersContract;
-import me.vadik.instaclimb.contract.ViewUsersRoutesContract;
 import me.vadik.instaclimb.model.Route;
-import me.vadik.instaclimb.model.User;
 import me.vadik.instaclimb.provider.RoutesContentProvider;
 import me.vadik.instaclimb.provider.UserProvider;
 import me.vadik.instaclimb.routes.RouteHelper;
@@ -103,7 +101,7 @@ public class UserActivity extends CommonActivity {
             ViewRoutesUsersContract.COLOR2,
             ViewRoutesUsersContract.COLOR3,
             ViewRoutesUsersContract.GRADE,
-            ViewRoutesUsersContract.IS_FLASH,
+            ViewRoutesUsersContract.DONE,
     };
 
     static final String[] ROUTES_PROJECTION = new String[]{
@@ -152,8 +150,7 @@ public class UserActivity extends CommonActivity {
                             Integer c2 = h.getInt(ViewRoutesUsersContract.COLOR2);
                             Integer c3 = h.getInt(ViewRoutesUsersContract.COLOR3);
                             String grade = h.getString(ViewRoutesUsersContract.GRADE);
-                            boolean isFlash = h.getBoolean(ViewRoutesUsersContract.IS_FLASH);
-                            int done = isFlash ? 2 : 1;
+                            Integer done = h.getInt(ViewRoutesUsersContract.DONE);
                             climbedRoutes.add(new Route(routeId, routeName, routeDate, c1, c2, c3, grade, done));
                         } while (cursor.moveToNext());
                     }
