@@ -113,23 +113,14 @@ public class HomeActivity extends MyAppCompatActivity implements
         TextView email = (TextView) navViewHeader.findViewById(R.id.textView);
         if (email != null) {
             int count = preferences.getInt("user_climbed", 0);
-            String countStr = String.valueOf(count);
-            if (count >= 5 && count <= 20) {
-                email.setText(countStr + " трасс пройдено");
-            } else if (countStr.endsWith("1")) {
-                email.setText(countStr + " трасса пройдена");
-            } else if (countStr.endsWith("2") || countStr.endsWith("3") || countStr.endsWith("4")) {
-                email.setText(countStr + " трассы пройдено");
-            } else {
-                email.setText(countStr + " трасс пройдено");
-            }
+            email.setText(getResources().getQuantityString(R.plurals.number_of_climbed_routes, count, count));
         } else {
             Log.e("me", "not found caption");
         }
 
         mAccount = CreateSyncAccount(this);
 
-        int syncFrequency = Integer.valueOf(preferences.getString("sync_frequency", "60"));
+        int syncFrequency = Integer.valueOf(preferences.getString("sync_frequency", "3600"));
 
         if (syncFrequency > 0) {
 

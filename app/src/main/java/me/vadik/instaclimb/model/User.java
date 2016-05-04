@@ -1,6 +1,7 @@
 package me.vadik.instaclimb.model;
 
 import android.database.Cursor;
+import android.databinding.BindingConversion;
 
 import me.vadik.instaclimb.android.CursorHelper;
 import me.vadik.instaclimb.contract.ViewUsersRoutesContract;
@@ -42,5 +43,9 @@ public class User {
 
     public boolean hasPicture() {
         return hasPicture;
+    }
+
+    public String getImageUrl() {
+        return "https://vadik.me/userpic/" + String.valueOf(getId()) + ".jpg";
     }
 }

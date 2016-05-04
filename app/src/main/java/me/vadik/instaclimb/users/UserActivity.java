@@ -2,6 +2,8 @@ package me.vadik.instaclimb.users;
 
 import android.content.Intent;
 import android.database.Cursor;
+import android.databinding.DataBindingUtil;
+import android.databinding.ViewDataBinding;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -52,7 +54,7 @@ public class UserActivity extends CommonActivity {
             fab.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Snackbar.make(view, "Ты думаешь, что это действительно должно работать? Сорян.", Snackbar.LENGTH_LONG)
+                    Snackbar.make(view, "Нот импелементед йет. Сорян.", Snackbar.LENGTH_LONG)
                             .setAction("Action", null).show();
                 }
             });
@@ -151,7 +153,7 @@ public class UserActivity extends CommonActivity {
                             Integer c3 = h.getInt(ViewRoutesUsersContract.COLOR3);
                             String grade = h.getString(ViewRoutesUsersContract.GRADE);
                             Integer done = h.getInt(ViewRoutesUsersContract.DONE);
-                            climbedRoutes.add(new Route(routeId, routeName, routeDate, c1, c2, c3, grade, done));
+                            climbedRoutes.add(new Route(routeId, routeName, routeDate, c1, c2, c3, grade, done, 0));
                         } while (cursor.moveToNext());
                     }
                 } finally {
@@ -189,20 +191,6 @@ public class UserActivity extends CommonActivity {
         }
         return super.onOptionsItemSelected(item);
     }
-
-//    @Override
-//    public void onSaveInstanceState(Bundle savedInstanceState) {
-//        savedInstanceState.putInt(ARG_USER_ID, objectId);
-//        savedInstanceState.putString(ARG_USER_NAME, objectName);
-//        super.onSaveInstanceState(savedInstanceState);
-//    }
-//
-//    @Override
-//    protected void onRestoreInstanceState(Bundle savedInstanceState) {
-//        super.onRestoreInstanceState(savedInstanceState);
-//        objectId = savedInstanceState.getInt(ARG_USER_ID);
-//        objectName = savedInstanceState.getString(ARG_USER_NAME);
-//    }
 
     @Override
     protected void onResume() {

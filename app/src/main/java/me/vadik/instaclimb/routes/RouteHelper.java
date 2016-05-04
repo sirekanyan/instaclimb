@@ -18,10 +18,12 @@ public class RouteHelper {
         return routeName;
     }
 
+    @Deprecated
     public static void setMarkerColor(View view, int color) {
         setMarkerColor(view, color, 0);
     }
 
+    @Deprecated
     public static void setMarkerColor(View view, int color, int defaultResId) {
         TypedArray colors = view.getContext().getResources().obtainTypedArray(R.array.colors);
         if (color == 0) {

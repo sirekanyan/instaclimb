@@ -1,5 +1,7 @@
 package me.vadik.instaclimb.common;
 
+import android.databinding.DataBindingUtil;
+import android.databinding.ViewDataBinding;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,13 +19,26 @@ import me.vadik.instaclimb.R;
  * User: vadik
  * Date: 4/13/16
  */
-public abstract class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public abstract class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.BindingHolder> {
     protected List mDataset;
 
     public void addAll(List myDataset) {
         mDataset.clear();
         mDataset.addAll(myDataset);
         this.notifyDataSetChanged();
+    }
+
+    public static class BindingHolder<T extends ViewDataBinding> extends RecyclerView.ViewHolder {
+        final T binding;
+
+        public BindingHolder(View view) {
+            super(view);
+            this.binding = DataBindingUtil.bind(view);
+        }
+
+        public T getBinding() {
+            return binding;
+        }
     }
 
     // Provide a reference to the views for each data item
@@ -53,16 +68,6 @@ public abstract class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerV
     public RecyclerViewAdapter(List myDataset) {
         mDataset = myDataset;
     }
-
-    // Create new views (invoked by the layout manager)
-    @Override
-    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        // create a new view
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.rowlayout, parent, false);
-        // set the view's size, margins, paddings and layout parameters
-        return new ViewHolder((RelativeLayout) v);
-    }
-
 
     // Return the size of your dataset (invoked by the layout manager)
     @Override

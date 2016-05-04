@@ -1,9 +1,9 @@
 <resources>
-    <string name="app_name">Instaclimb</string>
+    <string name="app_name" translatable="false">Instaclimb</string>
 
     <string name="menu_settings">Settings</string>
 
-    <string name="clear_filter_dialog">Clear filter</string>
+    <string name="clear_filter_dialog">Clear filter</string><!-- TODO -->
 
     <array name="grades">
         <item>5a—6a (very easy)</item>
@@ -118,7 +118,6 @@
 
     <string name="action_settings">Settings</string>
     <string name="action_share">Share</string>
-    <string name="all_routes_title">Все трассы</string>
     <string name="skalatoria_gym_name">Скалатория</string>
     <string name="bigwall_gym_name">BigWall</string>
     <string name="rockzona_gym_name">RockZona</string>
@@ -126,12 +125,10 @@
     <string name="mgtu_gym_name">МГТУ им. Баумана</string>
     <string name="x8_gym_name">X8</string>
     <string name="tramontana_gym_name">Трамонтана</string>
-    <string name="atmosfera_gym_name">Атмосфера</string>
     <string name="nav_group_settings">Settings</string>
     <string name="nav_group_communicate">Communicate</string>
     <string name="nav_send_feedback">Send feedback</string>
     <string name="nav_share_application_with_friends">Share with friends</string>
-    <string name="adding_route_is_under_construction">Добавление трасс в стадии разработки</string>
     <string name="not_implemented_yet">Sorry, not implemented yet</string>
     <string name="route_completed">Трасса пройдена</string>
     <string name="route_completed_flash">Трасса пройдена с первой попытки</string>
@@ -140,12 +137,24 @@
     <string name="no_users_found">Никто пока не пролез</string>
     <string name="title_activity_user">Instaclimb Users</string>
     <string name="title_activity_route">Instaclimb Routes</string>
-    <string name="default_route_name">Без названия</string>
     <string name="default_user_name">Вася Пупкин</string>
-    <string name="route">Трасса</string>
-    <string name="default_route_grade">4C</string>
+    <string name="default_route_grade" translatable="false">4C</string>
     <string name="default_route_date">1970/01/01</string>
     <string name="no_one_done_the_route">Никто пока не залез эту трассу</string>
     <string name="content_description_done">done</string>
     <string name="default_user_email">pupkin@example.com</string>
+    <plurals name="number_of_climbed_routes">
+        <item quantity="one">%d route done</item>
+        <item quantity="other">%d routes done</item>
+    </plurals>
+    <plurals name="number_of_users_who_climbed">
+        <item quantity="zero">Nobody climbed the route yet</item>
+        <item quantity="one">%d user climbed the route</item>
+        <item quantity="other">%d users climbed the route</item>
+    </plurals>
+    <string name="atmosfera_gym_name">Atmosfera</string>
+    <string name="default_route_name">Noname</string>
+    <string name="route">Route</string>
+    <string name="adding_route_is_under_construction">This feature is under construction</string>
+    <string name="all_routes_title">All Routes</string>
 </resources>

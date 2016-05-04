@@ -13,7 +13,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.ShareActionProvider;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -25,7 +24,6 @@ import me.vadik.instaclimb.R;
 import me.vadik.instaclimb.common.CommonActivity;
 import me.vadik.instaclimb.contract.ViewRouteContract;
 import me.vadik.instaclimb.model.Route;
-import me.vadik.instaclimb.model.RouteDetail;
 import me.vadik.instaclimb.model.User;
 import me.vadik.instaclimb.provider.RouteProvider;
 import me.vadik.instaclimb.provider.RoutesContentProvider;
@@ -57,9 +55,6 @@ public class RouteActivity extends CommonActivity {
                     boolean checked //TODO refactoring
                             = fab.getBackgroundTintList().getDefaultColor() != getResources().getColor(R.color.colorAccent)
                             && fab.getBackgroundTintList().getDefaultColor() != getResources().getColor(R.color.dColorAccent);
-
-                    Log.e("me", "fab checked: " + checked);
-                    Log.e("me", "fab .getDefaultColor(): " + Integer.toHexString(fab.getBackgroundTintList().getDefaultColor()));
 
                     if (checked) {
                         fab.setImageResource(R.drawable.ic_add_white_24dp);
@@ -148,9 +143,9 @@ public class RouteActivity extends CommonActivity {
                         done = cursor.getInt(cursor.getColumnIndex(ViewRouteContract.DONE));
                         int userId = cursor.getInt(cursor.getColumnIndex(ViewRouteContract.USER_ID));
                         String userName = cursor.getString(cursor.getColumnIndex(ViewRouteContract.USER_NAME));
-                        RouteDetail mItem = new RouteDetail(id.toString(), name, cursor);
-                        setupToolbarImage(mItem.getSmallPictureUrl(), R.id.route_image_toolbar);
-                        route = new Route(id, name, date, c1, c2, c3, grade, done);
+                        int pictureId = cursor.getInt(cursor.getColumnIndex(ViewRouteContract.PICTURE_ID));
+                        route = new Route(id, name, date, c1, c2, c3, grade, done, pictureId);
+                        setupToolbarImage(route.getSmallPictureUrl(), R.id.route_image_toolbar);
                         route.setAuthor(new User(userId, userName));
                     }
                 } finally {
@@ -159,8 +154,6 @@ public class RouteActivity extends CommonActivity {
                     }
                 }
                 FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-                Log.e("me", "fab: " + fab);
-                Log.e("me", "done: " + done);
                 if (fab != null && done > 0) {
                     if (done == 1) {
                         fab.setImageResource(R.drawable.ic_done_white_24dp);
@@ -196,7 +189,7 @@ public class RouteActivity extends CommonActivity {
         mRecyclerView.setHasFixedSize(true);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLayoutManager);
-        RouteUsersAdapter mAdapter = new RouteUsersAdapter();
+        RouteUsersAdapter mAdapter = new RouteUsersAdapter(this);
         mRecyclerView.setAdapter(mAdapter);
         return mAdapter;
     }
