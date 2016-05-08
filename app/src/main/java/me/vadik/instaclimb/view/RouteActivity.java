@@ -151,6 +151,7 @@ public class RouteActivity extends CommonActivity {
 
     private RouteUsersAdapter setupRecyclerView() {
         RecyclerView mRecyclerView = (RecyclerView) findViewById(R.id.who_climbed_routes);
+        mRecyclerView.setNestedScrollingEnabled(false);
         mRecyclerView.setHasFixedSize(true);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLayoutManager);

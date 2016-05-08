@@ -80,6 +80,7 @@ public class UserActivity extends CommonActivity {
 
     private UserRoutesAdapter setupRecyclerView() {
         RecyclerView mRecyclerView = (RecyclerView) findViewById(R.id.user_climbed_routes);
+        mRecyclerView.setNestedScrollingEnabled(false);
         mRecyclerView.setHasFixedSize(true);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLayoutManager);
