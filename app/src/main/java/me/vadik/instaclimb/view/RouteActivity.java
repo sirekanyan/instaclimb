@@ -48,7 +48,8 @@ public class RouteActivity extends CommonActivity {
         routeId = getItemId(ARG_ROUTE_ID);
         String routeName = getItemName(ARG_ROUTE_NAME);
         Route route = new Route.Builder(routeId, routeName).build();
-        binding.setRoute(new RouteViewModel(this, route));
+        RouteViewModel routeViewModel = new RouteViewModel(this, route);
+        binding.setRoute(routeViewModel);
 
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -109,6 +110,7 @@ public class RouteActivity extends CommonActivity {
                     if (cursor != null && !cursor.isClosed() && cursor.moveToFirst()) { //TODO remove isClosed check
                         route = new Route.Builder(cursor).build();
                         RouteViewModel routeView = new RouteViewModel(this, route); // TODO should this be here?
+                        binding.setRoute(routeView); // TODO should this be here???
                         setupToolbarImage(routeView.getSmallPictureUrl(), R.id.image_toolbar);
                     }
                 } finally {
