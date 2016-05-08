@@ -13,6 +13,7 @@ import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.NetworkImageView;
 
 import me.vadik.instaclimb.R;
+import me.vadik.instaclimb.helper.RouteHelper;
 import me.vadik.instaclimb.model.Marker;
 import me.vadik.instaclimb.model.Route;
 import me.vadik.instaclimb.model.User;
@@ -35,6 +36,11 @@ public class RouteViewModel extends CommonViewModel<Route> {
         this.route = route;
         this.author = new User.Builder(route.userId, route.userName).build();
         this.marker = new Marker(route.color1, route.color2, route.color3);
+    }
+
+    @Override
+    public String getName() {
+        return RouteHelper.getName(context, super.getName());
     }
 
     public String getGrade() {

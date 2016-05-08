@@ -2,6 +2,7 @@ package me.vadik.instaclimb.view;
 
 import android.content.Intent;
 import android.database.Cursor;
+import android.databinding.DataBindingUtil;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -12,7 +13,7 @@ import android.support.v4.view.MenuItemCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.ShareActionProvider;
-import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -21,28 +22,43 @@ import java.util.ArrayList;
 import java.util.List;
 
 import me.vadik.instaclimb.R;
+import me.vadik.instaclimb.databinding.UserActivityBinding;
+import me.vadik.instaclimb.model.User;
 import me.vadik.instaclimb.model.contract.RouteContract;
 import me.vadik.instaclimb.model.contract.RoutesUsersViewContract;
 import me.vadik.instaclimb.model.Route;
 import me.vadik.instaclimb.provider.RoutesContentProvider;
 import me.vadik.instaclimb.provider.UserProvider;
 import me.vadik.instaclimb.view.adapter.UserRoutesAdapter;
+import me.vadik.instaclimb.viewmodel.UserViewModel;
 
 public class UserActivity extends CommonActivity {
 
     public static String ARG_USER_ID = "me.vadik.instaclimb.user_id";
     public static String ARG_USER_NAME = "me.vadik.instaclimb.user_name";
 
-    private static final int LOADER_ID = 0;
-    private int userId;
+    private static final int USER_LOADER = 0;
+    private static final int ROUTES_LOADER = 1;
     private UserRoutesAdapter mAdapter;
+    private UserViewModel mUser;
+    private UserActivityBinding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.user_activity);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+
+        binding = DataBindingUtil.setContentView(this, R.layout.user_activity);
+        setSupportActionBar(binding.toolbar);
+
+        int userId = getItemId(ARG_USER_ID);
+        String userName = getItemName(ARG_USER_NAME);
+        if (userName == null && userId != 0) {
+            userName = UserProvider.getUserName(this, String.valueOf(userId));
+        }
+
+        User userModel = new User.Builder(userId, userName).build();
+        mUser = new UserViewModel(this, userModel);
+        binding.setUser(mUser);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         if (fab != null) {
@@ -53,13 +69,6 @@ public class UserActivity extends CommonActivity {
                             .setAction("Action", null).show();
                 }
             });
-        }
-
-        userId = getItemId(ARG_USER_ID);
-        String userName = getItemName(ARG_USER_NAME);
-
-        if (userName == null && userId != 0) {
-            userName = UserProvider.getUserName(this, String.valueOf(userId));
         }
 
         if (userName != null && getSupportActionBar() != null) {
@@ -75,7 +84,8 @@ public class UserActivity extends CommonActivity {
 
         mAdapter = setupRecyclerView();
 
-        getSupportLoaderManager().initLoader(LOADER_ID, b, this);
+        getSupportLoaderManager().initLoader(USER_LOADER, b, this);
+        getSupportLoaderManager().initLoader(ROUTES_LOADER, b, this);
     }
 
     private UserRoutesAdapter setupRecyclerView() {
@@ -93,7 +103,7 @@ public class UserActivity extends CommonActivity {
             RoutesUsersViewContract.ROUTE_ID + " as _id",
             RoutesUsersViewContract.USER_ID,
             RoutesUsersViewContract.ROUTE_ID,
-            RoutesUsersViewContract.ROUTE_NAME,
+            RoutesUsersViewContract.ROUTE_NAME + " as name",
             RoutesUsersViewContract.DATE,
             RoutesUsersViewContract.COLOR1,
             RoutesUsersViewContract.COLOR2,
@@ -102,28 +112,24 @@ public class UserActivity extends CommonActivity {
             RoutesUsersViewContract.DONE,
     };
 
-    static final String[] ROUTES_PROJECTION = new String[]{
-            RouteContract._ID,
-            RouteContract.NAME,
-            RouteContract.USER_ID,
-            RouteContract.CREATED_WHEN + " as date",
-    };
-
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle bundle) {
         Uri uri;
         String[] projection;
-        String select = "user_id = ?";
+        String select;
         String[] args = new String[]{String.valueOf(bundle.getInt(ARG_USER_ID))};
-        String order = "date desc";
+        String order = null;
         switch (id) {
-            case LOADER_ID:
-                uri = Uri.withAppendedPath(RoutesContentProvider.CONTENT_URI, "routes_users_view");
-                projection = ROUTES_USERS_PROJECTION;
+            case USER_LOADER:
+                uri = Uri.withAppendedPath(RoutesContentProvider.CONTENT_URI, "users");
+                select = "_id = ?";
+                projection = null;
                 break;
-            case 124:
-                uri = Uri.withAppendedPath(RoutesContentProvider.CONTENT_URI, "routes");
-                projection = ROUTES_PROJECTION;
+            case ROUTES_LOADER:
+                uri = Uri.withAppendedPath(RoutesContentProvider.CONTENT_URI, "routes_users_view");
+                select = "user_id = ?";
+                projection = ROUTES_USERS_PROJECTION;
+                order = "date desc";
                 break;
             default:
                 return null;
@@ -133,24 +139,38 @@ public class UserActivity extends CommonActivity {
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
+        if (cursor != null && cursor.isClosed()) {
+            //TODO: what should i really do if cursor is closed?
+            Log.e(UserActivity.class.getName(), "Oops, cursor is already closed");
+            return;
+        }
         switch (loader.getId()) {
-            case LOADER_ID:
-                List<Route> climbedRoutes = new ArrayList<>();
+            case USER_LOADER:
                 try {
-                    //TODO: what should i do if cursor is closed?
-                    if (cursor != null && !cursor.isClosed() && cursor.moveToFirst()) { //TODO remove isClosed check
-                        do {
-                            climbedRoutes.add(new Route.Builder(cursor).build());
-                        } while (cursor.moveToNext());
+                    if (cursor != null && cursor.moveToFirst()) {
+                        mUser = new UserViewModel(this, new User.Builder(cursor).build());
+                        binding.setUser(mUser); // todo maybe should i avoid this style?
                     }
                 } finally {
                     if (cursor != null) {
                         cursor.close();
                     }
                 }
-
-                mAdapter.setItems(climbedRoutes);
-
+                break;
+            case ROUTES_LOADER:
+                try {
+                    if (cursor != null && cursor.moveToFirst()) {
+                        List<Route> climbedRoutes = new ArrayList<>();
+                        do {
+                            climbedRoutes.add(new Route.Builder(cursor).build());
+                        } while (cursor.moveToNext());
+                        mAdapter.setItems(climbedRoutes);
+                    }
+                } finally {
+                    if (cursor != null) {
+                        cursor.close();
+                    }
+                }
                 break;
         }
     }
@@ -165,7 +185,7 @@ public class UserActivity extends CommonActivity {
         getMenuInflater().inflate(R.menu.menu_user, menu);
         MenuItem menuItem = menu.findItem(R.id.action_share_user);
         shareActionProvider = (ShareActionProvider) MenuItemCompat.getActionProvider(menuItem);
-        setShareIntent(userId);
+        setShareIntent(mUser.getId());
         return true;
     }
 
@@ -182,10 +202,11 @@ public class UserActivity extends CommonActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        setShareIntent(userId);
+        setShareIntent(mUser.getId());
         Bundle b = new Bundle();
-        b.putInt(ARG_USER_ID, userId);
-        getSupportLoaderManager().restartLoader(LOADER_ID, b, this);
+        b.putInt(ARG_USER_ID, mUser.getId());
+        getSupportLoaderManager().restartLoader(USER_LOADER, b, this);
+        getSupportLoaderManager().restartLoader(ROUTES_LOADER, b, this);
     }
 
     @Override

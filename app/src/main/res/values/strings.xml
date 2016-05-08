@@ -157,4 +157,9 @@
     <string name="route">Route</string>
     <string name="adding_route_is_under_construction">This feature is under construction</string>
     <string name="all_routes_title">All Routes</string>
+    <string name="rating_caption">Rating: %d</string>
+    <string name="height_caption">Height: %d</string>
+    <string name="weight_caption">Weight: %d</string>
+    <string name="boulder_caption">Bouldering: %1$s / %2$s</string>
+    <string name="lead_caption">Lead: %1$s / %2$s</string>
 </resources>

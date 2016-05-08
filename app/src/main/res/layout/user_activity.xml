@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto">
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:bind="http://schemas.android.com/tools">
 
     <data>
 
         <variable
-            name="userRow"
-            type="me.vadik.instaclimb.model.User"/>
+            name="user"
+            type="me.vadik.instaclimb.viewmodel.UserViewModel"/>
     </data>
 
     <android.support.design.widget.CoordinatorLayout
@@ -28,7 +29,7 @@
                 android:fitsSystemWindows="true"
                 app:contentScrim="?attr/colorPrimary"
                 app:layout_scrollFlags="scroll|exitUntilCollapsed"
-                app:title="@{userRow.name}">
+                app:title="@{user.name}">
 
                 <me.vadik.instaclimb.view.custom.MyNetworkImageView
                     android:id="@+id/image_toolbar"
@@ -51,7 +52,9 @@
             android:layout_height="match_parent"
             app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-            <include layout="@layout/user_content"/>
+            <include
+                layout="@layout/user_content"
+                bind:user="@{user}"/>
 
         </android.support.v4.widget.NestedScrollView>
 

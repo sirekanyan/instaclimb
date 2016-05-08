@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
 
         <variable
-            name="user"
-            type="me.vadik.instaclimb.viewmodel.UserViewModel"/>
+            name="route"
+            type="me.vadik.instaclimb.viewmodel.RouteViewModel"/>
     </data>
 
     <android.support.v7.widget.CardView
@@ -22,49 +23,41 @@
             android:orientation="vertical">
 
             <TextView
+                android:id="@+id/card_view_route_grade"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:paddingTop="24dp"
-                android:text="@{user.name}"
+                android:text="@{route.grade}"
                 android:textSize="24sp"/>
 
             <TextView
+                android:id="@+id/card_view_route_author"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:paddingTop="12dp"
-                android:text="@{@string/boulder_caption(user.flashBoulder, user.redpointBoulder)}"
-                android:visibility="@{user.getVisibility(user.flashBoulder, user.redpointBoulder)}"
+                android:text="@{route.author.name}"
+                android:textSize="14sp"/>
+
+            <me.vadik.instaclimb.view.custom.MarkerView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:marker="@{route.marker}"/>
+
+            <TextView
+                android:id="@+id/card_view_route_created_when"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@{route.date}"
                 android:textSize="14sp"/>
 
             <TextView
+                android:id="@+id/card_view_route_num_climbed"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@{@string/lead_caption(user.flashLead, user.redpointLead)}"
-                android:visibility="@{user.getVisibility(user.flashLead, user.redpointLead)}"
-                android:textSize="14sp"/>
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@{@string/rating_caption(user.rating)}"
-                android:textSize="14sp"/>
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@{@string/height_caption(user.height)}"
-                android:visibility="@{user.getVisibility(user.height)}"
-                android:textSize="14sp"/>
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@{@string/weight_caption(user.weight)}"
-                android:visibility="@{user.getVisibility(user.weight)}"
+                android:text="@{route.climbedCount}"
                 android:textSize="14sp"/>
 
         </LinearLayout>
 
     </android.support.v7.widget.CardView>
-
 </layout>

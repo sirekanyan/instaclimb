@@ -18,6 +18,10 @@ public abstract class CommonViewModel<T extends CommonObject> implements BaseVie
         this.object = object;
     }
 
+    public int getId() {
+        return object.id;
+    }
+
     public String getName() {
         return object.name;
     }
