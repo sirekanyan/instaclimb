@@ -149,7 +149,7 @@
     </plurals>
     <plurals name="number_of_users_who_climbed">
         <item quantity="zero">Nobody climbed the route yet</item>
-        <item quantity="one">%d user climbed the route</item>
+        <item quantity="one">%d userRow climbed the route</item>
         <item quantity="other">%d users climbed the route</item>
     </plurals>
     <string name="atmosfera_gym_name">Atmosfera</string>

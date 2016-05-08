@@ -4,8 +4,8 @@ import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
 
-import me.vadik.instaclimb.contract.RouteContract;
-import me.vadik.instaclimb.routes.RouteHelper;
+import me.vadik.instaclimb.helper.RouteHelper;
+import me.vadik.instaclimb.model.contract.RouteContract;
 
 /**
  * User: vadik

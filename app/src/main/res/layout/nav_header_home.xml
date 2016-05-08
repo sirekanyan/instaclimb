@@ -10,7 +10,7 @@
               android:paddingTop="@dimen/activity_vertical_margin"
               android:theme="@style/ThemeOverlay.AppCompat.Dark">
 
-    <me.vadik.instaclimb.android.MyRoundedNetworkImageView
+    <me.vadik.instaclimb.view.custom.MyRoundedNetworkImageView
         android:id="@+id/navHeaderImageView"
         android:layout_width="72dp"
         android:layout_height="72dp"

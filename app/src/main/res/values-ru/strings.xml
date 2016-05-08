@@ -6,7 +6,6 @@
         <item quantity="many">%d трасс пройдено</item>
     </plurals>
     <plurals name="number_of_users_who_climbed">
-        <item quantity="zero">Трассу пока никто не пролезs</item>
         <item quantity="one">Трассу пролез %d человек</item>
         <item quantity="few">Трассу пролезло %d человека</item>
         <item quantity="many">Трассу пролезли %d человек</item>

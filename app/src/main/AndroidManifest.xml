@@ -23,7 +23,7 @@
             android:exported="false"/>
 
         <activity
-            android:name=".HomeActivity"
+            android:name=".view.HomeActivity"
             android:label="@string/title_activity_home">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
@@ -32,15 +32,15 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".settings.SettingsActivity"
+            android:name=".view.SettingsActivity"
             android:label="@string/menu_settings"
-            android:parentActivityName=".HomeActivity">
+            android:parentActivityName=".view.HomeActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".HomeActivity"/>
+                android:value=".view.HomeActivity"/>
         </activity>
         <activity
-            android:name=".users.UserActivity"
+            android:name=".view.UserActivity"
             android:label="@string/title_activity_home">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW"/>
@@ -55,12 +55,12 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".routes.RouteActivity"
+            android:name=".view.RouteActivity"
             android:label="@string/title_activity_home"
-            android:parentActivityName=".HomeActivity">
+            android:parentActivityName=".view.HomeActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="me.vadik.instaclimb.HomeActivity"/>
+                android:value=".view.HomeActivity"/>
             <intent-filter>
                 <action android:name="android.intent.action.VIEW"/>
 
@@ -95,14 +95,6 @@
                 android:resource="@xml/syncadapter"/>
         </service>
 
-        <activity android:name=".ExampleActivity"
-            android:label="Example Activity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
-
-                <category android:name="android.intent.category.LAUNCHER"/>
-            </intent-filter>
-        </activity>
     </application>
 
 </manifest>

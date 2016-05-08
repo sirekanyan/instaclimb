@@ -1,51 +1,59 @@
 package me.vadik.instaclimb.model;
 
 import android.database.Cursor;
-import android.databinding.BindingConversion;
 
-import me.vadik.instaclimb.android.CursorHelper;
-import me.vadik.instaclimb.contract.ViewUsersRoutesContract;
+import me.vadik.instaclimb.model.common.CommonObject;
+import me.vadik.instaclimb.model.common.CursorBuilder;
+import me.vadik.instaclimb.model.contract.UsersRoutesViewContract;
+
+import static me.vadik.instaclimb.model.contract.UserContract.*;
 
 /**
  * User: vadik
  * Date: 4/13/16
  */
-public class User {
-    private final Integer id;
-    private final String name;
-    private String date;
-    private boolean hasPicture;
+public class User extends CommonObject {
 
-    public User(int id, String name) {
-        this.id = id;
-        this.name = name;
+    public final String date;
+    public final int rating;
+    public final int height;
+    public final int weight;
+    public final int sex;
+    public final String flash_boulder;
+    public final String redpoint_boulder;
+    public final String flash_lead;
+    public final String redpoint_lead;
+    public final String about;
+    public final boolean hasPicture;
+
+    public User(CursorBuilder builder) {
+        super(builder);
+        date = builder.getString(UsersRoutesViewContract.DATE); // todo is it ok?
+        rating = builder.getInt(RATING);
+        height = builder.getInt(HEIGHT);
+        weight = builder.getInt(WEIGHT);
+        sex = builder.getInt(SEX);
+        flash_boulder = builder.getString(FLASH_BOULDERING);
+        redpoint_boulder = builder.getString(REDPOINT_BOULDERING);
+        flash_lead = builder.getString(FLASH_LEAD);
+        redpoint_lead = builder.getString(REDPOINT_LEAD);
+        about = builder.getString(ABOUT);
+        hasPicture = builder.getBoolean(HAS_PICTURE);
     }
 
-    public User(Cursor cursor) {
-        CursorHelper h = new CursorHelper(cursor);
-        this.id = h.getInt(ViewUsersRoutesContract.USER_ID);
-        this.name = h.getString(ViewUsersRoutesContract.USER_NAME);
-        this.date = h.getString(ViewUsersRoutesContract.DATE);
-        this.hasPicture = h.getBoolean(ViewUsersRoutesContract.HAS_PICTURE);
-    }
+    public static class Builder extends CursorBuilder<User> {
 
-    public Integer getId() {
-        return id;
-    }
+        public Builder(Cursor cursor) {
+            super(cursor);
+        }
 
-    public String getName() {
-        return name;
-    }
+        public Builder(int id, String name) {
+            super(id, name);
+        }
 
-    public String getDate() {
-        return date;
-    }
-
-    public boolean hasPicture() {
-        return hasPicture;
-    }
-
-    public String getImageUrl() {
-        return "https://vadik.me/userpic/" + String.valueOf(getId()) + ".jpg";
+        @Override
+        public User build() {
+            return new User(this);
+        }
     }
 }

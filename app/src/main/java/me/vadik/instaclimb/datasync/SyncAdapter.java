@@ -23,7 +23,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import me.vadik.instaclimb.provider.RoutesContentProvider;
-import me.vadik.instaclimb.routes.VolleySingleton;
+import me.vadik.instaclimb.helper.VolleySingleton;
 
 /**
  * User: vadik

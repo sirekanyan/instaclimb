@@ -4,7 +4,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
 
-import me.vadik.instaclimb.contract.UserContract;
+import me.vadik.instaclimb.model.contract.UserContract;
 
 /**
  * User: vadik
