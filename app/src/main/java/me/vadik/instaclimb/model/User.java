@@ -3,7 +3,7 @@ package me.vadik.instaclimb.model;
 import android.database.Cursor;
 
 import me.vadik.instaclimb.model.common.CommonObject;
-import me.vadik.instaclimb.model.common.CursorBuilder;
+import me.vadik.instaclimb.model.common.ObjectBuilder;
 import me.vadik.instaclimb.model.contract.UsersRoutesViewContract;
 
 import static me.vadik.instaclimb.model.contract.UserContract.*;
@@ -26,7 +26,7 @@ public class User extends CommonObject {
     public final String about;
     public final boolean hasPicture;
 
-    public User(CursorBuilder builder) {
+    public User(ObjectBuilder builder) {
         super(builder);
         date = builder.getString(UsersRoutesViewContract.DATE); // todo is it ok?
         rating = builder.getInt(RATING);
@@ -41,7 +41,7 @@ public class User extends CommonObject {
         hasPicture = builder.getBoolean(HAS_PICTURE);
     }
 
-    public static class Builder extends CursorBuilder<User> {
+    public static class Builder extends ObjectBuilder<User> {
 
         public Builder(Cursor cursor) {
             super(cursor);

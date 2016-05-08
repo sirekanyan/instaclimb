@@ -4,7 +4,7 @@ package me.vadik.instaclimb.model.contract;
  * User: vadik
  * Date: 4/8/16
  */
-public interface RouteContract extends BaseObjectContract {
+public interface RouteContract extends CommonContract {
     String GRADE = "grade";
     String GRADE_AUTHOR = "grade_author";
     String GRADE_USERS = "grade_users";

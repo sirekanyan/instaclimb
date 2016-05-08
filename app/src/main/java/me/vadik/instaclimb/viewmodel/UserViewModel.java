@@ -3,12 +3,13 @@ package me.vadik.instaclimb.viewmodel;
 import android.content.Context;
 
 import me.vadik.instaclimb.model.User;
+import me.vadik.instaclimb.viewmodel.common.CommonViewModel;
 
 /**
  * User: vadik
  * Date: 5/3/16
  */
-public class UserViewModel extends ObjectViewModel<User> {
+public class UserViewModel extends CommonViewModel<User> {
     private final User user;
 
     public UserViewModel(Context context, User user) {

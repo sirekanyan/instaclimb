@@ -2,9 +2,8 @@ package me.vadik.instaclimb.model;
 
 import android.database.Cursor;
 
-import me.vadik.instaclimb.model.common.BaseObject;
 import me.vadik.instaclimb.model.common.CommonObject;
-import me.vadik.instaclimb.model.common.CursorBuilder;
+import me.vadik.instaclimb.model.common.ObjectBuilder;
 import me.vadik.instaclimb.model.contract.RouteViewContract;
 
 import static me.vadik.instaclimb.model.contract.RouteContract.*;
@@ -46,7 +45,7 @@ public class Route extends CommonObject {
         done = builder.getInt(DONE);
     }
 
-    public static class Builder extends CursorBuilder<Route> {
+    public static class Builder extends ObjectBuilder<Route> {
 
         public Builder(Cursor cursor) {
             super(cursor);

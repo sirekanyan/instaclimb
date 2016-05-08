@@ -22,6 +22,7 @@ public class RouteUsersAdapter extends RecyclerViewAdapter<User> {
     protected void onBindRowViewHolder(BindingHolder bindingHolder, User user) {
         RowLayoutUserBinding rowUserBinding = (RowLayoutUserBinding) bindingHolder.getBinding();
         rowUserBinding.setUser(new UserItemViewModel(context, user));
+        rowUserBinding.executePendingBindings();
     }
 
     @Override

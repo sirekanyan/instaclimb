@@ -10,7 +10,7 @@ public class BaseObject {
 
     public final int ts;
 
-    public BaseObject(CursorBuilder builder) {
+    public BaseObject(ObjectBuilder builder) {
         ts = builder.getInt(TS); // wait 2038 :)
     }
 }

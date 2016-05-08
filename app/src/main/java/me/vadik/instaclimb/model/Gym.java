@@ -1,7 +1,7 @@
 package me.vadik.instaclimb.model;
 
 import me.vadik.instaclimb.model.common.CommonObject;
-import me.vadik.instaclimb.model.common.CursorBuilder;
+import me.vadik.instaclimb.model.common.ObjectBuilder;
 
 /**
  * User: vadik
@@ -9,7 +9,7 @@ import me.vadik.instaclimb.model.common.CursorBuilder;
  */
 public class Gym extends CommonObject {
 
-    public Gym(CursorBuilder builder) {
+    public Gym(ObjectBuilder builder) {
         super(builder);
     }
 }

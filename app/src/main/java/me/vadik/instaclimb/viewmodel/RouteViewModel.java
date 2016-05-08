@@ -17,12 +17,13 @@ import me.vadik.instaclimb.model.Marker;
 import me.vadik.instaclimb.model.Route;
 import me.vadik.instaclimb.model.User;
 import me.vadik.instaclimb.helper.VolleySingleton;
+import me.vadik.instaclimb.viewmodel.common.CommonViewModel;
 
 /**
  * User: vadik
  * Date: 5/3/16
  */
-public class RouteViewModel extends ObjectViewModel<Route> {
+public class RouteViewModel extends CommonViewModel<Route> {
     private final Route route;
     private final User author;
     private final Resources resources;

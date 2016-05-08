@@ -21,6 +21,7 @@ public class UserRoutesAdapter extends RecyclerViewAdapter<Route> {
     protected void onBindRowViewHolder(BindingHolder bindingHolder, Route route) {
         RowLayoutRouteBinding rowRouteBinding = (RowLayoutRouteBinding) bindingHolder.getBinding();
         rowRouteBinding.setRoute(new RouteItemViewModel(context, route));
+        rowRouteBinding.executePendingBindings();
     }
 
     @Override

@@ -6,12 +6,13 @@ import android.view.View;
 
 import me.vadik.instaclimb.model.User;
 import me.vadik.instaclimb.view.UserActivity;
+import me.vadik.instaclimb.viewmodel.common.CommonViewModel;
 
 /**
  * User: vadik
  * Date: 5/8/16
  */
-public class UserItemViewModel extends ObjectViewModel<User> {
+public class UserItemViewModel extends CommonViewModel<User> {
     private final User user;
 
     public UserItemViewModel(Context context, User user) {

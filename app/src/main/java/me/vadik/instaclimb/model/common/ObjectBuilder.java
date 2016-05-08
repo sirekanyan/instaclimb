@@ -8,19 +8,19 @@ import java.util.Map;
 
 import me.vadik.instaclimb.helper.CursorHelper;
 
-import static me.vadik.instaclimb.model.contract.BaseObjectContract.NAME;
-import static me.vadik.instaclimb.model.contract.BaseObjectContract._ID;
+import static me.vadik.instaclimb.model.contract.CommonContract.NAME;
+import static me.vadik.instaclimb.model.contract.CommonContract._ID;
 
 /**
  * User: vadik
  * Date: 5/8/16
  */
-public abstract class CursorBuilder<T> {
+public abstract class ObjectBuilder<T> {
 
     private final Map<String, String> stringParams = new HashMap<>();
     private final Map<String, Integer> intParams = new HashMap<>();
 
-    public CursorBuilder(Cursor cursor) {
+    public ObjectBuilder(Cursor cursor) {
         CursorHelper helper = new CursorHelper(cursor);
         for (String columnName : cursor.getColumnNames()) {
             int type = helper.getType(columnName);
@@ -41,7 +41,7 @@ public abstract class CursorBuilder<T> {
         }
     }
 
-    public CursorBuilder(int id, String name) {
+    public ObjectBuilder(int id, String name) {
         intParams.put(_ID, id);
         stringParams.put(NAME, name);
     }

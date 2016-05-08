@@ -1,6 +1,6 @@
 package me.vadik.instaclimb.model.common;
 
-import static me.vadik.instaclimb.model.contract.BaseObjectContract.*;
+import static me.vadik.instaclimb.model.contract.CommonContract.*;
 
 /**
  * User: vadik
@@ -11,7 +11,7 @@ public class CommonObject extends BaseObject {
     public final int id;
     public final String name;
 
-    public CommonObject(CursorBuilder builder) {
+    public CommonObject(ObjectBuilder builder) {
         super(builder);
         id = builder.getInt(_ID);
         name = builder.getString(NAME);
