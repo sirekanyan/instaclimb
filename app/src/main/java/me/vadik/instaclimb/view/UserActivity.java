@@ -13,6 +13,7 @@ import android.support.v4.view.MenuItemCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.ShareActionProvider;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -48,7 +49,7 @@ public class UserActivity extends CommonActivity {
         super.onCreate(savedInstanceState);
 
         binding = DataBindingUtil.setContentView(this, R.layout.user_activity);
-        setSupportActionBar(binding.toolbar);
+        setSupportActionBar((Toolbar) findViewById(R.id.toolbar)); //todo avoid findbyid
 
         int userId = getItemId(ARG_USER_ID);
         String userName = getItemName(ARG_USER_NAME);

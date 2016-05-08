@@ -12,6 +12,7 @@ import android.support.v4.view.MenuItemCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.ShareActionProvider;
+import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -43,7 +44,7 @@ public class RouteActivity extends CommonActivity {
         super.onCreate(savedInstanceState);
 
         binding = DataBindingUtil.setContentView(this, R.layout.route_activity);
-        setSupportActionBar(binding.toolbar);
+        setSupportActionBar((Toolbar) findViewById(R.id.toolbar)); //todo avoid findbyid
 
         routeId = getItemId(ARG_ROUTE_ID);
         String routeName = getItemName(ARG_ROUTE_NAME);
