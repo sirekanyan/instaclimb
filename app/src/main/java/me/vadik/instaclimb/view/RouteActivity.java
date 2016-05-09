@@ -35,9 +35,9 @@ public class RouteActivity extends CommonActivity {
 
     private static final int LOADER_ID = 0;
     private static final int LOADER_WHO_CLIMBED = 1;
-    private int routeId;
     private RouteUsersAdapter mAdapter;
     private RouteActivityBinding binding;
+    private RouteViewModel mRoute;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,11 +46,11 @@ public class RouteActivity extends CommonActivity {
         binding = DataBindingUtil.setContentView(this, R.layout.route_activity);
         setSupportActionBar((Toolbar) findViewById(R.id.toolbar)); //todo avoid findbyid
 
-        routeId = getItemId(ARG_ROUTE_ID);
+        int routeId = getItemId(ARG_ROUTE_ID);
         String routeName = getItemName(ARG_ROUTE_NAME);
         Route route = new Route.Builder(routeId, routeName).build();
-        RouteViewModel routeViewModel = new RouteViewModel(this, route);
-        binding.setRoute(routeViewModel);
+        mRoute = new RouteViewModel(this, route);
+        binding.setRoute(mRoute);
 
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -146,6 +146,7 @@ public class RouteActivity extends CommonActivity {
                     }
                 }
                 mAdapter.setItems(whoClimbed);
+                mRoute.setClimbedCount(whoClimbed.size());
                 break;
         }
     }
@@ -171,7 +172,7 @@ public class RouteActivity extends CommonActivity {
         getMenuInflater().inflate(R.menu.menu_route, menu);
         MenuItem menuItem = menu.findItem(R.id.action_share_route);
         shareActionProvider = (ShareActionProvider) MenuItemCompat.getActionProvider(menuItem);
-        setShareIntent(routeId);
+        setShareIntent(mRoute.getId());
         return true;
     }
 
@@ -189,10 +190,10 @@ public class RouteActivity extends CommonActivity {
     protected void onResume() {
         super.onResume();
         Bundle b = new Bundle();
-        b.putInt(ARG_ROUTE_ID, routeId);
+        b.putInt(ARG_ROUTE_ID, mRoute.getId());
         getSupportLoaderManager().restartLoader(LOADER_ID, b, this);
         getSupportLoaderManager().restartLoader(LOADER_WHO_CLIMBED, b, this);
-        setShareIntent(routeId);
+        setShareIntent(mRoute.getId());
     }
 
     @Override

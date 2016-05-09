@@ -54,7 +54,7 @@
                 android:id="@+id/card_view_route_num_climbed"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@{route.climbedCount}"
+                android:text="@{@plurals/number_of_users_who_climbed(route.climbedCount, route.climbedCount)}"
                 android:textSize="14sp"/>
 
         </LinearLayout>

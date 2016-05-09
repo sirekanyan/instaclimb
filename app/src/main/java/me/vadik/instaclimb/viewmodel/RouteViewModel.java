@@ -3,6 +3,7 @@ package me.vadik.instaclimb.viewmodel;
 import android.content.Context;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
+import android.databinding.Bindable;
 import android.databinding.BindingAdapter;
 import android.graphics.drawable.Drawable;
 import android.support.design.widget.FloatingActionButton;
@@ -29,6 +30,9 @@ public class RouteViewModel extends CommonViewModel<Route> {
     private final User author;
     private final Resources resources;
     private Marker marker;
+
+    @Bindable
+    private int climbedCount;
 
     public RouteViewModel(Context context, Route route) {
         super(context, route);
@@ -107,11 +111,11 @@ public class RouteViewModel extends CommonViewModel<Route> {
         view.setImageUrl(url, mImageLoader);
     }
 
-    public String getClimbedCount() {
-        int resId = R.plurals.number_of_users_who_climbed;
-//        int count = route.getClimbedCount(); //TODO !!!
-        int count = 0;
-        return context.getResources().getQuantityString(resId, count, count);
+    public int getClimbedCount() {
+//        int resId = R.plurals.number_of_users_who_climbed;
+//        int count = climbedCount;
+//        return context.getResources().getQuantityString(resId, count, count);
+        return climbedCount;
     }
 
     public void onClickFAB(View view) {
@@ -137,5 +141,12 @@ public class RouteViewModel extends CommonViewModel<Route> {
                         }
                     }).show();
         }
+    }
+
+    public void setClimbedCount(int climbedCount) {
+        this.climbedCount = climbedCount;
+//        notifyPropertyChanged(BR.climbedCount);
+//        notifyPropertyChanged(me.vadik.instaclimb.viewmodel.BR.climbedCount);
+        notifyChange();
     }
 }
