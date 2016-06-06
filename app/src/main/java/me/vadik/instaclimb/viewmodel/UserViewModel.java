@@ -1,10 +1,19 @@
 package me.vadik.instaclimb.viewmodel;
 
 import android.content.Context;
+import android.content.Intent;
+import android.databinding.BindingAdapter;
+import android.graphics.drawable.Drawable;
 import android.text.TextUtils;
 import android.view.View;
+import android.widget.ImageView;
 
+import com.android.volley.toolbox.ImageLoader;
+import com.android.volley.toolbox.NetworkImageView;
+
+import me.vadik.instaclimb.helper.VolleySingleton;
 import me.vadik.instaclimb.model.User;
+import me.vadik.instaclimb.view.UserActivity;
 import me.vadik.instaclimb.viewmodel.common.CommonViewModel;
 
 /**
@@ -67,5 +76,13 @@ public class UserViewModel extends CommonViewModel<User> {
             return View.GONE;
         }
         return View.VISIBLE;
+    }
+
+    public void openUser(View view) {
+        Context context = view.getContext();
+        Intent intent = new Intent(context, UserActivity.class);
+        intent.putExtra(UserActivity.ARG_USER_ID, user.id);
+        intent.putExtra(UserActivity.ARG_USER_NAME, user.name);
+        context.startActivity(intent);
     }
 }

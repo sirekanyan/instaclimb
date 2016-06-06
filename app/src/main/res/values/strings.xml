@@ -95,6 +95,27 @@
         <item>21600</item>
         <item>-1</item>
     </string-array>
+    <string-array name="points">
+        <item>2</item><!--5A-->
+        <item>3</item><!--5A+-->
+        <item>5</item><!--5B-->
+        <item>7</item><!--5B+-->
+        <item>10</item><!--5C-->
+        <item>15</item><!--5C+-->
+        <item>25</item><!--6A-->
+        <item>30</item><!--6A+-->
+        <item>50</item><!--6B-->
+        <item>80</item><!--6B+-->
+        <item>175</item><!--6C-->
+        <item>220</item><!--6C+-->
+        <item>500</item><!--7A-->
+        <item>700</item><!--7A+-->
+        <item>1500</item><!--7B-->
+        <item>2200</item><!--7B+-->
+        <item>5000</item><!--7C-->
+        <item>7000</item><!--7C+-->
+        <item>15000</item><!--8A-->
+    </string-array>
 
     <string name="pref_title_system_sync_settings">System sync settings</string>
 
@@ -162,4 +183,16 @@
     <string name="weight_caption">Weight: %d</string>
     <string name="boulder_caption">Bouldering: %1$s / %2$s</string>
     <string name="lead_caption">Lead: %1$s / %2$s</string>
+    <string name="thumbnail_route_picture">http://instaclimb.ru/maps/%d/thumb.jpg</string>
+    <string name="small_route_picture">http://instaclimb.ru/maps/%d/small.jpg</string>
+    <string name="full_route_picture">http://instaclimb.ru/maps/%d/full.jpg</string>
+
+    <string name="nav_news_title">News</string>
+    <string name="nav_gyms_title">Gyms</string>
+    <string name="nav_climbers_title">Climbers</string>
+    <string name="nav_rating_title">Ratings</string>
+    <string name="content_description_gym_name">Без названия</string>
+    <string name="gym_button_routes">Routes</string>
+    <string name="gym_button_ratings">Ratings</string>
+    <string name="content_description_gym_star">Add to favourite</string>
 </resources>

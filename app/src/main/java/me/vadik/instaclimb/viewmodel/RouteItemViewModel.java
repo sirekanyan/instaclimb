@@ -36,8 +36,8 @@ public class RouteItemViewModel extends CommonViewModel<Route> {
         return marker;
     }
 
-    public String getDate() {
-        return route.createdWhen;
+    public String getClimbed() {
+        return route.climbedWhen;
     }
 
     public boolean isFlash() {

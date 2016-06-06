@@ -1,0 +1,100 @@
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="gym"
+            type="me.vadik.instaclimb.viewmodel.GymViewModel"/>
+    </data>
+
+    <android.support.v7.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginTop="16dp">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <me.vadik.instaclimb.view.custom.MyNetworkImageView
+                android:id="@+id/gym_image"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:scaleType="centerCrop"
+                app:imageUrl="@{gym.picUrl}"/>
+
+            <TextView
+                android:id="@+id/gym_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/gym_image"
+                android:paddingBottom="12dp"
+                android:paddingLeft="16dp"
+                android:paddingRight="16dp"
+                android:paddingTop="24dp"
+                android:text="@{gym.name}"
+                android:textSize="24sp"
+                tools:text="BigWall"/>
+
+            <ImageButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_below="@id/gym_image"
+                android:layout_centerVertical="true"
+                android:background="?android:attr/selectableItemBackground"
+                android:contentDescription="@string/content_description_gym_star"
+                android:onClick="@{gym.onClickStar}"
+                android:paddingBottom="12dp"
+                android:paddingLeft="16dp"
+                android:paddingRight="16dp"
+                android:paddingTop="24dp"
+                android:src="@{gym.starred ? @drawable/ic_star_black_24dp : @drawable/ic_star_border_black_24dp}"/>
+<!--
+            <TextView
+                android:id="@+id/gym_subtitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/gym_name"
+                android:paddingBottom="16dp"
+                android:paddingLeft="16dp"
+                android:paddingRight="16dp"
+                android:paddingTop="0dp"
+                android:text="@{gym.subtitle}"
+                android:textSize="14sp"
+                tools:text="218 трасс (27 новых)"/>
+-->
+            <Button
+                android:id="@+id/gym_routes_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_below="@id/gym_name"
+                android:layout_marginBottom="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginRight="8dp"
+                android:layout_marginTop="8dp"
+                android:background="?android:attr/selectableItemBackground"
+                android:onClick="@{gym.onClickRoutes}"
+                android:text="@string/gym_button_routes"/>
+<!--
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/gym_subtitle"
+                android:layout_margin="8dp"
+                android:layout_toLeftOf="@id/gym_routes_button"
+                android:layout_toStartOf="@id/gym_routes_button"
+                android:background="?android:attr/selectableItemBackground"
+                android:onClick="@{gym.onClickRatings}"
+                android:text="@string/gym_button_ratings"/>
+-->
+        </RelativeLayout>
+    </android.support.v7.widget.CardView>
+</layout>

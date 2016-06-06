@@ -16,6 +16,7 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -132,7 +133,7 @@ public class HomeActivity extends MyAppCompatActivity implements
         }
 
         String userId = preferences.getString("user_id", null);
-
+        /*
         if (userId != null) {
             // TODO don't do it in the main thread!
             RoutesProvider.clearClimbedRoutes(this);
@@ -145,6 +146,7 @@ public class HomeActivity extends MyAppCompatActivity implements
                     Toast.LENGTH_LONG)
                     .show();
         }
+        */
     }
 
     public static Account CreateSyncAccount(Context context) {
@@ -224,7 +226,30 @@ public class HomeActivity extends MyAppCompatActivity implements
             gymName = item.getTitle().toString();
         }
 
+//        String userId = UserHelper.getCurrentUserId(this);
+//        boolean loggedIn = !TextUtils.isEmpty(userId);
+
         switch (itemId) {
+//            case R.id.nav_news:
+//                Fragment newsFragment = NewsFragment.newInstance(loggedIn);
+//                getSupportFragmentManager().beginTransaction()
+//                        .replace(R.id.gym_fragment_container, newsFragment).commit();
+//                break;
+            case R.id.nav_gyms:
+                Fragment gymsFragment = GymsFragment.newInstance();
+                getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.gym_fragment_container, gymsFragment).commit();
+                break;
+//            case R.id.nav_climbers:
+//                Fragment usersFragment = UsersFragment.newInstance();
+//                getSupportFragmentManager().beginTransaction()
+//                        .replace(R.id.gym_fragment_container, usersFragment).commit();
+//                break;
+            case R.id.nav_rating:
+                Fragment ratingsFragment = RatingsFragment.newInstance();
+                getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.gym_fragment_container, ratingsFragment).commit();
+                break;
             case R.id.nav_all_routes:
                 gymId = GymFragment.ALL_GYMS;
                 gymName = item.getTitle().toString();

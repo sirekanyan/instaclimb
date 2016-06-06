@@ -106,13 +106,13 @@ public class RouteActivity extends CommonActivity {
         switch (loader.getId()) {
             case LOADER_ID:
                 Route route = null;
-                int done = 0;
                 try {
                     if (cursor != null && !cursor.isClosed() && cursor.moveToFirst()) { //TODO remove isClosed check
                         route = new Route.Builder(cursor).build();
-                        RouteViewModel routeView = new RouteViewModel(this, route); // TODO should this be here?
-                        binding.setRoute(routeView); // TODO should this be here???
-                        setupToolbarImage(routeView.getSmallPictureUrl(), R.id.image_toolbar);
+                        mRoute = new RouteViewModel(this, route); // TODO should this be here?
+                        mRoute.setImageUrl(mRoute.getSmallPictureUrl()); // todo what is this shit
+                        binding.setRoute(mRoute); // TODO should this be here???
+//                        setupToolbarImage(mRoute.getSmallPictureUrl(), R.id.image_toolbar);
                     }
                 } finally {
                     if (cursor != null) {
@@ -120,16 +120,13 @@ public class RouteActivity extends CommonActivity {
                     }
                 }
                 FloatingActionButton fab = binding.fab;
-                if (fab != null && done > 0) {
-                    if (done == 1) {
+                if (fab != null && route != null && route.done > 0) {
+                    if (route.done == 1) {
                         fab.setImageResource(R.drawable.ic_done_white_24dp);
-                    } else if (done == 2) {
+                    } else if (route.done == 2) {
                         fab.setImageResource(R.drawable.ic_done_all_white_24dp);
                     }
                     fab.setBackgroundTintList(getResources().getColorStateList(R.color.colorSuccessAccent));
-                }
-                if (route != null) {
-//                    mAdapter.setObject(route); //TODO
                 }
                 break;
             case LOADER_WHO_CLIMBED:
@@ -145,7 +142,7 @@ public class RouteActivity extends CommonActivity {
                         cursor.close();
                     }
                 }
-                mAdapter.setItems(whoClimbed);
+                mAdapter.swap(whoClimbed);
                 mRoute.setClimbedCount(whoClimbed.size());
                 break;
         }

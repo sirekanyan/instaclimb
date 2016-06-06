@@ -33,6 +33,10 @@ public class RoutesContentProvider extends ContentProvider {
 
     //TODO: remove this method
     private String databasePath() {
+        if (getContext() == null) {
+            Log.e("me", "context is null, cannot get database path");
+            return null;
+        }
         return getContext().getFilesDir() + "/" + DATABASE_NAME;
     }
 

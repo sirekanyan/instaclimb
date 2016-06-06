@@ -2,51 +2,71 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <group android:checkableBehavior="single">
+        <!--
+        <item
+            android:id="@+id/nav_news"
+            android:icon="@drawable/ic_menu_slideshow"
+            android:title="@string/nav_news_title"/>
+            -->
+        <item
+            android:id="@+id/nav_gyms"
+            android:icon="@drawable/ic_menu_slideshow"
+            android:title="@string/nav_gyms_title"/>
+        <!--
+        <item
+            android:id="@+id/nav_climbers"
+            android:icon="@drawable/ic_menu_slideshow"
+            android:title="@string/nav_climbers_title"/>
+            -->
         <item
             android:id="@+id/nav_all_routes"
             android:checked="true"
             android:icon="@drawable/ic_menu_slideshow"
-            android:title="@string/all_routes_title" />
+            android:title="@string/all_routes_title"/>
         <item
             android:id="@+id/nav_skalatoria"
             android:icon="@drawable/ic_menu_gallery"
-            android:title="@string/skalatoria_gym_name" />
+            android:title="@string/skalatoria_gym_name"/>
         <item
             android:id="@+id/nav_bigwall"
             android:icon="@drawable/ic_menu_gallery"
-            android:title="@string/bigwall_gym_name" />
+            android:title="@string/bigwall_gym_name"/>
         <item
             android:id="@+id/nav_rockzona"
             android:icon="@drawable/ic_menu_gallery"
-            android:title="@string/rockzona_gym_name" />
+            android:title="@string/rockzona_gym_name"/>
         <item
             android:id="@+id/nav_cherepaha"
             android:icon="@drawable/ic_menu_gallery"
-            android:title="@string/cherepaha_gym_name" />
+            android:title="@string/cherepaha_gym_name"/>
         <item
             android:id="@+id/nav_mgtu"
             android:icon="@drawable/ic_menu_gallery"
-            android:title="@string/mgtu_gym_name" />
+            android:title="@string/mgtu_gym_name"/>
         <item
             android:id="@+id/nav_x8"
             android:icon="@drawable/ic_menu_gallery"
-            android:title="@string/x8_gym_name" />
+            android:title="@string/x8_gym_name"/>
         <item
             android:id="@+id/nav_tramontana"
             android:icon="@drawable/ic_menu_gallery"
-            android:title="@string/tramontana_gym_name" />
+            android:title="@string/tramontana_gym_name"/>
         <item
             android:id="@+id/nav_atmosfera"
             android:icon="@drawable/ic_menu_gallery"
-            android:title="@string/atmosfera_gym_name" />
+            android:title="@string/atmosfera_gym_name"/>
     </group>
 
     <item android:title="@string/nav_group_settings">
         <menu>
             <item
+                android:id="@+id/nav_rating"
+                android:icon="@drawable/ic_menu_slideshow"
+                android:title="@string/nav_rating_title"/>
+            <item
                 android:id="@+id/nav_settings"
                 android:icon="@drawable/ic_menu_manage"
-                android:title="@string/menu_settings" />
+                android:title="@string/menu_settings"/>
         </menu>
     </item>
 
@@ -55,11 +75,11 @@
             <item
                 android:id="@+id/nav_send"
                 android:icon="@drawable/ic_menu_send"
-                android:title="@string/nav_send_feedback" />
+                android:title="@string/nav_send_feedback"/>
             <item
                 android:id="@+id/nav_share"
                 android:icon="@drawable/ic_menu_share"
-                android:title="@string/nav_share_application_with_friends" />
+                android:title="@string/nav_share_application_with_friends"/>
         </menu>
     </item>
 

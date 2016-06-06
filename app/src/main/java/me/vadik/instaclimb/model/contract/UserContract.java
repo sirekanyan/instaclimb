@@ -15,4 +15,9 @@ public interface UserContract extends CommonContract {
     String FLASH_LEAD = "flash_lead";
     String REDPOINT_LEAD = "redpoint_lead";
     String ABOUT = "about";
+
+    interface Sex {
+        int MALE = 1;
+        int FEMALE = 2;
+    }
 }

@@ -10,7 +10,7 @@ import android.view.View;
  * Date: 5/6/16
  */
 public class BindingHolder<T extends ViewDataBinding> extends RecyclerView.ViewHolder {
-    final T binding;
+    private final T binding;
 
     public BindingHolder(View view) {
         super(view);
@@ -21,4 +21,3 @@ public class BindingHolder<T extends ViewDataBinding> extends RecyclerView.ViewH
         return binding;
     }
 }
-

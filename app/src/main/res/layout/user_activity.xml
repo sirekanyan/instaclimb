@@ -16,6 +16,7 @@
         android:fitsSystemWindows="true">
 
         <include
+            android:id="@id/app_bar"
             layout="@layout/app_bar_layout"
             bind:object="@{user}"/>
 

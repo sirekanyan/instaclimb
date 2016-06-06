@@ -29,7 +29,8 @@
                 android:id="@+id/image_toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:scaleType="centerCrop"/>
+                android:scaleType="centerCrop"
+                app:imageUrl="@{object.imageUrl}"/>
 
             <android.support.v7.widget.Toolbar
                 android:id="@+id/toolbar"

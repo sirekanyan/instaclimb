@@ -21,8 +21,12 @@ public abstract class RecyclerViewAdapter<T> extends RecyclerView.Adapter<Bindin
         this.context = context;
     }
 
-    public void setItems(List<T> items) {
+    public void clear() {
         this.items.clear();
+    }
+
+    public void swap(List<T> items) {
+        this.clear();
         this.items.addAll(items);
         this.notifyDataSetChanged();
     }
@@ -30,6 +34,7 @@ public abstract class RecyclerViewAdapter<T> extends RecyclerView.Adapter<Bindin
     @Override
     public void onBindViewHolder(BindingHolder bindingHolder, int position) {
         onBindRowViewHolder(bindingHolder, items.get(position));
+        bindingHolder.getBinding().executePendingBindings();
     }
 
     protected abstract void onBindRowViewHolder(BindingHolder bindingHolder, T object);

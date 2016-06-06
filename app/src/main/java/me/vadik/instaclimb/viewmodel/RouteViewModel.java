@@ -13,12 +13,13 @@ import android.view.View;
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.NetworkImageView;
 
+import me.vadik.instaclimb.BR;
 import me.vadik.instaclimb.R;
 import me.vadik.instaclimb.helper.RouteHelper;
+import me.vadik.instaclimb.helper.VolleySingleton;
 import me.vadik.instaclimb.model.Marker;
 import me.vadik.instaclimb.model.Route;
 import me.vadik.instaclimb.model.User;
-import me.vadik.instaclimb.helper.VolleySingleton;
 import me.vadik.instaclimb.viewmodel.common.CommonViewModel;
 
 /**
@@ -112,18 +113,17 @@ public class RouteViewModel extends CommonViewModel<Route> {
     }
 
     public int getClimbedCount() {
-//        int resId = R.plurals.number_of_users_who_climbed;
-//        int count = climbedCount;
-//        return context.getResources().getQuantityString(resId, count, count);
         return climbedCount;
     }
 
     public void onClickFAB(View view) {
         final FloatingActionButton fab = (FloatingActionButton) view;
 
-        boolean checked //TODO refactoring
-                = fab.getBackgroundTintList().getDefaultColor() != resources.getColor(R.color.colorAccent)
-                && fab.getBackgroundTintList().getDefaultColor() != resources.getColor(R.color.dColorAccent);
+        boolean checked = false; //TODO refactoring
+        if (fab != null) {
+            checked = fab.getBackgroundTintList().getDefaultColor() != resources.getColor(R.color.colorAccent)
+                    && fab.getBackgroundTintList().getDefaultColor() != resources.getColor(R.color.dColorAccent);
+        }
 
         if (checked) {
             fab.setImageResource(R.drawable.ic_add_white_24dp);
@@ -145,8 +145,6 @@ public class RouteViewModel extends CommonViewModel<Route> {
 
     public void setClimbedCount(int climbedCount) {
         this.climbedCount = climbedCount;
-//        notifyPropertyChanged(BR.climbedCount);
-//        notifyPropertyChanged(me.vadik.instaclimb.viewmodel.BR.climbedCount);
-        notifyChange();
+        notifyPropertyChanged(BR.climbedCount);
     }
 }

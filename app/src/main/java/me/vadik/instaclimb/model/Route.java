@@ -5,6 +5,7 @@ import android.database.Cursor;
 import me.vadik.instaclimb.model.common.CommonObject;
 import me.vadik.instaclimb.model.common.ObjectBuilder;
 import me.vadik.instaclimb.model.contract.RouteViewContract;
+import me.vadik.instaclimb.model.contract.UsersRoutesContract;
 
 import static me.vadik.instaclimb.model.contract.RouteContract.*;
 
@@ -27,6 +28,7 @@ public class Route extends CommonObject {
     public final int pictureId;
     public final int sectorId;
     public final int done;
+    public final String climbedWhen;
 
     public Route(Builder builder) {
         super(builder);
@@ -43,6 +45,7 @@ public class Route extends CommonObject {
         pictureId = builder.getInt(PICTURE_ID);
         sectorId = builder.getInt(SECTOR_ID);
         done = builder.getInt(DONE);
+        climbedWhen = builder.getString(UsersRoutesContract.DATE);
     }
 
     public static class Builder extends ObjectBuilder<Route> {

@@ -19,4 +19,9 @@ public interface RouteContract extends CommonContract {
     String PICTURE_ID = "picture_id";
     String SECTOR_ID = "sector_id";
     String DONE = "done";
+
+    interface Discipline {
+        int LEAD = 1;
+        int BOULDER = 2;
+    }
 }

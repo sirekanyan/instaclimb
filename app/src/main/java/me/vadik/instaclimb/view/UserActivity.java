@@ -13,7 +13,6 @@ import android.support.v4.view.MenuItemCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.ShareActionProvider;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -24,19 +23,18 @@ import java.util.List;
 
 import me.vadik.instaclimb.R;
 import me.vadik.instaclimb.databinding.UserActivityBinding;
-import me.vadik.instaclimb.model.User;
-import me.vadik.instaclimb.model.contract.RouteContract;
-import me.vadik.instaclimb.model.contract.RoutesUsersViewContract;
 import me.vadik.instaclimb.model.Route;
+import me.vadik.instaclimb.model.User;
+import me.vadik.instaclimb.model.contract.RoutesUsersViewContract;
 import me.vadik.instaclimb.provider.RoutesContentProvider;
-import me.vadik.instaclimb.provider.UserProvider;
 import me.vadik.instaclimb.view.adapter.UserRoutesAdapter;
 import me.vadik.instaclimb.viewmodel.UserViewModel;
 
 public class UserActivity extends CommonActivity {
 
-    public static String ARG_USER_ID = "me.vadik.instaclimb.user_id";
-    public static String ARG_USER_NAME = "me.vadik.instaclimb.user_name";
+    private static final String TAG = UserActivity.class.getName();
+    public static final String ARG_USER_ID = "me.vadik.instaclimb.user_id";
+    public static final String ARG_USER_NAME = "me.vadik.instaclimb.user_name";
 
     private static final int USER_LOADER = 0;
     private static final int ROUTES_LOADER = 1;
@@ -49,16 +47,17 @@ public class UserActivity extends CommonActivity {
         super.onCreate(savedInstanceState);
 
         binding = DataBindingUtil.setContentView(this, R.layout.user_activity);
-        setSupportActionBar((Toolbar) findViewById(R.id.toolbar)); //todo avoid findbyid
+        setSupportActionBar(binding.appBar.toolbar);
 
         int userId = getItemId(ARG_USER_ID);
         String userName = getItemName(ARG_USER_NAME);
         if (userName == null && userId != 0) {
-            userName = UserProvider.getUserName(this, String.valueOf(userId));
+//            userName = UserProvider.getUserName(this, String.valueOf(userId));
         }
 
         User userModel = new User.Builder(userId, userName).build();
         mUser = new UserViewModel(this, userModel);
+        mUser.setImageUrl("https://vadik.me/userpic/" + String.valueOf(userId) + ".jpg");
         binding.setUser(mUser);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
@@ -76,9 +75,9 @@ public class UserActivity extends CommonActivity {
             getSupportActionBar().setTitle(userName);
         }
 
-        if (userId != 0 && UserProvider.hasPicture(this, userId)) {
-            setupToolbarImage("https://vadik.me/userpic/" + String.valueOf(userId) + ".jpg", R.id.image_toolbar);
-        }
+//        if (userId != 0 && UserProvider.hasPicture(this, userId)) {
+//            setupToolbarImage("https://vadik.me/userpic/" + String.valueOf(userId) + ".jpg", R.id.image_toolbar);
+//        }
 
         Bundle b = new Bundle();
         b.putInt(ARG_USER_ID, userId);
@@ -91,13 +90,16 @@ public class UserActivity extends CommonActivity {
 
     private UserRoutesAdapter setupRecyclerView() {
         RecyclerView mRecyclerView = (RecyclerView) findViewById(R.id.user_climbed_routes);
-        mRecyclerView.setNestedScrollingEnabled(false);
-        mRecyclerView.setHasFixedSize(true);
-        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(this);
-        mRecyclerView.setLayoutManager(mLayoutManager);
-        UserRoutesAdapter mAdapter = new UserRoutesAdapter(this);
-        mRecyclerView.setAdapter(mAdapter);
-        return mAdapter;
+        UserRoutesAdapter adapter = null;
+        if (mRecyclerView != null) {
+            mRecyclerView.setNestedScrollingEnabled(false);
+            mRecyclerView.setHasFixedSize(true);
+            RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(this);
+            mRecyclerView.setLayoutManager(mLayoutManager);
+            adapter = new UserRoutesAdapter(this);
+            mRecyclerView.setAdapter(adapter);
+        }
+        return adapter;
     }
 
     static final String[] ROUTES_USERS_PROJECTION = new String[]{
@@ -141,8 +143,7 @@ public class UserActivity extends CommonActivity {
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
         if (cursor != null && cursor.isClosed()) {
-            //TODO: what should i really do if cursor is closed?
-            Log.e(UserActivity.class.getName(), "Oops, cursor is already closed");
+            Log.e(TAG, "Cursor is already closed");
             return;
         }
         switch (loader.getId()) {
@@ -150,6 +151,7 @@ public class UserActivity extends CommonActivity {
                 try {
                     if (cursor != null && cursor.moveToFirst()) {
                         mUser = new UserViewModel(this, new User.Builder(cursor).build());
+                        mUser.setImageUrl("https://vadik.me/userpic/" + String.valueOf(mUser.getId()) + ".jpg"); // todo remove
                         binding.setUser(mUser); // todo maybe should i avoid this style?
                     }
                 } finally {
@@ -165,7 +167,7 @@ public class UserActivity extends CommonActivity {
                         do {
                             climbedRoutes.add(new Route.Builder(cursor).build());
                         } while (cursor.moveToNext());
-                        mAdapter.setItems(climbedRoutes);
+                        mAdapter.swap(climbedRoutes);
                     }
                 } finally {
                     if (cursor != null) {
@@ -178,7 +180,7 @@ public class UserActivity extends CommonActivity {
 
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
-        // todo ?
+        mAdapter.clear();
     }
 
     @Override
