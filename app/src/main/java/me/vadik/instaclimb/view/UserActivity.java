@@ -10,6 +10,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v4.view.MenuItemCompat;
+import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.ShareActionProvider;
@@ -38,6 +39,8 @@ public class UserActivity extends CommonActivity {
 
     private static final int USER_LOADER = 0;
     private static final int ROUTES_LOADER = 1;
+    private static final String ARG_LIMIT = "me.vadik.instaclimb.limit";
+    private static final int ITEMS_PER_PAGE = 5;
     private UserRoutesAdapter mAdapter;
     private UserViewModel mUser;
     private UserActivityBinding binding;
@@ -81,23 +84,42 @@ public class UserActivity extends CommonActivity {
 
         Bundle b = new Bundle();
         b.putInt(ARG_USER_ID, userId);
+        b.putInt(ARG_LIMIT, ITEMS_PER_PAGE);
 
         mAdapter = setupRecyclerView();
 
-        getSupportLoaderManager().initLoader(USER_LOADER, b, this);
-        getSupportLoaderManager().initLoader(ROUTES_LOADER, b, this);
+        getSupportLoaderManager().restartLoader(USER_LOADER, b, this);
+        getSupportLoaderManager().restartLoader(ROUTES_LOADER, b, this);
     }
 
     private UserRoutesAdapter setupRecyclerView() {
+        final UserActivity context = this;
         RecyclerView mRecyclerView = (RecyclerView) findViewById(R.id.user_climbed_routes);
+        NestedScrollView nestedScrollView = (NestedScrollView) findViewById(R.id.nested_scroll_view);
         UserRoutesAdapter adapter = null;
-        if (mRecyclerView != null) {
+        if (mRecyclerView != null && nestedScrollView != null) {
             mRecyclerView.setNestedScrollingEnabled(false);
             mRecyclerView.setHasFixedSize(true);
-            RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(this);
+            LinearLayoutManager mLayoutManager = new LinearLayoutManager(this);
             mRecyclerView.setLayoutManager(mLayoutManager);
             adapter = new UserRoutesAdapter(this);
             mRecyclerView.setAdapter(adapter);
+//            mRecyclerView.addOnScrollListener(new EndlessRecyclerOnScrollListener(mLayoutManager) {
+//                @Override
+//                public void onLoadMore(int current_page) {
+//                    Bundle bundle = new Bundle();
+//                    bundle.putInt(ARG_LIMIT, ITEMS_PER_PAGE * current_page);
+//                    getSupportLoaderManager().restartLoader(ROUTES_LOADER, bundle, context);
+//                }
+//            });
+//            nestedScrollView.setOnScrollChangeListener(new EndlessOnScrollListener(mLayoutManager, mRecyclerView) {
+//                @Override
+//                public void onLoadMore(int current_page) {
+//                    Bundle bundle = new Bundle();
+//                    bundle.putInt(ARG_LIMIT, ITEMS_PER_PAGE * current_page);
+//                    getSupportLoaderManager().restartLoader(ROUTES_LOADER, bundle, context);
+//                }
+//            });
         }
         return adapter;
     }
@@ -133,6 +155,8 @@ public class UserActivity extends CommonActivity {
                 select = "user_id = ?";
                 projection = ROUTES_USERS_PROJECTION;
                 order = "date desc";
+                int limit = bundle.getInt(ARG_LIMIT);
+                order += " limit " + String.valueOf(limit);
                 break;
             default:
                 return null;
@@ -206,10 +230,10 @@ public class UserActivity extends CommonActivity {
     protected void onResume() {
         super.onResume();
         setShareIntent(mUser.getId());
-        Bundle b = new Bundle();
-        b.putInt(ARG_USER_ID, mUser.getId());
-        getSupportLoaderManager().restartLoader(USER_LOADER, b, this);
-        getSupportLoaderManager().restartLoader(ROUTES_LOADER, b, this);
+//        Bundle b = new Bundle();
+//        b.putInt(ARG_USER_ID, mUser.getId());
+//        getSupportLoaderManager().restartLoader(USER_LOADER, b, this);
+//        getSupportLoaderManager().restartLoader(ROUTES_LOADER, b, this);
     }
 
     @Override
