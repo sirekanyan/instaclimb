@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.view.View;
 
+import me.vadik.instaclimb.helper.RouteHelper;
 import me.vadik.instaclimb.model.Marker;
 import me.vadik.instaclimb.model.Route;
 import me.vadik.instaclimb.view.RouteActivity;
@@ -46,5 +47,10 @@ public class RouteItemViewModel extends CommonViewModel<Route> {
 
     public String getGrade() {
         return route.grade;
+    }
+
+    @Override
+    public String getName() {
+        return RouteHelper.getName(context, super.getName());
     }
 }

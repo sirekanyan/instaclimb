@@ -5,19 +5,15 @@ import android.database.Cursor;
 import android.databinding.DataBindingUtil;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v4.view.MenuItemCompat;
-import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.ShareActionProvider;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -50,7 +46,7 @@ public class UserActivity extends CommonActivity {
         super.onCreate(savedInstanceState);
 
         binding = DataBindingUtil.setContentView(this, R.layout.user_activity);
-        setSupportActionBar(binding.appBar.toolbar);
+        setSupportActionBar(binding.incAppBar.toolbar);
 
         int userId = getItemId(ARG_USER_ID);
         String userName = getItemName(ARG_USER_NAME);
@@ -62,17 +58,6 @@ public class UserActivity extends CommonActivity {
         mUser = new UserViewModel(this, userModel);
         mUser.setImageUrl("https://vadik.me/userpic/" + String.valueOf(userId) + ".jpg");
         binding.setUser(mUser);
-
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        if (fab != null) {
-            fab.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    Snackbar.make(view, "Нот импелементед йет. Сорян.", Snackbar.LENGTH_LONG)
-                            .setAction("Action", null).show();
-                }
-            });
-        }
 
         if (userName != null && getSupportActionBar() != null) {
             getSupportActionBar().setTitle(userName);
@@ -93,34 +78,13 @@ public class UserActivity extends CommonActivity {
     }
 
     private UserRoutesAdapter setupRecyclerView() {
-        final UserActivity context = this;
-        RecyclerView mRecyclerView = (RecyclerView) findViewById(R.id.user_climbed_routes);
-        NestedScrollView nestedScrollView = (NestedScrollView) findViewById(R.id.nested_scroll_view);
-        UserRoutesAdapter adapter = null;
-        if (mRecyclerView != null && nestedScrollView != null) {
-            mRecyclerView.setNestedScrollingEnabled(false);
-            mRecyclerView.setHasFixedSize(true);
-            LinearLayoutManager mLayoutManager = new LinearLayoutManager(this);
-            mRecyclerView.setLayoutManager(mLayoutManager);
-            adapter = new UserRoutesAdapter(this);
-            mRecyclerView.setAdapter(adapter);
-//            mRecyclerView.addOnScrollListener(new EndlessRecyclerOnScrollListener(mLayoutManager) {
-//                @Override
-//                public void onLoadMore(int current_page) {
-//                    Bundle bundle = new Bundle();
-//                    bundle.putInt(ARG_LIMIT, ITEMS_PER_PAGE * current_page);
-//                    getSupportLoaderManager().restartLoader(ROUTES_LOADER, bundle, context);
-//                }
-//            });
-//            nestedScrollView.setOnScrollChangeListener(new EndlessOnScrollListener(mLayoutManager, mRecyclerView) {
-//                @Override
-//                public void onLoadMore(int current_page) {
-//                    Bundle bundle = new Bundle();
-//                    bundle.putInt(ARG_LIMIT, ITEMS_PER_PAGE * current_page);
-//                    getSupportLoaderManager().restartLoader(ROUTES_LOADER, bundle, context);
-//                }
-//            });
-        }
+        RecyclerView mRecyclerView = binding.incUserContent.userClimbedRoutes;
+        mRecyclerView.setNestedScrollingEnabled(false);
+        mRecyclerView.setHasFixedSize(true);
+        LinearLayoutManager mLayoutManager = new LinearLayoutManager(this);
+        mRecyclerView.setLayoutManager(mLayoutManager);
+        UserRoutesAdapter adapter = new UserRoutesAdapter(this);
+        mRecyclerView.setAdapter(adapter);
         return adapter;
     }
 
@@ -156,7 +120,7 @@ public class UserActivity extends CommonActivity {
                 projection = ROUTES_USERS_PROJECTION;
                 order = "date desc";
                 int limit = bundle.getInt(ARG_LIMIT);
-                order += " limit " + String.valueOf(limit);
+//                order += " limit " + String.valueOf(limit);
                 break;
             default:
                 return null;

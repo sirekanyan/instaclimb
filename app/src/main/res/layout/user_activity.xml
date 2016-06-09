@@ -16,7 +16,7 @@
         android:fitsSystemWindows="true">
 
         <include
-            android:id="@id/app_bar"
+            android:id="@+id/inc_app_bar"
             layout="@layout/app_bar_layout"
             bind:object="@{user}"/>
 
@@ -27,11 +27,13 @@
             app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
             <include
+                android:id="@+id/inc_user_content"
                 layout="@layout/user_content"
                 bind:user="@{user}"/>
 
         </android.support.v4.widget.NestedScrollView>
 
+        <!--
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/fab"
             android:layout_width="wrap_content"
@@ -40,6 +42,7 @@
             android:src="@drawable/ic_add_white_24dp"
             app:layout_anchor="@id/app_bar"
             app:layout_anchorGravity="bottom|end"/>
+            -->
 
     </android.support.design.widget.CoordinatorLayout>
 </layout>
