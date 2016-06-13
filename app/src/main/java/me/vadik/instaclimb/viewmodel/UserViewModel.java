@@ -82,7 +82,6 @@ public class UserViewModel extends CommonViewModel<User> {
         Context context = view.getContext();
         Intent intent = new Intent(context, UserActivity.class);
         intent.putExtra(UserActivity.ARG_USER_ID, user.id);
-        intent.putExtra(UserActivity.ARG_USER_NAME, user.name);
         context.startActivity(intent);
     }
 }

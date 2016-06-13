@@ -23,21 +23,20 @@ import me.vadik.instaclimb.databinding.UserActivityBinding;
 import me.vadik.instaclimb.model.Route;
 import me.vadik.instaclimb.model.User;
 import me.vadik.instaclimb.model.contract.RoutesUsersViewContract;
+import me.vadik.instaclimb.provider.ProviderHelper;
 import me.vadik.instaclimb.provider.RoutesContentProvider;
-import me.vadik.instaclimb.view.adapter.UserRoutesAdapter;
+import me.vadik.instaclimb.view.adapter.UserRecyclerViewAdapter;
 import me.vadik.instaclimb.viewmodel.UserViewModel;
 
 public class UserActivity extends CommonActivity {
 
     private static final String TAG = UserActivity.class.getName();
     public static final String ARG_USER_ID = "me.vadik.instaclimb.user_id";
-    public static final String ARG_USER_NAME = "me.vadik.instaclimb.user_name";
 
-    private static final int USER_LOADER = 0;
-    private static final int ROUTES_LOADER = 1;
+    private static final int ROUTES_LOADER = 0;
     private static final String ARG_LIMIT = "me.vadik.instaclimb.limit";
     private static final int ITEMS_PER_PAGE = 5;
-    private UserRoutesAdapter mAdapter;
+    private UserRecyclerViewAdapter mAdapter;
     private UserViewModel mUser;
     private UserActivityBinding binding;
 
@@ -49,43 +48,27 @@ public class UserActivity extends CommonActivity {
         setSupportActionBar(binding.incAppBar.toolbar);
 
         int userId = getItemId(ARG_USER_ID);
-        String userName = getItemName(ARG_USER_NAME);
-        if (userName == null && userId != 0) {
-//            userName = UserProvider.getUserName(this, String.valueOf(userId));
-        }
+        User user = ProviderHelper.getUser(this, userId);
 
-        User userModel = new User.Builder(userId, userName).build();
-        mUser = new UserViewModel(this, userModel);
-        mUser.setImageUrl("https://vadik.me/userpic/" + String.valueOf(userId) + ".jpg");
+        mUser = new UserViewModel(this, user);
+        mUser.setImageUrl("https://vadik.me/userpic/" + String.valueOf(userId) + ".jpg"); // todo remove this
         binding.setUser(mUser);
-
-        if (userName != null && getSupportActionBar() != null) {
-            getSupportActionBar().setTitle(userName);
-        }
-
-//        if (userId != 0 && UserProvider.hasPicture(this, userId)) {
-//            setupToolbarImage("https://vadik.me/userpic/" + String.valueOf(userId) + ".jpg", R.id.image_toolbar);
-//        }
 
         Bundle b = new Bundle();
         b.putInt(ARG_USER_ID, userId);
         b.putInt(ARG_LIMIT, ITEMS_PER_PAGE);
 
-        mAdapter = setupRecyclerView();
+        mAdapter = new UserRecyclerViewAdapter(this, user);
+        setupRecyclerView(mAdapter);
 
-        getSupportLoaderManager().restartLoader(USER_LOADER, b, this);
         getSupportLoaderManager().restartLoader(ROUTES_LOADER, b, this);
     }
 
-    private UserRoutesAdapter setupRecyclerView() {
-        RecyclerView mRecyclerView = binding.incUserContent.userClimbedRoutes;
-        mRecyclerView.setNestedScrollingEnabled(false);
+    private void setupRecyclerView(RecyclerView.Adapter adapter) {
+        RecyclerView mRecyclerView = binding.userClimbedRoutes;
         mRecyclerView.setHasFixedSize(true);
-        LinearLayoutManager mLayoutManager = new LinearLayoutManager(this);
-        mRecyclerView.setLayoutManager(mLayoutManager);
-        UserRoutesAdapter adapter = new UserRoutesAdapter(this);
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         mRecyclerView.setAdapter(adapter);
-        return adapter;
     }
 
     static final String[] ROUTES_USERS_PROJECTION = new String[]{
@@ -109,17 +92,12 @@ public class UserActivity extends CommonActivity {
         String[] args = new String[]{String.valueOf(bundle.getInt(ARG_USER_ID))};
         String order = null;
         switch (id) {
-            case USER_LOADER:
-                uri = Uri.withAppendedPath(RoutesContentProvider.CONTENT_URI, "users");
-                select = "_id = ?";
-                projection = null;
-                break;
             case ROUTES_LOADER:
                 uri = Uri.withAppendedPath(RoutesContentProvider.CONTENT_URI, "routes_users_view");
                 select = "user_id = ?";
                 projection = ROUTES_USERS_PROJECTION;
                 order = "date desc";
-                int limit = bundle.getInt(ARG_LIMIT);
+//                int limit = bundle.getInt(ARG_LIMIT);
 //                order += " limit " + String.valueOf(limit);
                 break;
             default:
@@ -135,19 +113,6 @@ public class UserActivity extends CommonActivity {
             return;
         }
         switch (loader.getId()) {
-            case USER_LOADER:
-                try {
-                    if (cursor != null && cursor.moveToFirst()) {
-                        mUser = new UserViewModel(this, new User.Builder(cursor).build());
-                        mUser.setImageUrl("https://vadik.me/userpic/" + String.valueOf(mUser.getId()) + ".jpg"); // todo remove
-                        binding.setUser(mUser); // todo maybe should i avoid this style?
-                    }
-                } finally {
-                    if (cursor != null) {
-                        cursor.close();
-                    }
-                }
-                break;
             case ROUTES_LOADER:
                 try {
                     if (cursor != null && cursor.moveToFirst()) {
@@ -168,7 +133,7 @@ public class UserActivity extends CommonActivity {
 
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
-        mAdapter.clear();
+        mAdapter.reset();
     }
 
     @Override
@@ -194,10 +159,6 @@ public class UserActivity extends CommonActivity {
     protected void onResume() {
         super.onResume();
         setShareIntent(mUser.getId());
-//        Bundle b = new Bundle();
-//        b.putInt(ARG_USER_ID, mUser.getId());
-//        getSupportLoaderManager().restartLoader(USER_LOADER, b, this);
-//        getSupportLoaderManager().restartLoader(ROUTES_LOADER, b, this);
     }
 
     @Override

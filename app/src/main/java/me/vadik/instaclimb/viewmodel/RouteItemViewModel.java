@@ -29,7 +29,6 @@ public class RouteItemViewModel extends CommonViewModel<Route> {
         Context context = view.getContext();
         Intent intent = new Intent(context, RouteActivity.class);
         intent.putExtra(RouteActivity.ARG_ROUTE_ID, route.id);
-        intent.putExtra(RouteActivity.ARG_ROUTE_NAME, route.name);
         context.startActivity(intent);
     }
 

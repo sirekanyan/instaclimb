@@ -3,11 +3,13 @@ package me.vadik.instaclimb.provider;
 import android.content.ContentProvider;
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.UriMatcher;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.text.TextUtils;
 import android.util.Log;
 
 import java.io.FileOutputStream;
@@ -22,6 +24,15 @@ public class RoutesContentProvider extends ContentProvider {
     public static final String AUTHORITY = "me.vadik.instaclimb.routes.provider";
     public static final Uri CONTENT_URI = Uri.parse("content://" + AUTHORITY);
     private static final String DATABASE_NAME = "instaclimb.db";
+
+    private static final UriMatcher sUriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
+    private static final int TABLE_MATCH = 0;
+    private static final int ROW_MATCH = 1;
+
+    static {
+        sUriMatcher.addURI(AUTHORITY, "*", TABLE_MATCH);
+        sUriMatcher.addURI(AUTHORITY, "*/#", ROW_MATCH);
+    }
 
     @Override
     public boolean onCreate() {
@@ -76,9 +87,20 @@ public class RoutesContentProvider extends ContentProvider {
 
     @Nullable
     @Override
-    public Cursor query(@NonNull Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
+    public Cursor query(@NonNull Uri uri, String[] projection, String select, String[] args, String order) {
         // SQLiteDatabase db = dbHelper.getReadableDatabase(); //TODO: uncomment
-        return sqLiteDatabase.query(getTableName(uri), projection, selection, selectionArgs, null, null, sortOrder);
+        switch (sUriMatcher.match(uri)) {
+            case TABLE_MATCH:
+                break;
+            case ROW_MATCH:
+                select = "_ID = ?";
+                args = new String[]{uri.getLastPathSegment()};
+                order = null;
+                break;
+            default:
+                return null;
+        }
+        return sqLiteDatabase.query(getTableName(uri), projection, select, args, null, null, order);
     }
 
     @Nullable
@@ -105,6 +127,6 @@ public class RoutesContentProvider extends ContentProvider {
     }
 
     public static String getTableName(Uri uri) {
-        return uri.getPath().replace("/", "");
+        return uri.getPathSegments().get(0);
     }
 }

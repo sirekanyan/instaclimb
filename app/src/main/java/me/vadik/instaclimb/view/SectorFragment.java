@@ -217,12 +217,8 @@ public class SectorFragment extends ListFragment implements
     @Override
     public void onListItemClick(ListView l, View v, int position, long id) {
         Context context = v.getContext();
-        TextView textView = (TextView) v.findViewById(R.id.firstLine);
         Intent intent = new Intent(context, RouteActivity.class);
         intent.putExtra(RouteActivity.ARG_ROUTE_ID, (int) id);
-        if (textView != null) {
-            intent.putExtra(RouteActivity.ARG_ROUTE_NAME, textView.getText());
-        }
         context.startActivity(intent);
     }
 
