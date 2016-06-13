@@ -124,6 +124,6 @@ public class RatingFragment extends Fragment implements LoaderManager.LoaderCall
 
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
-        mAdapter.clear();
+        mAdapter.reset();
     }
 }

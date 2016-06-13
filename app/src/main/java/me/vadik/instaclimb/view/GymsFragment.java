@@ -24,7 +24,6 @@ import me.vadik.instaclimb.model.Gym;
 import me.vadik.instaclimb.provider.RoutesContentProvider;
 import me.vadik.instaclimb.view.adapter.GymsAdapter;
 
-
 public class GymsFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
 
     private GymsFragmentBinding mBinding;
@@ -85,6 +84,6 @@ public class GymsFragment extends Fragment implements LoaderManager.LoaderCallba
 
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
-        mAdapter.clear();
+        mAdapter.reset();
     }
 }

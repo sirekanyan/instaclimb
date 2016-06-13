@@ -15,20 +15,17 @@
         android:layout_height="match_parent"
         android:fitsSystemWindows="true">
 
-            <include
-                layout="@layout/app_bar_layout"
-                bind:object="@{route}"/>
+        <include
+            android:id="@+id/inc_app_bar"
+            layout="@layout/app_bar_layout"
+            bind:object="@{route}"/>
 
-        <android.support.v4.widget.NestedScrollView
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/who_climbed_routes"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior">
-
-            <include
-                layout="@layout/route_content"
-                bind:route="@{route}"/>
-
-        </android.support.v4.widget.NestedScrollView>
+            android:scrollbars="vertical"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
 
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/fab"
@@ -37,9 +34,8 @@
             android:layout_margin="@dimen/fab_margin"
             android:onClick="@{route.onClickFAB}"
             android:src="@drawable/ic_add_white_24dp"
-            app:layout_anchor="@id/app_bar"
+            app:layout_anchor="@id/inc_app_bar"
             app:layout_anchorGravity="bottom|end"/>
 
     </android.support.design.widget.CoordinatorLayout>
-
 </layout>
