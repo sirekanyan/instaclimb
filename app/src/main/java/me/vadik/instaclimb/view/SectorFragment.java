@@ -44,6 +44,7 @@ public class SectorFragment extends ListFragment implements
     // This is the Adapter being used to display the list's data.
     SimpleCursorAdapter mAdapter;
     private String mCurFilter;
+    private int mGradeFilterId;
 
     private static final String ARG_SECTOR_ID = "sectorId";
     private Integer mSectorId;
@@ -199,6 +200,25 @@ public class SectorFragment extends ListFragment implements
         item.setActionView(sv);
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.grade_all:
+            case R.id.grade_very_easy:
+            case R.id.grade_easy:
+            case R.id.grade_medium:
+            case R.id.grade_advanced:
+            case R.id.grade_hard:
+            case R.id.grade_very_hard:
+                item.setChecked(true);
+                mGradeFilterId = item.getItemId();
+                getLoaderManager().restartLoader(0, null, this);
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
     public boolean onQueryTextChange(String newText) {
         // Called when the action bar search text has changed.  Update
         // the search filter, and restart the loader to do a new query
@@ -250,6 +270,20 @@ public class SectorFragment extends ListFragment implements
             selectArgs.add(like);
             selectArgs.add(like);
             selectArgs.add(like);
+        }
+        if (mGradeFilterId != 0 && mGradeFilterId != R.id.grade_all) {
+            List<String> gradeArgs = new ArrayList<>();
+            for (String gradeArg : RouteFilter.getGradeFilterArgs(getActivity(), mGradeFilterId)) {
+                if (gradeArg != null) {
+                    gradeArgs.add(gradeArg + "%");
+                }
+            }
+            List<String> selectList = new ArrayList<>();
+            for (String _ : gradeArgs) {
+                selectList.add("grade like ?");
+            }
+            select += "(" + TextUtils.join(" or ", selectList) + ") and ";
+            selectArgs.addAll(gradeArgs);
         }
         if (mSectorId != null && mSectorId != -1) {
             select += "sector_id = ? and ";

@@ -1,26 +1,52 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
       xmlns:app="http://schemas.android.com/apk/res-auto">
-    <item
-        android:id="@+id/settings"
-        android:title="@string/menu_settings"
-        app:showAsAction="never"/>
 
-    <item
-        android:id="@+id/grade_filter"
-        android:title="Grade filter">
-        <menu>
-            <item android:title="5a—6a (very easy)"/>
-            <item android:title="6a—6b (easy)"/>
-            <item android:title="6b—6c (medium)"/>
-            <item android:title="6c—7a (advanced)"/>
-            <item android:title="7a—7b (hard)"/>
-            <item android:title="7b—8c (very hard)"/>
-        </menu>
-    </item>
+    <!--<item-->
+    <!--android:id="@+id/grade_filter"-->
+    <!--android:title="Grade filter"-->
+    <!--app:showAsAction="never">-->
+    <!--<menu>-->
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/grade_all"
+            android:checked="true"
+            android:title="All grades"/>
+        <item
+            android:id="@+id/grade_very_easy"
+            android:title="5a—6a (very easy)"
+            android:titleCondensed="5a—6a"/>
+        <item
+            android:id="@+id/grade_easy"
+            android:title="6a—6b (easy)"
+            android:titleCondensed="6a—6b"/>
+        <item
+            android:id="@+id/grade_medium"
+            android:title="6b—6c (medium)"
+            android:titleCondensed="6b—6c"/>
+        <item
+            android:id="@+id/grade_advanced"
+            android:title="6c—7a (advanced)"
+            android:titleCondensed="6c—7a"/>
+        <item
+            android:id="@+id/grade_hard"
+            android:title="7a—7b (hard)"
+            android:titleCondensed="7a—7b"/>
+        <item
+            android:id="@+id/grade_very_hard"
+            android:title="7b—8c (very hard)"
+            android:titleCondensed="7b—8c"/>
+    </group>
+    <!--</menu>-->
+    <!--</item>-->
 
     <item
         android:id="@+id/night_mode"
         android:checkable="true"
         android:enabled="true"
         android:title="Night mode"/>
+
+    <item
+        android:id="@+id/settings"
+        android:title="@string/menu_settings"
+        app:showAsAction="never"/>
 </menu>
