@@ -3,9 +3,12 @@ package me.vadik.instaclimb.viewmodel.common;
 import android.content.Context;
 import android.databinding.Bindable;
 import android.databinding.BindingAdapter;
+import android.graphics.drawable.Drawable;
+import android.widget.ImageView;
 
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.NetworkImageView;
+import com.squareup.picasso.Picasso;
 
 import me.vadik.instaclimb.BR;
 import me.vadik.instaclimb.helper.VolleySingleton;
@@ -45,9 +48,14 @@ public abstract class CommonViewModel<T extends CommonObject> extends BaseViewMo
         notifyPropertyChanged(BR.imageUrl);
     }
 
-    @BindingAdapter({"imageUrl"/*, "bind:error"*/}) // TODO bind errorDrawable
-    public static void loadImage(NetworkImageView view, String url/*, Drawable error*/) {
+    @BindingAdapter("imageUrl")
+    public static void loadImage(NetworkImageView view, String url) {
         ImageLoader imageLoader = VolleySingleton.getInstance(view.getContext()).getImageLoader();
         view.setImageUrl(url, imageLoader);
+    }
+
+    @BindingAdapter({"imageUrl", "placeholder"})
+    public static void loadImage(ImageView view, String url, Drawable placeholder) {
+        Picasso.with(view.getContext()).load(url).placeholder(placeholder).into(view);
     }
 }

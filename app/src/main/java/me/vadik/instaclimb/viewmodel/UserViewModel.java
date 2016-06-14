@@ -26,6 +26,9 @@ public class UserViewModel extends CommonViewModel<User> {
     }
 
     public String getPictureUrl() {
+        if (!hasPicture()) {
+            return null;
+        }
         return "https://vadik.me/userpic/" + user.id + ".jpg";
     }
 

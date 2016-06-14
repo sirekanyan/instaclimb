@@ -25,13 +25,15 @@
             android:layout_centerVertical="true"
             android:layout_marginRight="16dp">
 
-            <me.vadik.instaclimb.view.custom.MyNetworkImageView
+            <ImageView
                 android:id="@+id/cicon"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
-                android:contentDescription="icon"
+                android:contentDescription="@string/content_description_userpic"
                 android:scaleType="centerCrop"
-                app:imageUrl="@{user.hasPicture ? user.pictureUrl : null}"/>
+                app:imageUrl="@{user.pictureUrl}"
+                app:placeholder="@{@drawable/blackface}"/>
+
         </FrameLayout>
 
         <RelativeLayout
