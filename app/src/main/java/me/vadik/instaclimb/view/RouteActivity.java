@@ -47,7 +47,6 @@ public class RouteActivity extends CommonActivity {
         Route route = ProviderHelper.getRoute(this, routeId);
 
         mRoute = new RouteViewModel(this, route);
-        mRoute.setImageUrl(mRoute.getSmallPictureUrl()); // todo remove this
         binding.setRoute(mRoute);
 
         if (getSupportActionBar() != null) {

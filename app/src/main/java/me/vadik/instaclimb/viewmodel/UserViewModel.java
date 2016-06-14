@@ -80,4 +80,9 @@ public class UserViewModel extends CommonViewModel<User> {
         intent.putExtra(UserActivity.ARG_USER_ID, user.id);
         context.startActivity(intent);
     }
+
+    @Override
+    public String getImageUrl() {
+        return getPictureUrl();
+    }
 }

@@ -147,4 +147,9 @@ public class RouteViewModel extends CommonViewModel<Route> {
         this.climbedCount = climbedCount;
         notifyPropertyChanged(BR.climbedCount);
     }
+
+    @Override
+    public String getImageUrl() {
+        return getSmallPictureUrl();
+    }
 }

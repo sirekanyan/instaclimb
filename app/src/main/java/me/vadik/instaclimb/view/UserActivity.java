@@ -51,7 +51,6 @@ public class UserActivity extends CommonActivity {
         User user = ProviderHelper.getUser(this, userId);
 
         mUser = new UserViewModel(this, user);
-        mUser.setImageUrl("https://vadik.me/userpic/" + String.valueOf(userId) + ".jpg"); // todo remove this
         binding.setUser(mUser);
 
         if (getSupportActionBar() != null) {
