@@ -19,18 +19,17 @@ public class PreferencesHelper {
     public static void setTheme(Context context, boolean withActionBar) {
         int lightTheme = withActionBar ? R.style.AppTheme : R.style.AppTheme_NoActionBar;
         int darkTheme = withActionBar ? R.style.AppThemeDark : R.style.AppThemeDark_NoActionBar;
+        context.setTheme(isDark(context) ? darkTheme : lightTheme);
+    }
+
+    public static boolean isDark(Context context) {
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
+        return preferences.getBoolean("dark_theme", false);
+    }
+
+    public static void applyDark(Context context) {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
         boolean isDark = preferences.getBoolean("dark_theme", false);
-        context.setTheme(isDark ? darkTheme : lightTheme);
-    }
-
-    public static void setTheme1(Context context, boolean isDark) {
-        setTheme1(context, false, isDark);
-    }
-
-    public static void setTheme1(Context context, boolean withActionBar, boolean isDark) {
-        int lightTheme = withActionBar ? R.style.AppTheme : R.style.AppTheme_NoActionBar;
-        int darkTheme = withActionBar ? R.style.AppThemeDark : R.style.AppThemeDark_NoActionBar;
-        context.setTheme(isDark ? darkTheme : lightTheme);
+        preferences.edit().putBoolean("dark_theme", !isDark).apply();
     }
 }

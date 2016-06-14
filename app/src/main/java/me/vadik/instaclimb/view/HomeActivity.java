@@ -288,6 +288,8 @@ public class HomeActivity extends MyAppCompatActivity implements
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu, menu);
+        MenuItem nightMode = menu.findItem(R.id.night_mode);
+        nightMode.setChecked(PreferencesHelper.isDark(this));
         return true;
     }
 
@@ -298,17 +300,14 @@ public class HomeActivity extends MyAppCompatActivity implements
                 this.startActivity(new Intent(this, SettingsActivity.class));
                 return true;
             case R.id.night_mode:
-                SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(HomeActivity.this);
-                boolean isDark = !preferences.getBoolean("dark_theme", false);
-                preferences.edit().putBoolean("dark_theme", isDark).apply();
-                PreferencesHelper.setTheme1(HomeActivity.this, isDark);
-                this.refreshTheme();
+                PreferencesHelper.applyDark(this);
+                this.refreshActivity();
                 return true;
         }
         return super.onOptionsItemSelected(item);
     }
 
-    private void refreshTheme() {
+    private void refreshActivity() {
         new Handler().post(new Runnable() {
             @Override
             public void run() {
