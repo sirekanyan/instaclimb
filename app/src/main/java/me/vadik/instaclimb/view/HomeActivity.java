@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
@@ -29,6 +30,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import me.vadik.instaclimb.R;
+import me.vadik.instaclimb.helper.PreferencesHelper;
 import me.vadik.instaclimb.view.custom.MyAppCompatActivity;
 import me.vadik.instaclimb.helper.VolleySingleton;
 import me.vadik.instaclimb.helper.UserHelper;
@@ -295,8 +297,27 @@ public class HomeActivity extends MyAppCompatActivity implements
             case R.id.settings:
                 this.startActivity(new Intent(this, SettingsActivity.class));
                 return true;
+            case R.id.night_mode:
+                SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(HomeActivity.this);
+                boolean isDark = !preferences.getBoolean("dark_theme", false);
+                preferences.edit().putBoolean("dark_theme", isDark).apply();
+                PreferencesHelper.setTheme1(HomeActivity.this, isDark);
+                this.refreshTheme();
+                return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void refreshTheme() {
+        new Handler().post(new Runnable() {
+            @Override
+            public void run() {
+                Intent intent = new Intent(HomeActivity.this, HomeActivity.class);
+                HomeActivity.this.finish();
+                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+                startActivity(intent);
+            }
+        });
     }
 
     public void gotoMyProfile(View view) {

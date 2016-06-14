@@ -9,10 +9,9 @@
         <item>5a—6a (very easy)</item>
         <item>6a—6b (easy)</item>
         <item>6b—6c (medium)</item>
-        <item>6c—7a (hard)</item>
-        <item>7a—7b (very hard)</item>
-        <item>7b—7c (wtf, is it real?)</item>
-        <item>7c—8c (hardcore)</item>
+        <item>6c—7a (advanced)</item>
+        <item>7a—7b (hard)</item>
+        <item>7b—8c (very hard)</item>
     </array>
 
     <array name="status">

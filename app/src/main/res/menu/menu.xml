@@ -4,4 +4,23 @@
         android:id="@+id/settings"
         android:title="@string/menu_settings"
         app:showAsAction="never"/>
+
+    <item
+        android:id="@+id/grade_filter"
+        android:title="Grade filter">
+        <menu>
+            <item android:title="5a—6a (very easy)"/>
+            <item android:title="6a—6b (easy)"/>
+            <item android:title="6b—6c (medium)"/>
+            <item android:title="6c—7a (advanced)"/>
+            <item android:title="7a—7b (hard)"/>
+            <item android:title="7b—8c (very hard)"/>
+        </menu>
+    </item>
+
+    <item
+        android:id="@+id/night_mode"
+        android:checkable="true"
+        android:enabled="true"
+        android:title="Night mode"/>
 </menu>
