@@ -2,10 +2,8 @@ package me.vadik.instaclimb.viewmodel;
 
 import android.content.Context;
 import android.databinding.Bindable;
-import android.util.Log;
 import android.view.View;
 
-import me.vadik.instaclimb.BR;
 import me.vadik.instaclimb.model.Gym;
 import me.vadik.instaclimb.viewmodel.common.CommonViewModel;
 

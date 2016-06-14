@@ -2,16 +2,9 @@ package me.vadik.instaclimb.viewmodel;
 
 import android.content.Context;
 import android.content.Intent;
-import android.databinding.BindingAdapter;
-import android.graphics.drawable.Drawable;
 import android.text.TextUtils;
 import android.view.View;
-import android.widget.ImageView;
 
-import com.android.volley.toolbox.ImageLoader;
-import com.android.volley.toolbox.NetworkImageView;
-
-import me.vadik.instaclimb.helper.VolleySingleton;
 import me.vadik.instaclimb.model.User;
 import me.vadik.instaclimb.view.UserActivity;
 import me.vadik.instaclimb.viewmodel.common.CommonViewModel;
