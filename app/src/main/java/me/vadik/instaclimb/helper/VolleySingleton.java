@@ -55,6 +55,7 @@ public class VolleySingleton {
         getRequestQueue().add(req);
     }
 
+    @Deprecated
     public ImageLoader getImageLoader() {
         return mImageLoader;
     }

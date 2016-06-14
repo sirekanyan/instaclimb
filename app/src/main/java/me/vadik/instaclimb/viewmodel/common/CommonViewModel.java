@@ -6,12 +6,9 @@ import android.databinding.BindingAdapter;
 import android.graphics.drawable.Drawable;
 import android.widget.ImageView;
 
-import com.android.volley.toolbox.ImageLoader;
-import com.android.volley.toolbox.NetworkImageView;
 import com.squareup.picasso.Picasso;
 
 import me.vadik.instaclimb.BR;
-import me.vadik.instaclimb.helper.VolleySingleton;
 import me.vadik.instaclimb.model.common.CommonObject;
 
 /**
@@ -49,9 +46,8 @@ public abstract class CommonViewModel<T extends CommonObject> extends BaseViewMo
     }
 
     @BindingAdapter("imageUrl")
-    public static void loadImage(NetworkImageView view, String url) {
-        ImageLoader imageLoader = VolleySingleton.getInstance(view.getContext()).getImageLoader();
-        view.setImageUrl(url, imageLoader);
+    public static void loadImage(ImageView view, String url) {
+        Picasso.with(view.getContext()).load(url).into(view);
     }
 
     @BindingAdapter({"imageUrl", "placeholder"})

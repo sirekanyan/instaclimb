@@ -20,7 +20,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <me.vadik.instaclimb.view.custom.MyNetworkImageView
+            <ImageView
                 android:id="@+id/gym_image"
                 android:layout_width="match_parent"
                 android:layout_height="200dp"

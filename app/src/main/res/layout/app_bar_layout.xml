@@ -24,7 +24,7 @@
             app:layout_scrollFlags="scroll|exitUntilCollapsed"
             app:title="@{object.name}">
 
-            <me.vadik.instaclimb.view.custom.MyNetworkImageView
+            <ImageView
                 android:id="@+id/image_toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
