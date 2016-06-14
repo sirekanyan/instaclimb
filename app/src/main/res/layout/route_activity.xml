@@ -32,7 +32,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/fab_margin"
-            android:onClick="@{route.onClickFAB}"
+            android:onClick="@{route::onClickFAB}"
             android:src="@drawable/ic_add_white_24dp"
             app:layout_anchor="@id/inc_app_bar"
             app:layout_anchorGravity="bottom|end"/>

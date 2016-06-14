@@ -80,7 +80,7 @@ public class RouteViewModel extends CommonViewModel<Route> {
         return "http://instaclimb.ru/maps/" + route.pictureId + "/full.jpg";
     }
 
-    @BindingAdapter({"bind:markerColor", "bind:defaultResource"})
+    @BindingAdapter({"markerColor", "defaultResource"})
     public static void setMarkerColor(View view, int dbColor, Drawable defaultDrawable) {
         TypedArray colors = view.getContext().getResources().obtainTypedArray(R.array.colors);
         if (dbColor == 0) {
@@ -93,7 +93,7 @@ public class RouteViewModel extends CommonViewModel<Route> {
         colors.recycle();
     }
 
-    @BindingAdapter("bind:markerColor")
+    @BindingAdapter("markerColor")
     public static void setMarkerColor(View view, int dbColor) {
         TypedArray colors = view.getContext().getResources().obtainTypedArray(R.array.colors);
         if (dbColor == 0) {
@@ -105,7 +105,7 @@ public class RouteViewModel extends CommonViewModel<Route> {
         colors.recycle();
     }
 
-    @BindingAdapter("bind:imageUrl")
+    @BindingAdapter("imageUrl")
     public static void loadImage(NetworkImageView view, String url) {
         ImageLoader mImageLoader = VolleySingleton.getInstance(view.getContext()).getImageLoader();
         view.setDefaultImageResId(R.drawable.blackface);

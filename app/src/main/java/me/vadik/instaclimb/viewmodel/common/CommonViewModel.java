@@ -45,7 +45,7 @@ public abstract class CommonViewModel<T extends CommonObject> extends BaseViewMo
         notifyPropertyChanged(BR.imageUrl);
     }
 
-    @BindingAdapter({"bind:imageUrl"/*, "bind:error"*/}) // TODO bind errorDrawable
+    @BindingAdapter({"imageUrl"/*, "bind:error"*/}) // TODO bind errorDrawable
     public static void loadImage(NetworkImageView view, String url/*, Drawable error*/) {
         ImageLoader imageLoader = VolleySingleton.getInstance(view.getContext()).getImageLoader();
         view.setImageUrl(url, imageLoader);
