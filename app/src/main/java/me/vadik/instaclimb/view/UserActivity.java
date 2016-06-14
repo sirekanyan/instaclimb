@@ -54,6 +54,10 @@ public class UserActivity extends CommonActivity {
         mUser.setImageUrl("https://vadik.me/userpic/" + String.valueOf(userId) + ".jpg"); // todo remove this
         binding.setUser(mUser);
 
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
+
         Bundle b = new Bundle();
         b.putInt(ARG_USER_ID, userId);
         b.putInt(ARG_LIMIT, ITEMS_PER_PAGE);
