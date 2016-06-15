@@ -279,7 +279,7 @@ public class SectorFragment extends ListFragment implements
                 }
             }
             List<String> selectList = new ArrayList<>();
-            for (String _ : gradeArgs) {
+            for (String g : gradeArgs) {
                 selectList.add("grade like ?");
             }
             select += "(" + TextUtils.join(" or ", selectList) + ") and ";

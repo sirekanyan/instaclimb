@@ -6,6 +6,7 @@ import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.databinding.DataBindingUtil;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -30,9 +31,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 import me.vadik.instaclimb.R;
+import me.vadik.instaclimb.databinding.HomeActivityBinding;
+import me.vadik.instaclimb.databinding.NavHeaderHomeBinding;
 import me.vadik.instaclimb.helper.PreferencesHelper;
-import me.vadik.instaclimb.view.custom.MyAppCompatActivity;
 import me.vadik.instaclimb.helper.VolleySingleton;
+import me.vadik.instaclimb.view.custom.MyAppCompatActivity;
 
 public class HomeActivity extends MyAppCompatActivity implements
         NavigationView.OnNavigationItemSelectedListener,
@@ -42,25 +45,23 @@ public class HomeActivity extends MyAppCompatActivity implements
 
     public static final String AUTHORITY = "me.vadik.instaclimb.routes.provider";
     public static final String ACCOUNT_TYPE = "vadik.me";
-    public static final String ACCOUNT = "dummyaccount";
+    public static final String ACCOUNT = "default account";
     private Account mAccount;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.home_activity);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        HomeActivityBinding binding = DataBindingUtil.setContentView(this, R.layout.home_activity);
+        Toolbar toolbar = binding.incAppBarHome.toolbar;
         setSupportActionBar(toolbar);
 
-        final Context context = this;
-
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = binding.drawerLayout;
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.setDrawerListener(toggle);
+        drawer.addDrawerListener(toggle);
         toggle.syncState();
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        NavigationView navigationView = binding.navView;
         navigationView.setNavigationItemSelectedListener(this);
 
         if (savedInstanceState == null) {
@@ -75,9 +76,9 @@ public class HomeActivity extends MyAppCompatActivity implements
         }
 
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
-        View navViewHeader = navigationView.getHeaderView(0);
+        NavHeaderHomeBinding headerBinding = DataBindingUtil.bind(navigationView.getHeaderView(0));
 
-        NetworkImageView navHeaderImageView = (NetworkImageView) navViewHeader.findViewById(R.id.navHeaderImageView);
+        NetworkImageView navHeaderImageView = headerBinding.navHeaderImageView;
         if (navHeaderImageView != null) {
             ImageLoader mImageLoader = VolleySingleton.getInstance(this).getImageLoader();
             navHeaderImageView.setDefaultImageResId(R.drawable.blackface);
@@ -94,18 +95,14 @@ public class HomeActivity extends MyAppCompatActivity implements
         String userName = preferences.getString("user_name", null);
 
         if (userName != null) {
-            TextView userCaption = (TextView) navViewHeader.findViewById(R.id.caption);
-            if (userCaption != null) { // todo remove check
-                userCaption.setVisibility(View.VISIBLE);
-                userCaption.setText(userName);
-            }
+            TextView userCaption = headerBinding.caption;
+            userCaption.setVisibility(View.VISIBLE);
+            userCaption.setText(userName);
 
-            TextView emailCaption = (TextView) navViewHeader.findViewById(R.id.textView);
-            if (emailCaption != null) { // todo remove check
-                emailCaption.setVisibility(View.VISIBLE);
-                int count = preferences.getInt("user_climbed", 0);
-                emailCaption.setText(getResources().getQuantityString(R.plurals.number_of_climbed_routes, count, count));
-            }
+            TextView emailCaption = headerBinding.textView;
+            emailCaption.setVisibility(View.VISIBLE);
+            int count = preferences.getInt("user_climbed", 0);
+            emailCaption.setText(getResources().getQuantityString(R.plurals.number_of_climbed_routes, count, count));
         }
 
         mAccount = CreateSyncAccount(this);
