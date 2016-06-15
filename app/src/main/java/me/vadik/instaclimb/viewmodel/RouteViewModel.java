@@ -105,13 +105,6 @@ public class RouteViewModel extends CommonViewModel<Route> {
         colors.recycle();
     }
 
-    @BindingAdapter("imageUrl")
-    public static void loadImage(NetworkImageView view, String url) {
-        ImageLoader mImageLoader = VolleySingleton.getInstance(view.getContext()).getImageLoader();
-        view.setDefaultImageResId(R.drawable.blackface);
-        view.setImageUrl(url, mImageLoader);
-    }
-
     public int getClimbedCount() {
         return climbedCount;
     }

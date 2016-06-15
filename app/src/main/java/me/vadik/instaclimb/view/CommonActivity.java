@@ -31,18 +31,6 @@ public abstract class CommonActivity extends MyAppCompatActivity implements Load
         return objectId;
     }
 
-    protected String getItemName(String propertyName) {
-        return getIntent().getStringExtra(propertyName);
-    }
-
-    protected void setupToolbarImage(String url, int imageViewResId) {
-        NetworkImageView mNetworkImageToolbarView = (NetworkImageView) this.findViewById(imageViewResId);
-        ImageLoader mImageLoader = VolleySingleton.getInstance(this).getImageLoader();
-        if (mNetworkImageToolbarView != null) {
-            mNetworkImageToolbarView.setImageUrl(url, mImageLoader);
-        }
-    }
-
     protected int getIdFromUriIfPresent() {
         int id = 0;
         Uri uri = getIntent().getData();

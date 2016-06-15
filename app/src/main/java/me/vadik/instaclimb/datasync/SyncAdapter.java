@@ -205,6 +205,6 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
                     }
                 });
 
-        VolleySingleton.getInstance(this.getContext()).getRequestQueue().add(jsonRequest);
+        VolleySingleton.getInstance(this.getContext()).addToRequestQueue(jsonRequest);
     }
 }

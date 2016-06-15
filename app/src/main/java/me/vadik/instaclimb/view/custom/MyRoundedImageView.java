@@ -7,6 +7,7 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
 import android.util.Log;
+import android.widget.ImageView;
 
 import com.android.volley.toolbox.NetworkImageView;
 
@@ -14,16 +15,17 @@ import com.android.volley.toolbox.NetworkImageView;
  * User: vadik
  * Date: 4/12/16
  */
-public class MyRoundedNetworkImageView extends NetworkImageView {
-    public MyRoundedNetworkImageView(Context context) {
+public class MyRoundedImageView extends ImageView {
+    
+    public MyRoundedImageView(Context context) {
         super(context);
     }
 
-    public MyRoundedNetworkImageView(Context context, AttributeSet attrs) {
+    public MyRoundedImageView(Context context, AttributeSet attrs) {
         super(context, attrs);
     }
 
-    public MyRoundedNetworkImageView(Context context, AttributeSet attrs, int defStyle) {
+    public MyRoundedImageView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
     }
 

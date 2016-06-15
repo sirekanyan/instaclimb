@@ -21,11 +21,13 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.NetworkImageView;
+import com.squareup.picasso.Picasso;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -78,18 +80,11 @@ public class HomeActivity extends MyAppCompatActivity implements
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
         NavHeaderHomeBinding headerBinding = DataBindingUtil.bind(navigationView.getHeaderView(0));
 
-        NetworkImageView navHeaderImageView = headerBinding.navHeaderImageView;
-        if (navHeaderImageView != null) {
-            ImageLoader mImageLoader = VolleySingleton.getInstance(this).getImageLoader();
-            navHeaderImageView.setDefaultImageResId(R.drawable.blackface);
-            String userId = preferences.getString("user_id", null);
-            if (userId == null) {
-                navHeaderImageView.setImageUrl(null, mImageLoader);
-            } else {
-                navHeaderImageView.setImageUrl("https://vadik.me/userpic/" + userId + ".jpg", mImageLoader);
-            }
-        } else {
-            Log.e("me", "not found navHeaderImageView");
+        ImageView navHeaderImageView = headerBinding.navHeaderImageView;
+        String userId = preferences.getString("user_id", null);
+        if (userId != null) {
+            // TODO remove hardcoded url
+            Picasso.with(this).load("https://vadik.me/userpic/" + userId + ".jpg").into(navHeaderImageView);
         }
 
         String userName = preferences.getString("user_name", null);
@@ -120,7 +115,6 @@ public class HomeActivity extends MyAppCompatActivity implements
                     syncFrequency);
         }
 
-        String userId = preferences.getString("user_id", null);
         /*
         if (userId != null) {
             // TODO don't do it in the main thread!
