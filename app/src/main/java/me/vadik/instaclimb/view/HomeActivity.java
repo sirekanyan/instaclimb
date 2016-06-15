@@ -33,7 +33,6 @@ import me.vadik.instaclimb.R;
 import me.vadik.instaclimb.helper.PreferencesHelper;
 import me.vadik.instaclimb.view.custom.MyAppCompatActivity;
 import me.vadik.instaclimb.helper.VolleySingleton;
-import me.vadik.instaclimb.helper.UserHelper;
 
 public class HomeActivity extends MyAppCompatActivity implements
         NavigationView.OnNavigationItemSelectedListener,
@@ -92,19 +91,21 @@ public class HomeActivity extends MyAppCompatActivity implements
             Log.e("me", "not found navHeaderImageView");
         }
 
-        TextView caption = (TextView) navViewHeader.findViewById(R.id.caption);
-        if (caption != null) {
-            caption.setText(preferences.getString("user_name", "Пупкин"));
-        } else {
-            Log.e("me", "not found caption");
-        }
+        String userName = preferences.getString("user_name", null);
 
-        TextView email = (TextView) navViewHeader.findViewById(R.id.textView);
-        if (email != null) {
-            int count = preferences.getInt("user_climbed", 0);
-            email.setText(getResources().getQuantityString(R.plurals.number_of_climbed_routes, count, count));
-        } else {
-            Log.e("me", "not found caption");
+        if (userName != null) {
+            TextView userCaption = (TextView) navViewHeader.findViewById(R.id.caption);
+            if (userCaption != null) { // todo remove check
+                userCaption.setVisibility(View.VISIBLE);
+                userCaption.setText(userName);
+            }
+
+            TextView emailCaption = (TextView) navViewHeader.findViewById(R.id.textView);
+            if (emailCaption != null) { // todo remove check
+                emailCaption.setVisibility(View.VISIBLE);
+                int count = preferences.getInt("user_climbed", 0);
+                emailCaption.setText(getResources().getQuantityString(R.plurals.number_of_climbed_routes, count, count));
+            }
         }
 
         mAccount = CreateSyncAccount(this);
@@ -320,11 +321,12 @@ public class HomeActivity extends MyAppCompatActivity implements
     }
 
     public void gotoMyProfile(View view) {
-        Intent intent = new Intent(this, UserActivity.class);
-        String userId = UserHelper.getCurrentUserId(this);
-        if (userId != null) {
-            intent.putExtra(UserActivity.ARG_USER_ID, Integer.parseInt(userId));
-            startActivity(intent);
-        }
+        startActivity(new Intent(this, LoginActivity.class));
+//        Intent intent = new Intent(this, UserActivity.class);
+//        String userId = UserHelper.getCurrentUserId(this);
+//        if (userId != null) {
+//            intent.putExtra(UserActivity.ARG_USER_ID, Integer.parseInt(userId));
+//            startActivity(intent);
+//        }
     }
 }

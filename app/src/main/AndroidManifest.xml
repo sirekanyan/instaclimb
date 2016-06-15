@@ -7,6 +7,11 @@
     <uses-permission android:name="android.permission.WRITE_SYNC_SETTINGS"/>
     <uses-permission android:name="android.permission.AUTHENTICATE_ACCOUNTS"/>
 
+    <!-- To auto-complete the email text field in the login form with the user's emails -->
+    <uses-permission android:name="android.permission.GET_ACCOUNTS"/>    <!-- TODO REMOVE -->
+    <uses-permission android:name="android.permission.READ_PROFILE"/>    <!-- TODO REMOVE -->
+    <uses-permission android:name="android.permission.READ_CONTACTS"/>   <!-- TODO REMOVE -->
+
     <application
         android:allowBackup="true"
         android:icon="@drawable/arrow_up"
@@ -45,6 +50,7 @@
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".view.HomeActivity"/>
+
             <intent-filter>
                 <action android:name="android.intent.action.VIEW"/>
 
@@ -63,6 +69,7 @@
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".view.HomeActivity"/>
+
             <intent-filter>
                 <action android:name="android.intent.action.VIEW"/>
 
@@ -76,11 +83,11 @@
             </intent-filter>
         </activity>
 
-        <service
-            android:name=".datasync.AuthenticatorService">
+        <service android:name=".datasync.AuthenticatorService">
             <intent-filter>
                 <action android:name="android.accounts.AccountAuthenticator"/>
             </intent-filter>
+
             <meta-data
                 android:name="android.accounts.AccountAuthenticator"
                 android:resource="@xml/authenticator"/>
@@ -97,6 +104,14 @@
                 android:resource="@xml/syncadapter"/>
         </service>
 
+        <activity
+            android:name=".view.LoginActivity"
+            android:label="@string/title_activity_login"
+            android:parentActivityName=".view.HomeActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="me.vadik.instaclimb.view.HomeActivity"/>
+        </activity>
     </application>
 
 </manifest>
