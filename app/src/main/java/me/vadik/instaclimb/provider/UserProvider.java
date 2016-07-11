@@ -31,6 +31,10 @@ public class UserProvider {
         return userName;
     }
 
+    public static String getUserName(Context context, int userId) {
+        return getUserName(context, String.valueOf(userId));
+    }
+
     public static boolean hasPicture(Context context, int userId) {
         boolean hasPicture = false;
         Cursor cursor = context.getContentResolver().query(

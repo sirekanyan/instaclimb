@@ -87,6 +87,7 @@
     <string name="pref_default_user_id">1561</string>
 
     <string name="pref_title_dark_theme">Use dark theme</string>
+    <string name="pref_title_log_out">Log out</string>
 
     <string name="pref_title_add_friends_to_messages">Add friends to messages</string>
     <string-array name="pref_example_list_titles">
@@ -238,7 +239,4 @@
     <string name="error_invalid_password">This password is too short</string>
     <string name="error_incorrect_password">This password is incorrect</string>
     <string name="error_field_required">This field is required</string>
-    <string name="permission_rationale">"Contacts permissions are needed for providing email
-        completions."
-    </string>
 </resources>

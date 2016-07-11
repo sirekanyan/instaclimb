@@ -4,7 +4,6 @@ package me.vadik.instaclimb.view;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
@@ -14,20 +13,19 @@ import android.os.Bundle;
 import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
-import android.support.v7.app.ActionBar;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 import android.preference.RingtonePreference;
+import android.support.v4.app.NavUtils;
+import android.support.v7.app.ActionBar;
 import android.text.TextUtils;
 import android.view.MenuItem;
-import android.support.v4.app.NavUtils;
 import android.widget.Toast;
 
 import java.util.List;
 
 import me.vadik.instaclimb.R;
-import me.vadik.instaclimb.provider.RoutesProvider;
-import me.vadik.instaclimb.provider.UserProvider;
+import me.vadik.instaclimb.login.LoginManager;
 
 /**
  * A {@link PreferenceActivity} that presents a set of application settings. On
@@ -207,6 +205,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
 //            bindAndApplyPreferenceSummaryToValue(findPreference("example_list"));
 //            bindAndApplyPreferenceSummaryToValue(findPreference("user_id"));
 
+            /* TODO move this code somewhere else
             bindAndApplyPreferenceSummaryToValue(
                     findPreference("user_id"),
                     new Preference.OnPreferenceChangeListener() {
@@ -240,7 +239,8 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
                             return false;
                         }
                     });
-
+                    */
+            /*
             applyPreferenceSummaryToValue(
                     findPreference("user_id"),
                     new Preference.OnPreferenceChangeListener() {
@@ -255,6 +255,16 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
                             return false;
                         }
                     });
+                    */
+
+            findPreference("log_out").setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+                @Override
+                public boolean onPreferenceClick(Preference preference) {
+                    LoginManager.logOut(getActivity());
+                    Toast.makeText(getActivity(), "Logged out", Toast.LENGTH_LONG).show();
+                    return true;
+                }
+            });
         }
 
         @Override

@@ -25,8 +25,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.android.volley.toolbox.ImageLoader;
-import com.android.volley.toolbox.NetworkImageView;
 import com.squareup.picasso.Picasso;
 
 import java.util.HashMap;
@@ -36,7 +34,9 @@ import me.vadik.instaclimb.R;
 import me.vadik.instaclimb.databinding.HomeActivityBinding;
 import me.vadik.instaclimb.databinding.NavHeaderHomeBinding;
 import me.vadik.instaclimb.helper.PreferencesHelper;
-import me.vadik.instaclimb.helper.VolleySingleton;
+import me.vadik.instaclimb.login.LoginManager;
+import me.vadik.instaclimb.login.UserSession;
+import me.vadik.instaclimb.provider.UserProvider;
 import me.vadik.instaclimb.view.custom.MyAppCompatActivity;
 
 public class HomeActivity extends MyAppCompatActivity implements
@@ -80,40 +80,45 @@ public class HomeActivity extends MyAppCompatActivity implements
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
         NavHeaderHomeBinding headerBinding = DataBindingUtil.bind(navigationView.getHeaderView(0));
 
-        ImageView navHeaderImageView = headerBinding.navHeaderImageView;
-        String userId = preferences.getString("user_id", null);
-        if (userId != null) {
+        if (!LoginManager.isLoggedIn(this)) {
+            TextView userCaption = headerBinding.caption;
+            userCaption.setVisibility(View.VISIBLE);
+            userCaption.setText("Sign in");
+        } else {
+            ImageView navHeaderImageView = headerBinding.navHeaderImageView;
+            int userId = LoginManager.getUserId(this);
+            Picasso.with(this).load("https://vadik.me/userpic/" + userId + ".jpg").placeholder(R.drawable.blackface).into(navHeaderImageView);
             // TODO remove hardcoded url
-            Picasso.with(this).load("https://vadik.me/userpic/" + userId + ".jpg").into(navHeaderImageView);
-        }
 
-        String userName = preferences.getString("user_name", null);
+            String userName = UserProvider.getUserName(this, userId);
 
-        if (userName != null) {
+            if (userName == null || userName.isEmpty()) {
+                userName = "Unknown user (" + userId + ")";
+            }
+
             TextView userCaption = headerBinding.caption;
             userCaption.setVisibility(View.VISIBLE);
             userCaption.setText(userName);
 
             TextView emailCaption = headerBinding.textView;
             emailCaption.setVisibility(View.VISIBLE);
-            int count = preferences.getInt("user_climbed", 0);
+            int count = preferences.getInt("user_climbed", 0); // TODO this property is not exist anymore: always will return 0
             emailCaption.setText(getResources().getQuantityString(R.plurals.number_of_climbed_routes, count, count));
-        }
 
-        mAccount = CreateSyncAccount(this);
+            mAccount = CreateSyncAccount(this);
 
-        int syncFrequency = Integer.valueOf(preferences.getString("sync_frequency", "3600"));
+            int syncFrequency = Integer.valueOf(preferences.getString("sync_frequency", "3600"));
 
-        if (syncFrequency > 0) {
+            if (syncFrequency > 0) {
 
-            Log.e("me", "sync frequency is " + syncFrequency + " seconds");
+                Log.e("me", "sync frequency is " + syncFrequency + " seconds");
 
-            ContentResolver.addPeriodicSync(
-                    mAccount,
-                    AUTHORITY,
-                    Bundle.EMPTY,
-                    syncFrequency);
-        }
+                ContentResolver.addPeriodicSync(
+                        mAccount,
+                        AUTHORITY,
+                        Bundle.EMPTY,
+                        syncFrequency);
+            }
 
         /*
         if (userId != null) {
@@ -129,6 +134,7 @@ public class HomeActivity extends MyAppCompatActivity implements
                     .show();
         }
         */
+        }
     }
 
     public static Account CreateSyncAccount(Context context) {
@@ -312,12 +318,14 @@ public class HomeActivity extends MyAppCompatActivity implements
     }
 
     public void gotoMyProfile(View view) {
-        startActivity(new Intent(this, LoginActivity.class));
-//        Intent intent = new Intent(this, UserActivity.class);
-//        String userId = UserHelper.getCurrentUserId(this);
-//        if (userId != null) {
-//            intent.putExtra(UserActivity.ARG_USER_ID, Integer.parseInt(userId));
-//            startActivity(intent);
-//        }
+        final Intent intent;
+        if (LoginManager.isLoggedIn(this)) {
+            UserSession session = LoginManager.getSession(this);
+            intent = new Intent(this, UserActivity.class);
+            intent.putExtra(UserActivity.ARG_USER_ID, session.getUserId());
+        } else {
+            intent = new Intent(this, LoginActivity.class);
+        }
+        startActivity(intent);
     }
 }

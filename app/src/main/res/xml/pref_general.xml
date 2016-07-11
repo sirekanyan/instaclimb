@@ -2,6 +2,7 @@
 
     <!-- NOTE: EditTextPreference accepts EditText attributes. -->
     <!-- NOTE: EditTextPreference's summary should be set to its value by the activity code. -->
+    <!--
     <EditTextPreference
         android:defaultValue="@string/pref_default_user_id"
         android:key="user_id"
@@ -10,6 +11,7 @@
         android:selectAllOnFocus="true"
         android:singleLine="true"
         android:title="@string/pref_title_user_id" />
+        -->
 
     <SwitchPreference
         android:defaultValue="false"
@@ -20,6 +22,10 @@
         android:defaultValue="false"
         android:key="dark_theme"
         android:title="@string/pref_title_dark_theme" />
+
+    <Preference
+        android:key="log_out"
+        android:title="@string/pref_title_log_out" />
 
     <!--<SwitchPreference-->
     <!--android:defaultValue="true"-->
