@@ -43,17 +43,19 @@ public class HomeActivity extends MyAppCompatActivity implements
         NavigationView.OnNavigationItemSelectedListener,
         GymFragment.OnFragmentInteractionListener {
 
+    private static final int GET_SESSION_ID_REQUEST = 0;
     private String gymName;
 
     public static final String AUTHORITY = "me.vadik.instaclimb.routes.provider";
     public static final String ACCOUNT_TYPE = "vadik.me";
     public static final String ACCOUNT = "default account";
     private Account mAccount;
+    private HomeActivityBinding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        HomeActivityBinding binding = DataBindingUtil.setContentView(this, R.layout.home_activity);
+        binding = DataBindingUtil.setContentView(this, R.layout.home_activity);
         Toolbar toolbar = binding.incAppBarHome.toolbar;
         setSupportActionBar(toolbar);
 
@@ -76,9 +78,17 @@ public class HomeActivity extends MyAppCompatActivity implements
                 setTitle(savedInstanceState.getString("gymname"));
             }
         }
+    }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        updateNavHeader();
+    }
+
+    private void updateNavHeader() {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
-        NavHeaderHomeBinding headerBinding = DataBindingUtil.bind(navigationView.getHeaderView(0));
+        NavHeaderHomeBinding headerBinding = DataBindingUtil.bind(binding.navView.getHeaderView(0));
 
         if (!LoginManager.isLoggedIn(this)) {
             TextView userCaption = headerBinding.caption;
@@ -318,14 +328,23 @@ public class HomeActivity extends MyAppCompatActivity implements
     }
 
     public void gotoMyProfile(View view) {
-        final Intent intent;
         if (LoginManager.isLoggedIn(this)) {
             UserSession session = LoginManager.getSession(this);
-            intent = new Intent(this, UserActivity.class);
+            Intent intent = new Intent(this, UserActivity.class);
             intent.putExtra(UserActivity.ARG_USER_ID, session.getUserId());
+            startActivity(intent);
         } else {
-            intent = new Intent(this, LoginActivity.class);
+            Intent intent = new Intent(this, LoginActivity.class);
+            startActivityForResult(intent, GET_SESSION_ID_REQUEST);
         }
-        startActivity(intent);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == GET_SESSION_ID_REQUEST) {
+            if (resultCode != RESULT_OK) {
+                Toast.makeText(this, R.string.cannot_log_in, Toast.LENGTH_SHORT).show();
+            }
+        }
     }
 }
