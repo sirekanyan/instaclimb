@@ -27,12 +27,14 @@
             android:scrollbars="vertical"
             app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
 
+        <!-- todo move onClickFab listener to RouteViewModel class -->
+        <!-- todo android:onClick="@{route::onClickFAB}" -->
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/fab"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/fab_margin"
-            android:onClick="@{route::onClickFAB}"
+            android:onClick="onClickFab"
             android:src="@drawable/ic_add_white_24dp"
             app:layout_anchor="@id/inc_app_bar"
             app:layout_anchorGravity="bottom|end"/>

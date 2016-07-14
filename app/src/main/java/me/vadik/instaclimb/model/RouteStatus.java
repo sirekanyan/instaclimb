@@ -5,5 +5,13 @@ package me.vadik.instaclimb.model;
  * Date: 7/13/16
  */
 public enum RouteStatus {
-    NONE, CLIMBED, FLASHED
+    NONE, CLIMBED, FLASHED;
+
+    public static RouteStatus negative(RouteStatus status) {
+        if (status == CLIMBED || status == FLASHED) {
+            return NONE;
+        } else {
+            return CLIMBED;
+        }
+    }
 }

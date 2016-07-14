@@ -17,6 +17,7 @@ import android.support.v7.widget.ShareActionProvider;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,6 +31,7 @@ import me.vadik.instaclimb.model.User;
 import me.vadik.instaclimb.model.contract.UsersRoutesViewContract;
 import me.vadik.instaclimb.provider.ProviderHelper;
 import me.vadik.instaclimb.provider.RouteChecker;
+import me.vadik.instaclimb.provider.RouteCheckerHttpImpl;
 import me.vadik.instaclimb.provider.RoutesContentProvider;
 import me.vadik.instaclimb.view.adapter.RouteRecyclerViewAdapter;
 import me.vadik.instaclimb.viewmodel.RouteViewModel;
@@ -42,6 +44,8 @@ public class RouteActivity extends CommonActivity {
     private RouteRecyclerViewAdapter mAdapter;
     private RouteActivityBinding binding;
     private RouteViewModel mRoute;
+    private FloatingActionButton fab;
+    private RouteStatus routeStatus;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,38 +71,59 @@ public class RouteActivity extends CommonActivity {
         b.putInt(ARG_ROUTE_ID, routeId);
         getSupportLoaderManager().restartLoader(USERS_LOADER, b, this);
 
-        final FloatingActionButton fab = binding.fab;
+        fab = binding.fab;
         fab.hide();
 
         if (LoginManager.isLoggedIn(this)) {
-            new RouteStatusTask(this, routeId) {
-                @Override
-                protected void onSuccess(RouteStatus status) {
-                    if (status == RouteStatus.FLASHED) {
-                        fab.setImageResource(R.drawable.ic_done_all_white_24dp);
-                    } else if (status == RouteStatus.CLIMBED) {
-                        fab.setImageResource(R.drawable.ic_done_white_24dp);
-                    }
-                    if (status != RouteStatus.NONE) {
-                        fab.setBackgroundTintList(getResources().getColorStateList(R.color.colorSuccessAccent));
-                    }
-                    fab.show();
-                }
-
-                @Override
-                protected void onError(Exception exception) {
-                    // do nothing, fab will not be shown
-                }
-            }.execute();
+            updateFab(routeId);
         }
     }
 
-    private static abstract class RouteStatusTask extends AsyncTask<Void, Void, RouteStatus> {
+    private void updateFab(int routeId) {
+        new RouteStatusGetTask(this, routeId) {
+            @Override
+            protected void onSuccess(RouteStatus status) {
+                int drawableResId = R.drawable.ic_add_white_24dp;
+                if (status == RouteStatus.CLIMBED) {
+                    drawableResId = R.drawable.ic_done_white_24dp;
+                } else if (status == RouteStatus.FLASHED) {
+                    drawableResId = R.drawable.ic_done_all_white_24dp;
+                }
+                final int bgColor;
+                if (status == RouteStatus.NONE) {
+                    bgColor = R.color.colorAccent;
+                } else {
+                    bgColor = R.color.colorSuccessAccent;
+                }
+                RouteActivity.this.routeStatus = status;
+                fab.setBackgroundTintList(getResources().getColorStateList(bgColor));
+                fab.setImageResource(drawableResId);
+                fab.show();
+            }
+
+            @Override
+            protected void onError(Exception exception) {
+                // do nothing, fab will not be shown
+            }
+        }.execute();
+    }
+
+    public void onClickFab(View view) {
+        final int routeId = mRoute.getId();
+        new RouteStatusSetTask(this, routeId, RouteStatus.negative(routeStatus)) {
+            @Override
+            protected void onPostExecute(Void aVoid) {
+                updateFab(routeId);
+            }
+        }.execute();
+    }
+
+    private static abstract class RouteStatusGetTask extends AsyncTask<Void, Void, RouteStatus> {
         private final Context context;
         private final int routeId;
         private Exception exception;
 
-        public RouteStatusTask(Context context, int routeId) {
+        public RouteStatusGetTask(Context context, int routeId) {
             this.context = context;
             this.routeId = routeId;
         }
@@ -106,7 +131,8 @@ public class RouteActivity extends CommonActivity {
         @Override
         protected RouteStatus doInBackground(Void... params) {
             try {
-                return new RouteChecker(context).getRouteStatus(routeId);
+                RouteChecker routeChecker = new RouteCheckerHttpImpl(context);
+                return routeChecker.getRouteStatus(routeId);
             } catch (Exception e) {
                 Log.e("me", "cannot get status for route " + routeId, e);
                 this.exception = e;
@@ -126,6 +152,29 @@ public class RouteActivity extends CommonActivity {
         protected abstract void onSuccess(RouteStatus session);
 
         protected abstract void onError(Exception exception);
+    }
+
+    private static class RouteStatusSetTask extends AsyncTask<Void, Void, Void> {
+        private final Context context;
+        private final int routeId;
+        private final RouteStatus status;
+
+        public RouteStatusSetTask(Context context, int routeId, RouteStatus status) {
+            this.context = context;
+            this.routeId = routeId;
+            this.status = status;
+        }
+
+        @Override
+        protected Void doInBackground(Void... params) {
+            try {
+                RouteChecker routeChecker = new RouteCheckerHttpImpl(context);
+                routeChecker.setRouteStatus(routeId, status);
+            } catch (Exception e) {
+                Log.e("me", "cannot set status " + status + " for route " + routeId, e);
+            }
+            return null;
+        }
     }
 
     @Override
