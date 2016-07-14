@@ -1,16 +1,20 @@
 package me.vadik.instaclimb.view;
 
+import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.databinding.DataBindingUtil;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.ShareActionProvider;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -19,10 +23,13 @@ import java.util.List;
 
 import me.vadik.instaclimb.R;
 import me.vadik.instaclimb.databinding.RouteActivityBinding;
+import me.vadik.instaclimb.login.LoginManager;
 import me.vadik.instaclimb.model.Route;
+import me.vadik.instaclimb.model.RouteStatus;
 import me.vadik.instaclimb.model.User;
 import me.vadik.instaclimb.model.contract.UsersRoutesViewContract;
 import me.vadik.instaclimb.provider.ProviderHelper;
+import me.vadik.instaclimb.provider.RouteChecker;
 import me.vadik.instaclimb.provider.RoutesContentProvider;
 import me.vadik.instaclimb.view.adapter.RouteRecyclerViewAdapter;
 import me.vadik.instaclimb.viewmodel.RouteViewModel;
@@ -43,7 +50,7 @@ public class RouteActivity extends CommonActivity {
         binding = DataBindingUtil.setContentView(this, R.layout.route_activity);
         setSupportActionBar(binding.incAppBar.toolbar);
 
-        int routeId = getItemId(ARG_ROUTE_ID);
+        final int routeId = getItemId(ARG_ROUTE_ID);
         Route route = ProviderHelper.getRoute(this, routeId);
 
         mRoute = new RouteViewModel(this, route);
@@ -60,18 +67,65 @@ public class RouteActivity extends CommonActivity {
         b.putInt(ARG_ROUTE_ID, routeId);
         getSupportLoaderManager().restartLoader(USERS_LOADER, b, this);
 
+        final FloatingActionButton fab = binding.fab;
+        fab.hide();
 
-//        FloatingActionButton fab = binding.fab;
-//        if (fab != null && route != null && route.done > 0) {
-//            if (route.done == 1) {
-//                fab.setImageResource(R.drawable.ic_done_white_24dp);
-//            } else if (route.done == 2) {
-//                fab.setImageResource(R.drawable.ic_done_all_white_24dp);
-//            }
-//            fab.setBackgroundTintList(getResources().getColorStateList(R.color.colorSuccessAccent));
-//        }
-//        break;
+        if (LoginManager.isLoggedIn(this)) {
+            new RouteStatusTask(this, routeId) {
+                @Override
+                protected void onSuccess(RouteStatus status) {
+                    if (status == RouteStatus.FLASHED) {
+                        fab.setImageResource(R.drawable.ic_done_all_white_24dp);
+                    } else if (status == RouteStatus.CLIMBED) {
+                        fab.setImageResource(R.drawable.ic_done_white_24dp);
+                    }
+                    if (status != RouteStatus.NONE) {
+                        fab.setBackgroundTintList(getResources().getColorStateList(R.color.colorSuccessAccent));
+                    }
+                    fab.show();
+                }
 
+                @Override
+                protected void onError(Exception exception) {
+                    // do nothing, fab will not be shown
+                }
+            }.execute();
+        }
+    }
+
+    private static abstract class RouteStatusTask extends AsyncTask<Void, Void, RouteStatus> {
+        private final Context context;
+        private final int routeId;
+        private Exception exception;
+
+        public RouteStatusTask(Context context, int routeId) {
+            this.context = context;
+            this.routeId = routeId;
+        }
+
+        @Override
+        protected RouteStatus doInBackground(Void... params) {
+            try {
+                return new RouteChecker(context).getRouteStatus(routeId);
+            } catch (Exception e) {
+                Log.e("me", "cannot get status for route " + routeId, e);
+                this.exception = e;
+                return null;
+            }
+        }
+
+        @Override
+        protected void onPostExecute(RouteStatus session) {
+            if (exception == null) {
+                onSuccess(session);
+            } else {
+                onError(exception);
+            }
+        }
+
+        protected abstract void onSuccess(RouteStatus session);
+
+        protected abstract void onError(Exception exception);
     }
 
     @Override
