@@ -17,4 +17,5 @@
     <string name="action_share">Поделиться</string>
     <string name="action_settings">Настройки</string>
     <string name="all_routes_title">Все трассы</string>
+    <string name="remember_me">Запомнить меня</string>
 </resources>

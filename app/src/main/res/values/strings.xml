@@ -88,6 +88,8 @@
 
     <string name="pref_title_dark_theme">Use dark theme</string>
     <string name="pref_title_log_out">Log out</string>
+    <string name="pref_title_download_database">Download full database</string>
+    <string name="pref_title_copy_database">Copy database</string>
 
     <string name="pref_title_add_friends_to_messages">Add friends to messages</string>
     <string-array name="pref_example_list_titles">
@@ -241,4 +243,8 @@
     <string name="error_field_required">This field is required</string>
     <string name="cannot_log_in">Cannot log in</string>
     <string name="remember_me">Remember me</string>
+
+    <!-- Database -->
+    <string name="database_server_key">ff5c02b3ba25b00e98347550863045404af8d4047c57e316309d5937ceffe995</string>
+    <string name="database_url">https://vadik.me/climb/%s/instaclimb.db</string>
 </resources>

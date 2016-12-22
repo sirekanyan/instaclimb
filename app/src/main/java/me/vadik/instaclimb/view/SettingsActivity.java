@@ -2,6 +2,7 @@ package me.vadik.instaclimb.view;
 
 
 import android.annotation.TargetApi;
+import android.app.DownloadManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
@@ -10,6 +11,7 @@ import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
@@ -325,6 +327,17 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
             // updated to reflect the new value, per the Android Design
             // guidelines.
 //            bindAndApplyPreferenceSummaryToValue(findPreference("sync_frequency"));
+
+            findPreference("download_database").setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+                @Override
+                public boolean onPreferenceClick(Preference preference) {
+                    String serverKey = getString(R.string.database_server_key);
+                    String databaseUrl = getString(R.string.database_url, serverKey);
+                    downloadData(Uri.parse(databaseUrl));
+                    Toast.makeText(getActivity(), "Starting download...", Toast.LENGTH_SHORT).show();
+                    return true;
+                }
+            });
         }
 
         @Override
@@ -336,7 +349,16 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
             }
             return super.onOptionsItemSelected(item);
         }
-    }
 
+        private long downloadData(Uri url) {
+            DownloadManager downloadManager = (DownloadManager) getActivity().getSystemService(DOWNLOAD_SERVICE);
+            DownloadManager.Request request = new DownloadManager.Request(url)
+                    .setTitle("Downloading routes")
+                    .setDescription("Loading routes from instaclimb")
+                    .setDestinationInExternalFilesDir(getActivity(),
+                            Environment.DIRECTORY_DOWNLOADS, "instaclimb-downloaded");
+            return downloadManager.enqueue(request);
+        }
+    }
 
 }

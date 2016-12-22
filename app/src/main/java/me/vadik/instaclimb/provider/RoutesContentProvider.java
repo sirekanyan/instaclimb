@@ -11,6 +11,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
+import java.io.Closeable;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -66,20 +67,33 @@ public class RoutesContentProvider extends ContentProvider {
         } catch (IOException e) {
             Log.e("me", "Cannot copy database from assets to data", e);
         } finally {
-            if (is != null) {
-                try {
-                    is.close();
-                } catch (IOException e) {
-                    //ignored
-                }
+            StreamHelper.close(is);
+            StreamHelper.flushClose(os);
+        }
+    }
+
+    private static class StreamHelper {
+
+        private static void close(Closeable closeable) {
+            if (closeable == null) {
+                return;
             }
-            if (os != null) {
-                try {
-                    os.flush();
-                    os.close();
-                } catch (IOException e) {
-                    //ignored
-                }
+            try {
+                closeable.close();
+            } catch (IOException e) {
+                //ignored
+            }
+        }
+
+        private static void flushClose(OutputStream outputStream) {
+            if (outputStream == null) {
+                return;
+            }
+            try {
+                outputStream.flush();
+                outputStream.close();
+            } catch (IOException e) {
+                // ignored
             }
         }
     }
