@@ -36,7 +36,8 @@ public class LoginActivity extends AppCompatActivity implements InstaclimbLogin.
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        PreferencesHelper.setTheme(this, true);
+        PreferencesHelper preferences = new PreferencesHelper(this);
+        preferences.refreshThemeWithActionBar();
         super.onCreate(savedInstanceState);
         ActivityLoginBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_login);
         setupActionBar();

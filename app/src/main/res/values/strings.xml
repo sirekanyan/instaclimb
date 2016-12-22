@@ -240,4 +240,5 @@
     <string name="error_incorrect_password">This password is incorrect</string>
     <string name="error_field_required">This field is required</string>
     <string name="cannot_log_in">Cannot log in</string>
+    <string name="remember_me">Remember me</string>
 </resources>

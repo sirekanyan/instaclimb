@@ -33,7 +33,6 @@ import java.util.Map;
 import me.vadik.instaclimb.R;
 import me.vadik.instaclimb.databinding.HomeActivityBinding;
 import me.vadik.instaclimb.databinding.NavHeaderHomeBinding;
-import me.vadik.instaclimb.helper.PreferencesHelper;
 import me.vadik.instaclimb.login.LoginManager;
 import me.vadik.instaclimb.login.UserSession;
 import me.vadik.instaclimb.provider.UserProvider;
@@ -49,7 +48,6 @@ public class HomeActivity extends MyAppCompatActivity implements
     public static final String AUTHORITY = "me.vadik.instaclimb.routes.provider";
     public static final String ACCOUNT_TYPE = "vadik.me";
     public static final String ACCOUNT = "default account";
-    private Account mAccount;
     private HomeActivityBinding binding;
 
     @Override
@@ -115,7 +113,7 @@ public class HomeActivity extends MyAppCompatActivity implements
             int count = preferences.getInt("user_climbed", 0); // TODO this property is not exist anymore: always will return 0
             emailCaption.setText(getResources().getQuantityString(R.plurals.number_of_climbed_routes, count, count));
 
-            mAccount = CreateSyncAccount(this);
+            Account mAccount = createSyncAccount(this);
 
             int syncFrequency = Integer.valueOf(preferences.getString("sync_frequency", "3600"));
 
@@ -147,7 +145,7 @@ public class HomeActivity extends MyAppCompatActivity implements
         }
     }
 
-    public static Account CreateSyncAccount(Context context) {
+    public static Account createSyncAccount(Context context) {
         // Create the account type and default account
         Account newAccount = new Account(ACCOUNT, ACCOUNT_TYPE);
         // Get an instance of the Android account manager
@@ -156,6 +154,7 @@ public class HomeActivity extends MyAppCompatActivity implements
          * Add the account and account type, no password or user data
          * If successful, return the Account object, otherwise report an error.
          */
+        //noinspection StatementWithEmptyBody
         if (accountManager.addAccountExplicitly(newAccount, null, null)) {
             /*
              * If you don't set android:syncable="true" in
@@ -297,7 +296,7 @@ public class HomeActivity extends MyAppCompatActivity implements
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu, menu);
         MenuItem nightMode = menu.findItem(R.id.night_mode);
-        nightMode.setChecked(PreferencesHelper.isDark(this));
+        nightMode.setChecked(preferences.isDark());
         return true;
     }
 
@@ -308,7 +307,7 @@ public class HomeActivity extends MyAppCompatActivity implements
                 this.startActivity(new Intent(this, SettingsActivity.class));
                 return true;
             case R.id.night_mode:
-                PreferencesHelper.applyDark(this);
+                preferences.applyDark();
                 this.refreshActivity();
                 return true;
         }

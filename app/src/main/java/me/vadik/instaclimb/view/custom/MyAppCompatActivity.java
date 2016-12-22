@@ -10,9 +10,13 @@ import me.vadik.instaclimb.helper.PreferencesHelper;
  * Date: 4/15/16
  */
 public class MyAppCompatActivity extends AppCompatActivity {
+
+    protected PreferencesHelper preferences;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        PreferencesHelper.setTheme(this);
+        preferences = new PreferencesHelper(this);
+        preferences.refreshTheme();
         super.onCreate(savedInstanceState);
     }
 }
