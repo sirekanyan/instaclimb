@@ -33,6 +33,7 @@ import java.util.Map;
 import me.vadik.instaclimb.R;
 import me.vadik.instaclimb.databinding.HomeActivityBinding;
 import me.vadik.instaclimb.databinding.NavHeaderHomeBinding;
+import me.vadik.instaclimb.login.InstaclimbLogin;
 import me.vadik.instaclimb.login.LoginManager;
 import me.vadik.instaclimb.login.UserSession;
 import me.vadik.instaclimb.provider.UserProvider;
@@ -40,7 +41,8 @@ import me.vadik.instaclimb.view.custom.MyAppCompatActivity;
 
 public class HomeActivity extends MyAppCompatActivity implements
         NavigationView.OnNavigationItemSelectedListener,
-        GymFragment.OnFragmentInteractionListener {
+        GymFragment.OnFragmentInteractionListener,
+        InstaclimbLogin.OnPostExecuteListener {
 
     private static final int GET_SESSION_ID_REQUEST = 0;
     private String gymName;
@@ -328,6 +330,9 @@ public class HomeActivity extends MyAppCompatActivity implements
 
     public void gotoMyProfile(View view) {
         if (LoginManager.isLoggedIn(this)) {
+            if (preferences.hasSavedCredentials()) {
+                new InstaclimbLogin(this).execute(preferences.getCredentials());
+            }
             UserSession session = LoginManager.getSession(this);
             Intent intent = new Intent(this, UserActivity.class);
             intent.putExtra(UserActivity.ARG_USER_ID, session.getUserId());
@@ -345,5 +350,20 @@ public class HomeActivity extends MyAppCompatActivity implements
                 Toast.makeText(this, R.string.cannot_log_in, Toast.LENGTH_SHORT).show();
             }
         }
+    }
+
+    @Override
+    public void onPostExecute() {
+
+    }
+
+    @Override
+    public void onSuccessLogin(UserSession session) {
+
+    }
+
+    @Override
+    public void onErrorLogin(Exception ex) {
+
     }
 }

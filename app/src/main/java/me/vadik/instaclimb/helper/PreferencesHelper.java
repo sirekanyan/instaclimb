@@ -6,6 +6,7 @@ import android.preference.PreferenceManager;
 import android.text.TextUtils;
 
 import me.vadik.instaclimb.R;
+import me.vadik.instaclimb.login.UserCredentials;
 
 /**
  * User: vadik
@@ -14,8 +15,9 @@ import me.vadik.instaclimb.R;
 public class PreferencesHelper {
 
     private static final String PROPERTY_DARK_THEME = "me.vadik.instaclimb.dark_theme";
-    private static final String PROPERTY_USERNAME = "me.vadik.instaclimb.username";
+    private static final String PROPERTY_EMAIL = "me.vadik.instaclimb.email";
     private static final String PROPERTY_PASSWORD = "me.vadik.instaclimb.password";
+    private static final String PROPERTY_REMEMBER_ME = "me.vadik.instaclimb.remember_me";
     private final SharedPreferences preferences;
     private final Context context;
 
@@ -47,23 +49,28 @@ public class PreferencesHelper {
         preferences.edit().putBoolean(PROPERTY_DARK_THEME, !isDark).apply();
     }
 
-    public void saveCredentials(String username, String password) {
+    public void saveCredentials(UserCredentials credentials) {
         preferences.edit()
-                .putString(PROPERTY_USERNAME, username)
-                .putString(PROPERTY_PASSWORD, password)
+                .putString(PROPERTY_EMAIL, credentials.getEmail())
+                .putString(PROPERTY_PASSWORD, credentials.getPassword())
+                .putBoolean(PROPERTY_REMEMBER_ME, credentials.isRememberMe())
                 .apply();
     }
 
+    public void clearCredentials() {
+        saveCredentials(UserCredentials.EMPTY);
+    }
+
     public boolean hasSavedCredentials() {
-        return !TextUtils.isEmpty(getUsername())
-                && !TextUtils.isEmpty(getPassword());
+        UserCredentials credentials = getCredentials();
+        return !TextUtils.isEmpty(credentials.getEmail())
+                && !TextUtils.isEmpty(credentials.getPassword());
     }
 
-    public String getUsername() {
-        return preferences.getString(PROPERTY_USERNAME, "");
-    }
-
-    public String getPassword() {
-        return preferences.getString(PROPERTY_PASSWORD, "");
+    public UserCredentials getCredentials() {
+        return new UserCredentials(
+                preferences.getString(PROPERTY_EMAIL, ""),
+                preferences.getString(PROPERTY_PASSWORD, ""),
+                preferences.getBoolean(PROPERTY_REMEMBER_ME, false));
     }
 }

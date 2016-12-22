@@ -39,7 +39,7 @@ public class LoginManager {
     }
 
     public static UserSession getSession(Context context) {
-        return new UserSession(getSessionId(context), getUserId(context));
+        return new UserSession(getSessionId(context), getUserId(context), UserCredentials.EMPTY /* TODO */);
     }
 
     public static void logOut(Context context) {

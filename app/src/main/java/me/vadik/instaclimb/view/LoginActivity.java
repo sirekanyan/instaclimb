@@ -14,6 +14,7 @@ import android.view.View.OnClickListener;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -22,6 +23,7 @@ import me.vadik.instaclimb.databinding.ActivityLoginBinding;
 import me.vadik.instaclimb.helper.PreferencesHelper;
 import me.vadik.instaclimb.login.InstaclimbLogin;
 import me.vadik.instaclimb.login.LoginManager;
+import me.vadik.instaclimb.login.UserCredentials;
 import me.vadik.instaclimb.login.UserSession;
 
 public class LoginActivity extends AppCompatActivity implements InstaclimbLogin.OnPostExecuteListener {
@@ -31,6 +33,7 @@ public class LoginActivity extends AppCompatActivity implements InstaclimbLogin.
     // UI references.
     private EditText mEmailView;
     private EditText mPasswordView;
+    private CheckBox mRememberMe;
     private View mProgressView;
     private View mLoginFormView;
 
@@ -43,8 +46,16 @@ public class LoginActivity extends AppCompatActivity implements InstaclimbLogin.
         setupActionBar();
         // Set up the login form.
         mEmailView = binding.email;
-
         mPasswordView = binding.password;
+        mRememberMe = binding.rememberMe;
+
+        if (preferences.hasSavedCredentials()) {
+            UserCredentials credentials = preferences.getCredentials();
+            mEmailView.setText(credentials.getEmail());
+            mPasswordView.setText(credentials.getPassword());
+            mRememberMe.setChecked(credentials.isRememberMe());
+        }
+
         mPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {
@@ -89,14 +100,30 @@ public class LoginActivity extends AppCompatActivity implements InstaclimbLogin.
             return;
         }
 
-        // Reset errors.
         mEmailView.setError(null);
         mPasswordView.setError(null);
 
-        // Store values at the time of the login attempt.
         String email = mEmailView.getText().toString();
         String password = mPasswordView.getText().toString();
+        boolean rememberMe = mRememberMe.isChecked();
 
+        UserCredentials credentials = new UserCredentials(email, password, rememberMe);
+
+        if (!validate(email, password)) {
+            // Show a progress spinner, and kick off a background task to
+            // perform the user login attempt.
+            View view = this.getCurrentFocus();
+            if (view != null) {
+                InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+            }
+            showProgress(true);
+            mAuthTask = new InstaclimbLogin(this);
+            mAuthTask.execute(credentials);
+        }
+    }
+
+    private boolean validate(String email, String password) {
         boolean cancel = false;
         View focusView = null;
 
@@ -126,18 +153,8 @@ public class LoginActivity extends AppCompatActivity implements InstaclimbLogin.
             // There was an error; don't attempt login and focus the first
             // form field with an error.
             focusView.requestFocus();
-        } else {
-            // Show a progress spinner, and kick off a background task to
-            // perform the user login attempt.
-            View view = this.getCurrentFocus();
-            if (view != null) {
-                InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
-                imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
-            }
-            showProgress(true);
-            mAuthTask = new InstaclimbLogin(this);
-            mAuthTask.execute(email, password);
         }
+        return cancel;
     }
 
     private boolean isEmailValid(String email) {
@@ -178,7 +195,14 @@ public class LoginActivity extends AppCompatActivity implements InstaclimbLogin.
 
     @Override
     public void onSuccessLogin(UserSession session) {
+        PreferencesHelper preferences = new PreferencesHelper(this);
         LoginManager.saveSession(this, session);
+        UserCredentials credentials = session.getCredentials();
+        if (credentials.isRememberMe()) {
+            preferences.saveCredentials(credentials);
+        } else {
+            preferences.clearCredentials();
+        }
         setResult(RESULT_OK);
         finish();
     }

@@ -20,10 +20,12 @@ import static me.vadik.instaclimb.login.SessionCookieJar.*;
 class InstaclimbLoginTask extends AsyncTask<Request, Void, UserSession> {
 
     private final OnPostExecuteListener listener;
+    private final UserCredentials credentials;
     private Exception exception;
 
-    public InstaclimbLoginTask(OnPostExecuteListener listener) {
+    InstaclimbLoginTask(OnPostExecuteListener listener, UserCredentials credentials) {
         this.listener = listener;
+        this.credentials = credentials;
     }
 
     @Override
@@ -61,7 +63,8 @@ class InstaclimbLoginTask extends AsyncTask<Request, Void, UserSession> {
         }
         return new UserSession(
                 sessionCookieJar.getSessionId(),
-                sessionCookieJar.getUserId());
+                sessionCookieJar.getUserId(),
+                credentials);
     }
 
     private static class UnexpectedResponseException extends IOException {

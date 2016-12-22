@@ -15,13 +15,13 @@ public class InstaclimbLogin {
         this.listener = listener;
     }
 
-    public void execute(String email, String password) {
+    public void execute(UserCredentials credentials) {
 
         String url = "http://instaclimb.ru/user/auth/login";
 
         FormBody formBody = new FormBody.Builder()
-                .add("YumUserLogin[username]", email)
-                .add("YumUserLogin[password]", password)
+                .add("YumUserLogin[username]", credentials.getEmail())
+                .add("YumUserLogin[password]", credentials.getPassword())
                 .add("YumUserLogin[rememberMe]", "1")
                 .add("yt0", "Вход").build();
 
@@ -30,7 +30,7 @@ public class InstaclimbLogin {
                 .post(formBody)
                 .build();
 
-        new InstaclimbLoginTask(listener).execute(request);
+        new InstaclimbLoginTask(listener, credentials).execute(request);
     }
 
     public interface OnPostExecuteListener {
